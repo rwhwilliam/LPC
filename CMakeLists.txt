@@ -1,10 +1,11 @@
-Project(SimVillage)
+Project(Villages)
 
 cmake_minimum_required(VERSION 2.8)
 
 Include(FindSDL)
 Include(FindSDL_image)
 Include(FindSDL_ttf)
+Include(FindSDL_mixer)
 
 FILE(GLOB WINDOWDLLS lib/windows/dlls/*.dll)
 
@@ -25,6 +26,7 @@ set (
 Find_Package(SDL REQUIRED)
 Find_Package(SDL_image REQUIRED)
 Find_Package(SDL_ttf REQUIRED)
+Find_Package(SDL_mixer REQUIRED)
 
 include_directories(
 	includes/sdl/
@@ -39,6 +41,7 @@ if(${WIN32})
 		${SDL_LIBRARY}
 		${SDLIMAGE_LIBRARY}
 		${SDLTTF_LIBRARY}
+		${SDLMIXER_LIBRARY}
 		../../lib/windows/SDLmain
 	)
 
@@ -50,12 +53,13 @@ elseif(${UNIX})
 		${SDL_LIBRARY}
 		${SDLIMAGE_LIBRARY}
 		${SDLTTF_LIBRARY}
+		${SDLMIXER_LIBRARY}
 	)
 
 endif(${WIN32})
 
 add_executable (
-	SimVillage
+	Villages
 	WIN32
 	MACOSX_BUNDLE
 	${SOURCES}
