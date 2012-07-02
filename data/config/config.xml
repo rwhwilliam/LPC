@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<Configuration>
+	<Config>
+		<Name>logfile</Name>
+		<Value>log.txt</Value>
+	</Config>
+</Configuration>

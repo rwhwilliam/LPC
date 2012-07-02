@@ -1,5 +1,8 @@
 #include <iostream>
+
 #include "SDL.h"
+
+#include "Engine/Util/Logger.h"
 
 using namespace std;
 
@@ -16,6 +19,8 @@ int main(int argc, char* args[])
 	SDL_Surface* screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
 
 	bool quit = false;
+
+	Logger::debugFormat("logging test");
 
 	while(!quit)
 	{
