@@ -12,9 +12,17 @@ FILE(GLOB WINDOWDLLS lib/windows/dlls/*.dll)
 FILE(GLOB SDLGFX includes/sdl-gfx/*.h includes/sdl-gfx/*.c)
 FILE(GLOB TinyXML2 includes/tinyxml2/*.h includes/tinyxml2/*.cpp)
 
+FILE(GLOB Config data/config/config.xml)
+FILE(GLOB Tiles data/tiles/*.png)
+FILE(GLOB Maps data/maps/*.xml)
+FILE(GLOB Fonts data/fonts/*.tff)
+FILE(GLOB Music data/music/*.ogg)
+
 set (
 	SOURCES
-	${SDGFX}
+	src/main.cpp
+
+	${SDLGFX}
 	${TinyXML2}
 )
 
@@ -37,6 +45,9 @@ include_directories(
 
 if(${WIN32})
 
+	source_group(Source\ Files\\TinyXML2 FILES ${TinyXML2})
+	source_group(Source\ Files\\SDL-Gfx FILES ${SDLGFX})
+
 	link_libraries (
 		${SDL_LIBRARY}
 		${SDLIMAGE_LIBRARY}
@@ -47,6 +58,12 @@ if(${WIN32})
 
 	file(COPY ${DLLS} DESTINATION Debug)
 
+	file(COPY ${Config} DESTINATION Debug/data/config)
+	file(COPY ${Tiles} DESTINATION Debug/data/tiles)
+	file(COPY ${Maps} DESTINATION Debug/data/maps)
+	file(COPY ${Fonts} DESTINATION Debug/data/fonts)
+	file(COPY ${Music} DESTINATION Debug/data/music)
+
 elseif(${UNIX})
 
 	link_libraries (
@@ -55,6 +72,13 @@ elseif(${UNIX})
 		${SDLTTF_LIBRARY}
 		${SDLMIXER_LIBRARY}
 	)
+
+
+	file(COPY ${Config} DESTINATION data/config)
+	file(COPY ${Tiles} DESTINATION data/tiles)
+	file(COPY ${Maps} DESTINATION data/maps)
+	file(COPY ${Fonts} DESTINATION data/fonts)
+	file(COPY ${Music} DESTINATION data/music)
 
 endif(${WIN32})
 
