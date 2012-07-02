@@ -12,6 +12,7 @@ FILE(GLOB WINDOWDLLS lib/windows/dlls/*.dll)
 FILE(GLOB SDLGFX includes/sdl-gfx/*.h includes/sdl-gfx/*.c)
 FILE(GLOB TinyXML2 includes/tinyxml2/*.h includes/tinyxml2/*.cpp)
 
+File(GLOB Time src/Engine/Time/*.h src/Engine/Timer/*.cpp)
 FILE(GLOB Util src/Engine/Util/*.h src/Engine/Util/*.cpp)
 
 FILE(GLOB Config data/config/config.xml)
@@ -27,6 +28,7 @@ set (
 	${SDLGFX}
 	${TinyXML2}
 
+	${Time}
 	${Util}
 )
 
@@ -52,6 +54,7 @@ if(${WIN32})
 	source_group(Source\ Files\\TinyXML2 FILES ${TinyXML2})
 	source_group(Source\ Files\\SDL-Gfx FILES ${SDLGFX})
 
+	source_group(Source\ Files\\Engine\\Time FILES ${Time})
 	source_group(Source\ Files\\Engine\\Util FILES ${Util})
 
 	link_libraries (

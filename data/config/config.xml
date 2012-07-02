@@ -1,7 +1,15 @@
 <?xml version="1.0"?>
 <Configuration>
 	<Config>
-		<Name>logfile</Name>
+		<Name>LogFile</Name>
 		<Value>log.txt</Value>
+	</Config>
+	<Config>
+		<Name>ScreenWidth</Name>
+		<Value>640</Value>
+	</Config>
+	<Config>
+		<Name>ScreenHeight</Name>
+		<Value>480</Value>
 	</Config>
 </Configuration>

@@ -35,7 +35,7 @@ void Logger::record(LogLevel level, string message)
 {
 	if(level >= logwriting)
 	{
-		static ofstream fout(Config::getConfig("logfile"), fstream::app);
+		static ofstream fout(Config::getConfig("LogFile"), fstream::app);
 
 		fout << enumToString(level) << "\t" << getDate() << "\t" << message << endl;
 	}
