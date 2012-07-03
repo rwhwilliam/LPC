@@ -13,7 +13,7 @@ FILE(GLOB SDLGFX includes/sdl-gfx/*.h includes/sdl-gfx/*.c)
 FILE(GLOB TinyXML2 includes/tinyxml2/*.h includes/tinyxml2/*.cpp)
 
 FILE(GLOB Graphics src/Engine/Graphics/*.h src/Engine/Graphics/*.cpp)
-FILE(GLOB Sound src/Engine/Source/*.h src/Engine/Sound/*.cpp)
+FILE(GLOB Sound src/Engine/Sound/*.h src/Engine/Sound/*.cpp)
 FILE(GLOB Time src/Engine/Time/*.h src/Engine/Time/*.cpp)
 FILE(GLOB Util src/Engine/Util/*.h src/Engine/Util/*.cpp)
 
