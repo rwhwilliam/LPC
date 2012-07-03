@@ -12,4 +12,24 @@
 		<Name>ScreenHeight</Name>
 		<Value>480</Value>
 	</Config>
+	<Config>
+		<Name>ImagePath</Name>
+		<Value>data/images/</Value>
+	</Config>
+	<Config>
+		<Name>FontPath</Name>
+		<Value>data/fonts/</Value>
+	</Config>
+	<Config>
+		<Name>MusicPath</Name>
+		<Value>data/music/</Value>
+	</Config>
+	<Config>
+		<Name>SoundEffectPath</Name>
+		<Value>data/music/</Value>
+	</Config>
+	<Config>
+		<Name>MapPath</Name>
+		<Value>data/maps</Value>
+	</Config>
 </Configuration>

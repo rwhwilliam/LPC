@@ -22,6 +22,7 @@
 
 #include "SDL_mixer.h"
 
+#include "Engine/Util/Config.h"
 #include "Engine/Util/Logger.h"
 
 using namespace std;
@@ -50,6 +51,8 @@ string SoundLoader::loadSoundEffect(string path)
 {
 	if(loaded)
 	{
+		path = Config::getConfig("SoundEffectPath") + path;
+
 		map<string, Mix_Chunk*>::iterator it;
 
 		it = soundeffects.find(path);
@@ -74,6 +77,8 @@ string SoundLoader::loadMusic(string path)
 {
 	if(loaded)
 	{
+		path = Config::getConfig("MusicPath") + path;
+
 		map<string, Mix_Music*>::iterator it;
 
 		it = music.find(path);

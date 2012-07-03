@@ -24,6 +24,7 @@
 #include "SDL_image.h"
 #include "SDL_rotozoom.h"
 
+#include "Engine/Util/Config.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Util.h"
 #include "Engine/Util/Tokenizer.h"
@@ -65,7 +66,7 @@ string ImageLoader::loadImage(string path, float scale)
 {
 	if(loaded)
 	{
-		path += "_" + toString(scale);
+		path = Config::getConfig("ImagePath") + path + "_" + toString(scale);
 
 		map<string, SDL_Surface*>::iterator it;
 
@@ -73,7 +74,7 @@ string ImageLoader::loadImage(string path, float scale)
 
 		if(it == images.end())
 		{
-			Logger::debugFormat("Loading Images %s", path);
+			Logger::debugFormat("Loading Image %s", path);
 
 			SDL_Surface* loadedImage = NULL;
 			SDL_Surface* optimizedImage = NULL;

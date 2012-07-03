@@ -22,6 +22,7 @@
 
 #include "SDL_ttf.h"
 
+#include "Engine/Util/Config.h"
 #include "Engine/Util/Util.h"
 #include "Engine/Util/Logger.h"
 
@@ -51,7 +52,7 @@ string FontLoader::loadFont(string path, int size)
 	{
 		Logger::debugFormat("Loading Font %s at Size %i", path, size);
 
-		string id = path + toString(size);
+		string id = Config::getConfig("FontPath") + path + toString(size);
 
 		map<string, TTF_Font*>::iterator it;
 		it = fonts.find(id);
