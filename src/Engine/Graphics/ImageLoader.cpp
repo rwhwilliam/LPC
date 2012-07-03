@@ -170,8 +170,6 @@ SDL_Surface* ImageLoader::getImage(string id)
 
 void ImageLoader::cleanup()
 {
-	Logger::debug("ImageLoader Cleanup");
-
 	//cleanup all the images
 	map<string, SDL_Surface*>::iterator it;
 
@@ -179,6 +177,8 @@ void ImageLoader::cleanup()
 		SDL_FreeSurface(it->second);
 
 	images.clear();
+
+	Logger::debug("ImageLoader Cleanup");
 
 	loaded = false;
 }
