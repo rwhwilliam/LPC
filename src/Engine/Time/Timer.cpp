@@ -38,14 +38,14 @@ Timer::~Timer()
 
 }
 
-Timer::Timer(const Timer& ship)
+Timer::Timer(const Timer& data)
 {
-	throw exception("Timer Copy Constructor");
+	throw exception();//"Timer Copy Constructor");
 }
 
 Timer& Timer::operator=(const Timer* rhs)
 {
-	throw exception("Timer Assignment Operator");
+	throw exception();//"Timer Assignment Operator");
 }
 
 void Timer::start()

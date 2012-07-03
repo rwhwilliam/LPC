@@ -19,6 +19,7 @@
 
 #include <map>
 #include <vector>
+#include <exception>
 
 #include "SDL.h"
 
@@ -48,12 +49,12 @@ TileMap::~TileMap()
 
 TileMap::TileMap(const TileMap& img)
 {
-	throw exception("TileMap Copy Constructor");
+	throw exception();//"TileMap Copy Constructor");
 }
 
 TileMap& TileMap::operator=(const TileMap* rhs)
 {
-	throw exception("TileMap Assignment Operator");
+	throw exception();//"TileMap Assignment Operator");
 }
 
 void TileMap::addLayer(int id, int dat[])

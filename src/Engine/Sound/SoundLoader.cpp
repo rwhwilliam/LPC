@@ -59,7 +59,7 @@ string SoundLoader::loadSoundEffect(string path)
 
 		if(it == soundeffects.end())
 		{
-			Logger::debugFormat("Loading SoundEffect %s", path);
+			Logger::debugFormat("Loading SoundEffect %s", path.c_str());
 
 			soundeffects[path] = Mix_LoadWAV(path.c_str());
 
@@ -85,7 +85,7 @@ string SoundLoader::loadMusic(string path)
 
 		if(it == music.end())
 		{
-			Logger::debugFormat("Loading Music %s", path);
+			Logger::debugFormat("Loading Music %s", path.c_str());
 
 			music[path] = Mix_LoadMUS(path.c_str());
 		}

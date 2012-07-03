@@ -18,6 +18,7 @@
 #include "Image.h"
 
 #include <string>
+#include <exception>
 
 #include "SDL.h"
 #include "SDL_rotozoom.h"
@@ -92,12 +93,12 @@ Image::~Image()
 
 Image::Image(const Image& img)
 {
-	throw exception("Image Copy Constructor");
+	throw exception();//"Image Copy Constructor");
 }
 
 Image& Image::operator=(const Image* rhs)
 {
-	throw exception("Image Assignment Operator");
+	throw exception();//"Image Assignment Operator");
 }
 
 void Image::setAlpha(int alpha)

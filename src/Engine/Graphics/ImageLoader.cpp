@@ -74,7 +74,7 @@ string ImageLoader::loadImage(string path, float scale)
 
 		if(it == images.end())
 		{
-			Logger::debugFormat("Loading Image %s", path);
+			Logger::debugFormat("Loading Image %s", path.c_str());
 
 			SDL_Surface* loadedImage = NULL;
 			SDL_Surface* optimizedImage = NULL;
@@ -142,7 +142,7 @@ string ImageLoader::scaleImage(string src, float scale)
 {
 	string base = src.substr(0, src.find_last_of("_"));
 
-	Logger::debugFormat("Scaling image %s", base);
+	Logger::debugFormat("Scaling image %s", base.c_str());
 
 	if(ImageLoader::getImage(base + "_" + toString(scale)) != NULL)
 		return base + "_" + toString(scale);

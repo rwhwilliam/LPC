@@ -50,7 +50,7 @@ string FontLoader::loadFont(string path, int size)
 {
 	if(loaded)
 	{
-		Logger::debugFormat("Loading Font %s at Size %i", path, size);
+		Logger::debugFormat("Loading Font %s at Size %i", path.c_str(), size);
 
 		string id = Config::getConfig("FontPath") + path + toString(size);
 

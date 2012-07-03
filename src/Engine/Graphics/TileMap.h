@@ -27,7 +27,7 @@ using namespace std;
 
 class Image;
 
-typedef map<int, vector<int>> layerVector;
+typedef map<int, vector<int> > layerVector;
 
 class TileMap
 {
