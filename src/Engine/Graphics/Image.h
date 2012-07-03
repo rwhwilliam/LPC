@@ -36,6 +36,10 @@ public:
 	Image(string src, Uint8 r, Uint8 g, Uint8 b, float scale);
 	Image(string src, int alpha, Uint8 r, Uint8 g, Uint8 b, float scale);
 
+	Image(const Image& img);
+	Image& operator=(const Image* rhs);
+	~Image();
+
 	void draw(int x, int y, SDL_Surface* screen);
 
 	void setAlpha(int alpha);

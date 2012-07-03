@@ -29,6 +29,11 @@ class Font
 {
 public:
 	Font(string path, int size, Uint8 r, Uint8 g, Uint8 b);
+
+	Font(const Font& img);
+	Font& operator=(const Font* rhs);
+	~Font();
+
 	void draw(int x, int y, SDL_Surface* source, SDL_Surface* screen);
 	SDL_Surface* getSurface(string msg);
 

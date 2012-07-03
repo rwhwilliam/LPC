@@ -36,6 +36,21 @@ Font::Font(string path, int size, Uint8 r, Uint8 g, Uint8 b)
 	color.b = b;
 }
 
+Font::~Font()
+{
+
+}
+
+Font::Font(const Font& img)
+{
+	throw exception("Font Copy Constructor");
+}
+
+Font& Font::operator=(const Font* rhs)
+{
+	throw exception("Font Assignment Operator");
+}
+
 void Font::draw(int x, int y, SDL_Surface* source, SDL_Surface* screen)
 {
 	SDL_Rect offset;

@@ -85,6 +85,21 @@ void Image::draw(int x, int y, SDL_Surface* screen)
 	SDL_BlitSurface(ImageLoader::getImage(src), NULL, screen, &offset);
 }
 
+Image::~Image()
+{
+
+}
+
+Image::Image(const Image& img)
+{
+	throw exception("Image Copy Constructor");
+}
+
+Image& Image::operator=(const Image* rhs)
+{
+	throw exception("Image Assignment Operator");
+}
+
 void Image::setAlpha(int alpha)
 {
 	SDL_SetAlpha(ImageLoader::getImage(src), SDL_SRCALPHA, (alpha % 256));

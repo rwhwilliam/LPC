@@ -33,6 +33,9 @@ class TileMap
 {
 public:
 	TileMap(int width, int height, int tileWidth, int tileHeight, int layerCount);
+
+	TileMap(const TileMap& img);
+	TileMap& operator=(const TileMap* rhs);
 	~TileMap();
 
 	void addLayer(int id, int dat[]);
