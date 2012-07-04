@@ -31,16 +31,16 @@ using namespace std;
 
 UI::UI(int x, int y, int width, int height, string backgroundSrc) : Component(x, y, width, height)
 {
-	background = new Image(backgroundSrc);
-
 	Logger::debug("UI Constructor");
+
+	background = new Image(backgroundSrc);
 }
 
 UI::UI(int x, int y, int width, int height, string backgroundSrc, Uint8 r, Uint8 g, Uint8 b) : Component(x, y, width, height)
 {
-	background = new Image(backgroundSrc, r, g, b);
-
 	Logger::debug("UI Constructor");
+
+	background = new Image(backgroundSrc, r, g, b);
 }
 
 UI::~UI()

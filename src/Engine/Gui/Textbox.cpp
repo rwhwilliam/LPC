@@ -30,6 +30,8 @@ using namespace std;
 
 Textbox::Textbox(int x, int y, int width, int height, string backgroundSrc, string fontSrc, int fontSize) : Component(x, y, width, height)
 {
+	Logger::debug("Textbox Constructor");
+
 	background = new Image(backgroundSrc);
 
 	font = new Font(fontSrc, fontSize, 255, 255, 255);
@@ -37,8 +39,6 @@ Textbox::Textbox(int x, int y, int width, int height, string backgroundSrc, stri
 	contents = "";
 
 	textImage = font->getSurface(contents);
-
-	Logger::debug("Textbox Constructor");
 }
 
 Textbox::~Textbox()
