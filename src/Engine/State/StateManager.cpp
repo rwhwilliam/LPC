@@ -15,101 +15,94 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#include "Timer.h"
+#include "StateManager.h"
 
-#include <exception>
+#include <vector>
 
-#include "SDL.h"
-
+#include "State.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 
-using namespace std;
-
-Timer::Timer()
+StateManager::StateManager()
 {
-	startTicks = 0;
-	pausedTicks = 0;
-	paused = false;
-	started = false;
+	states.clear();
 }
 
-Timer::~Timer()
+StateManager::~StateManager()
 {
 
 }
 
-Timer::Timer(const Timer& data)
+StateManager::StateManager(const StateManager& data)
 {
 	throw VillageException("Time Copy Constructor");
 }
 
-Timer& Timer::operator=(const Timer* rhs)
+StateManager& StateManager::operator=(const StateManager* rhs)
 {
 	throw VillageException("Time Assignment Operator");
 }
 
-void Timer::start()
+void StateManager::push(State* state)
 {
-	started = true;
-
-	paused = false;
-
-	startTicks = SDL_GetTicks();
+	states.push_back(state);
 }
 
-void Timer::stop()
+State* StateManager::pop()
 {
-	started = false;
+	State* popped = states.back();
 
-	paused = false;
+	states.pop_back();
+
+	return popped;
 }
 
-int Timer::get_ticks() const
+void StateManager::update(float time, Uint8* keystates)
 {
-	if(started == true)
+	vector<State*>::const_iterator ittr = states.end();
+
+	do
 	{
-		if(paused == true)
-		{
-			return pausedTicks;
-		}
-		else
-		{
-			return SDL_GetTicks() - startTicks;
-		}
-	}
+		--ittr;
 
-	return 0;
+		(*ittr)->update(time, keystates);
+
+		if(!(*ittr)->getExecuteBehind())
+			break;
+	}
+	while(ittr != states.begin());
 }
 
-void Timer::pause()
+void StateManager::raiseEvent(SDL_Event event)
 {
-	if((started == true) && (paused == false))
+	vector<State*>::const_iterator ittr = states.end();
+
+	do
 	{
-		paused = true;
+		--ittr;
 
-		pausedTicks = SDL_GetTicks() - startTicks;
+		(*ittr)->raiseEvent(event);
+
+		if(!(*ittr)->getRaiseBehind())
+			break;
 	}
+	while(ittr != states.begin());
 }
 
-void Timer::unpause()
+void StateManager::draw(SDL_Surface* screen)
 {
-	if(paused == true)
+	vector<State*>::const_iterator ittr = states.end();
+
+	do
 	{
-		paused = false;
+		--ittr;
 
-		startTicks = SDL_GetTicks() - pausedTicks;
+		(*ittr)->draw();
+		(*ittr)->flip(screen);
 
-		pausedTicks = 0;
+		if(!(*ittr)->getShowBehind())
+			break;
 	}
-}
-
-bool Timer::is_started() const
-{
-	return started;
-}
-
-bool Timer::is_paused() const
-{
-	return paused;
+	while(ittr != states.begin());
+	
 }

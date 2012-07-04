@@ -15,101 +15,37 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#include "Timer.h"
+#ifndef STATEMANAGER_H
+#define STATEMANAGER_H
 
-#include <exception>
+#include <vector>
 
 #include "SDL.h"
-
-#include "Engine/Util/Logger.h"
-#include "Engine/Util/VillageException.h"
+#include "SDL_image.h"
 
 using namespace std;
 
-Timer::Timer()
+class State;
+
+class StateManager
 {
-	startTicks = 0;
-	pausedTicks = 0;
-	paused = false;
-	started = false;
-}
+public:
+	StateManager();
+	~StateManager();
 
-Timer::~Timer()
-{
+	StateManager(const StateManager& data);
+	StateManager& operator=(const StateManager* rhs);
 
-}
+	void push(State* state);
+	State* pop();
 
-Timer::Timer(const Timer& data)
-{
-	throw VillageException("Time Copy Constructor");
-}
+	void draw(SDL_Surface* screen);
+	void raiseEvent(SDL_Event event);
+	void update(float time, Uint8* keystates);
 
-Timer& Timer::operator=(const Timer* rhs)
-{
-	throw VillageException("Time Assignment Operator");
-}
+private:
+	//tho I'm going for the ability of a stack..use a vector for I can 'look' behind
+	vector<State*> states;
+};
 
-void Timer::start()
-{
-	started = true;
-
-	paused = false;
-
-	startTicks = SDL_GetTicks();
-}
-
-void Timer::stop()
-{
-	started = false;
-
-	paused = false;
-}
-
-int Timer::get_ticks() const
-{
-	if(started == true)
-	{
-		if(paused == true)
-		{
-			return pausedTicks;
-		}
-		else
-		{
-			return SDL_GetTicks() - startTicks;
-		}
-	}
-
-	return 0;
-}
-
-void Timer::pause()
-{
-	if((started == true) && (paused == false))
-	{
-		paused = true;
-
-		pausedTicks = SDL_GetTicks() - startTicks;
-	}
-}
-
-void Timer::unpause()
-{
-	if(paused == true)
-	{
-		paused = false;
-
-		startTicks = SDL_GetTicks() - pausedTicks;
-
-		pausedTicks = 0;
-	}
-}
-
-bool Timer::is_started() const
-{
-	return started;
-}
-
-bool Timer::is_paused() const
-{
-	return paused;
-}
+#endif

@@ -14,6 +14,7 @@ FILE(GLOB TinyXML2 includes/tinyxml2/*.h includes/tinyxml2/*.cpp)
 
 FILE(GLOB Graphics src/Engine/Graphics/*.h src/Engine/Graphics/*.cpp)
 FILE(GLOB Sound src/Engine/Sound/*.h src/Engine/Sound/*.cpp)
+FILE(GLOB State src/Engine/State/*.h src/Engine/State/*.cpp)
 FILE(GLOB Time src/Engine/Time/*.h src/Engine/Time/*.cpp)
 FILE(GLOB Util src/Engine/Util/*.h src/Engine/Util/*.cpp)
 
@@ -32,6 +33,7 @@ set (
 
 	${Graphics}
 	${Sound}
+	${State}
 	${Time}
 	${Util}
 )
@@ -60,6 +62,7 @@ if(${WIN32})
 
 	source_group(Source\ Files\\Engine\\Graphics FILES ${Graphics})
 	source_group(Source\ Files\\Engine\\Sound FILES ${Sound})
+	source_group(Source\ Files\\Engine\\State FILES ${State})
 	source_group(Source\ Files\\Engine\\Time FILES ${Time})
 	source_group(Source\ Files\\Engine\\Util FILES ${Util})
 

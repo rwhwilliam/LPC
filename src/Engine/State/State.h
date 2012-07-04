@@ -15,101 +15,49 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#include "Timer.h"
-
-#include <exception>
+#ifndef STATE_H
+#define STATE_H
 
 #include "SDL.h"
+#include "SDL_image.h"
 
-#include "Engine/Util/Logger.h"
-#include "Engine/Util/VillageException.h"
-
-using namespace std;
-
-Timer::Timer()
+class State
 {
-	startTicks = 0;
-	pausedTicks = 0;
-	paused = false;
-	started = false;
-}
+public:
+	virtual void update(float time, Uint8* keystates) = 0;
+	virtual void raiseEvent(SDL_Event event) = 0;
+	virtual void draw() = 0;
+	
+	//unconventional...but this is what draws "frame" onto the screen
+	void flip(SDL_Surface* screen);
 
-Timer::~Timer()
-{
+	bool getShowBehind() { return showBehind; }
+	bool getRaiseBehind() { return raiseBehind; }
+	bool getExecuteBehind() { return executeBehind; }
+protected:
+	State(int width, int height, int xloc, int yloc);
+	~State();
 
-}
+	State(const State& data);
+	State& operator=(const State* rhs);
 
-Timer::Timer(const Timer& data)
-{
-	throw VillageException("Time Copy Constructor");
-}
+	//if true, drawing will go another layer down
+	//using this you could draw a menu only half the screen over a game and still see it
+	bool showBehind;
 
-Timer& Timer::operator=(const Timer* rhs)
-{
-	throw VillageException("Time Assignment Operator");
-}
+	//if true, updates, but -not- usercontrol/input will go another layer down
+	//using this you can draw a menu and the game can still be running/animating beneath it
+	bool executeBehind;
 
-void Timer::start()
-{
-	started = true;
+	//if true, raises SDL events 'below' this state to others
+	bool raiseBehind;
 
-	paused = false;
+	//the position and width/height of this 'frame'
+	int width, height;
+	int xloc, yloc;
 
-	startTicks = SDL_GetTicks();
-}
+	//actual surface that is drawn
+	SDL_Surface* frame;
+};
 
-void Timer::stop()
-{
-	started = false;
-
-	paused = false;
-}
-
-int Timer::get_ticks() const
-{
-	if(started == true)
-	{
-		if(paused == true)
-		{
-			return pausedTicks;
-		}
-		else
-		{
-			return SDL_GetTicks() - startTicks;
-		}
-	}
-
-	return 0;
-}
-
-void Timer::pause()
-{
-	if((started == true) && (paused == false))
-	{
-		paused = true;
-
-		pausedTicks = SDL_GetTicks() - startTicks;
-	}
-}
-
-void Timer::unpause()
-{
-	if(paused == true)
-	{
-		paused = false;
-
-		startTicks = SDL_GetTicks() - pausedTicks;
-
-		pausedTicks = 0;
-	}
-}
-
-bool Timer::is_started() const
-{
-	return started;
-}
-
-bool Timer::is_paused() const
-{
-	return paused;
-}
+#endif
