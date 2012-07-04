@@ -32,6 +32,7 @@ public:
 	void setActive(bool active) { Component::active = active; }
 
 protected:
+	Component();
 	Component(int x, int y, int width, int height);
 	
 	int x, y;

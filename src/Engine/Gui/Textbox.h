@@ -35,6 +35,9 @@ public:
 	Textbox(int x, int y, int width, int height, string backgroundSrc, string fontSrc, int fontSize);
 	~Textbox();
 
+	Textbox(const Textbox& data);
+	Textbox& operator=(const Textbox* rhs);
+
 	void draw(SDL_Surface* screen);
 	void raiseEvent(SDL_Event event);
 	

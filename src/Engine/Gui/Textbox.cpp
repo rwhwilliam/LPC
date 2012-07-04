@@ -23,6 +23,8 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Graphics/Font.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
 
 using namespace std;
 
@@ -35,12 +37,26 @@ Textbox::Textbox(int x, int y, int width, int height, string backgroundSrc, stri
 	contents = "";
 
 	textImage = font->getSurface(contents);
+
+	Logger::debug("Textbox Constructor");
 }
 
 Textbox::~Textbox()
 {
 	delete background;
 	delete font;
+
+	Logger::debug("Textbox Destructor");
+}
+
+Textbox::Textbox(const Textbox& data)
+{
+	throw VillageException("Textbox Copy Constructor");
+}
+
+Textbox& Textbox::operator=(const Textbox* rhs)
+{
+	throw VillageException("Textbox Assignment Operator");
 }
 
 void Textbox::draw(SDL_Surface* screen)

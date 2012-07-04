@@ -36,6 +36,9 @@ public:
 	UI(int x, int y, int width, int height, string backgroundSrc, Uint8 r, Uint8 g, Uint8 b);
 	~UI();
 
+	UI(const UI& data);
+	UI& operator=(const UI* rhs);
+
 	void raiseEvent(SDL_Event* event);
 	void draw(SDL_Surface* screen);
 

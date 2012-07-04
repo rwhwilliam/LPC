@@ -24,17 +24,23 @@
 
 #include "Component.h"
 #include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
 
 using namespace std;
 
 UI::UI(int x, int y, int width, int height, string backgroundSrc) : Component(x, y, width, height)
 {
 	background = new Image(backgroundSrc);
+
+	Logger::debug("UI Constructor");
 }
 
 UI::UI(int x, int y, int width, int height, string backgroundSrc, Uint8 r, Uint8 g, Uint8 b) : Component(x, y, width, height)
 {
 	background = new Image(backgroundSrc, r, g, b);
+
+	Logger::debug("UI Constructor");
 }
 
 UI::~UI()
@@ -47,6 +53,18 @@ UI::~UI()
 		delete it->second;
 
 	subcomponents.clear();
+
+	Logger::debug("UI Destructor");
+}
+
+UI::UI(const UI& data)
+{
+	throw VillageException("UI Copy Constructor");
+}
+
+UI& UI::operator=(const UI* rhs)
+{
+	throw VillageException("UI Assignment Operator");
 }
 
 void UI::raiseEvent(SDL_Event* event)
