@@ -13,6 +13,7 @@ FILE(GLOB SDLGFX includes/sdl-gfx/*.h includes/sdl-gfx/*.c)
 FILE(GLOB TinyXML2 includes/tinyxml2/*.h includes/tinyxml2/*.cpp)
 
 FILE(GLOB Graphics src/Engine/Graphics/*.h src/Engine/Graphics/*.cpp)
+FILE(GLOB Gui src/Engine/Gui/*.h src/Engine/Gui/*.cpp)
 FILE(GLOB Sound src/Engine/Sound/*.h src/Engine/Sound/*.cpp)
 FILE(GLOB State src/Engine/State/*.h src/Engine/State/*.cpp)
 FILE(GLOB Time src/Engine/Time/*.h src/Engine/Time/*.cpp)
@@ -32,6 +33,7 @@ set (
 	${TinyXML2}
 
 	${Graphics}
+	${Gui}
 	${Sound}
 	${State}
 	${Time}
@@ -61,6 +63,7 @@ if(${WIN32})
 	source_group(Source\ Files\\SDL-Gfx FILES ${SDLGFX})
 
 	source_group(Source\ Files\\Engine\\Graphics FILES ${Graphics})
+	source_group(Source\ Files\\Engine\\Gui FILES ${Gui})
 	source_group(Source\ Files\\Engine\\Sound FILES ${Sound})
 	source_group(Source\ Files\\Engine\\State FILES ${State})
 	source_group(Source\ Files\\Engine\\Time FILES ${Time})
