@@ -25,6 +25,7 @@
 
 #include "Image.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
 
 TileMap::TileMap(int width, int height, int tileWidth, int tileHeight, int layerCount) : width(width), height(height), tileWidth(tileWidth), tileHeight(tileHeight), layerCount(layerCount)
 {
@@ -49,12 +50,12 @@ TileMap::~TileMap()
 
 TileMap::TileMap(const TileMap& img)
 {
-	throw exception();//"TileMap Copy Constructor");
+	throw VillageException("TileMap Copy Constructor");
 }
 
 TileMap& TileMap::operator=(const TileMap* rhs)
 {
-	throw exception();//"TileMap Assignment Operator");
+	throw VillageException("TileMap Assignment Operator");
 }
 
 void TileMap::addLayer(int id, int dat[])

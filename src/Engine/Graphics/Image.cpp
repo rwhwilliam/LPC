@@ -18,13 +18,13 @@
 #include "Image.h"
 
 #include <string>
-#include <exception>
 
 #include "SDL.h"
 #include "SDL_rotozoom.h"
 
 #include "ImageLoader.h"
 #include "Engine/Util/Util.h"
+#include "Engine/Util/VillageException.h"
 
 using namespace std;
 
@@ -93,12 +93,12 @@ Image::~Image()
 
 Image::Image(const Image& img)
 {
-	throw exception();//"Image Copy Constructor");
+	throw VillageException("Image Copy Constructor");
 }
 
 Image& Image::operator=(const Image* rhs)
 {
-	throw exception();//"Image Assignment Operator");
+	throw VillageException("Image Assignment Operator");
 }
 
 void Image::setAlpha(int alpha)

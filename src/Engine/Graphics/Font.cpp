@@ -18,13 +18,13 @@
 #include "Font.h"
 
 #include <string>
-#include <exception>
 
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
 #include "FontLoader.h"
+#include "Engine/Util/VillageException.h"
 
 using namespace std;
 
@@ -44,12 +44,12 @@ Font::~Font()
 
 Font::Font(const Font& img)
 {
-	throw exception();//("Font Copy Constructor");
+	throw VillageException("Font Copy Constructor");
 }
 
 Font& Font::operator=(const Font* rhs)
 {
-	throw exception();//("Font Assignment Operator");
+	throw VillageException("Font Assignment Operator");
 }
 
 void Font::draw(int x, int y, SDL_Surface* source, SDL_Surface* screen)
