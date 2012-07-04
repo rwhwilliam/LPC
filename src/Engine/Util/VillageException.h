@@ -28,6 +28,7 @@ class VillageException : public exception
 public:
    VillageException(string ss) : s(ss) {}
    const char* what() const throw() { return s.c_str(); }
+   ~VillageException() throw() {}
 
 private:
 	string s;
