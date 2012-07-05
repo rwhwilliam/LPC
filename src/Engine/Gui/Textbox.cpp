@@ -46,6 +46,9 @@ Textbox::~Textbox()
 	delete background;
 	delete font;
 
+	if(textImage != NULL)
+		SDL_FreeSurface(textImage);
+
 	Logger::debug("Textbox Destructor");
 }
 

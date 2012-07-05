@@ -15,41 +15,64 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef BUTTON_H
-#define BUTTON_H
+#include "Label.h"
 
 #include <string>
 
 #include "SDL.h"
 
-#include "Component.h"
+#include "Engine/Graphics/Font.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
 
 using namespace std;
 
-enum ButtonState {NORMAL, HOVER, DOWN};
-
-class UIEvent;
-class Image;
-
-class Button : public Component
+Label::Label(int x, int y, string fontSrc, string content, int size) : Component(x, y, 0, 0)
 {
-public:
-	Button(int x, int y, int width, int height, string normalSrc, string hoverSrc, string downSrc);
-	Button(int x, int y, int width, int height, string normalSrc, string hoverSrc, string downSrc, Uint8 r, Uint8 g, Uint8 b);
-	~Button();
+	Logger::debugFormat("Label created with content: %s", content.c_str());
 
-	Button(const Button& data);
-	Button& operator=(const Button* rhs);
+	font = new Font(fontSrc, size, 255, 255, 255);
 
-	virtual void click() = 0;
-	void raiseEvent(SDL_Event* event);
-	void draw(SDL_Surface* screen);
+	textImage = font->getSurface(content);
+}
 
-private:
-	Image* normalBackground;
-	Image* hoverBackground;
-	Image* downBackground;
-	ButtonState state;
-};
+Label::Label(int x, int y, string fontSrc, string content, int size, Uint8 r, Uint8 g, Uint8 b) : Component(x, y, 0, 0)
+{
+	Logger::debugFormat("Label created with content: %s", content.c_str());
 
-#endif
+	font = new Font(fontSrc, size, r, g, b);
+
+	textImage = font->getSurface(content);
+}
+
+Label::~Label()
+{
+	delete font;
+	
+	SDL_FreeSurface(textImage);
+
+	Logger::debug("Label Destructor");
+}
+
+Label::Label(const Label& data)
+{
+	throw VillageException("Label Copy Constructor");
+}
+
+Label& Label::operator=(const Label* rhs)
+{
+	throw VillageException("Label Assignment Operator");
+}
+
+void Label::raiseEvent(SDL_Event* event)
+{
+	//no events
+}
+
+void Label::draw(SDL_Surface* screen)
+{
+	if(active)
+	{
+		font->draw(x, y, textImage, screen);
+	}
+}

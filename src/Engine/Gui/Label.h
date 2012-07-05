@@ -15,8 +15,8 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef LABEL_H
+#define LABEL_H
 
 #include <string>
 
@@ -26,30 +26,24 @@
 
 using namespace std;
 
-enum ButtonState {NORMAL, HOVER, DOWN};
+class Font;
 
-class UIEvent;
-class Image;
-
-class Button : public Component
+class Label : public Component
 {
 public:
-	Button(int x, int y, int width, int height, string normalSrc, string hoverSrc, string downSrc);
-	Button(int x, int y, int width, int height, string normalSrc, string hoverSrc, string downSrc, Uint8 r, Uint8 g, Uint8 b);
-	~Button();
+	Label(int x, int y, string fontSrc, string content, int size);
+	Label(int x, int y, string fontSrc, string content, int size, Uint8 r, Uint8 g, Uint8 b);
+	~Label();
 
-	Button(const Button& data);
-	Button& operator=(const Button* rhs);
+	Label(const Label& data);
+	Label& operator=(const Label* rhs);
 
-	virtual void click() = 0;
 	void raiseEvent(SDL_Event* event);
 	void draw(SDL_Surface* screen);
 
 private:
-	Image* normalBackground;
-	Image* hoverBackground;
-	Image* downBackground;
-	ButtonState state;
+	Font* font;
+	SDL_Surface* textImage;
 };
 
 #endif
