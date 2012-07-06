@@ -27,7 +27,7 @@
 
 using namespace std;
 
-enum SIMMODE { NORMAL, PLACECASTLE };
+enum SimMode { NORMAL, PLACECASTLE };
 
 class SimState : public State
 {
@@ -45,7 +45,7 @@ public:
 	TileMap* getMap();
 
 private:
-	SIMMODE mode;
+	SimMode mode;
 	TileMap* map;
 
 };
