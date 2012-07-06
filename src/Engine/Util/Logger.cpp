@@ -29,7 +29,7 @@
 using namespace std;
 
 //initalize
-LogLevel Logger::logwriting = DEBUG;
+LogLevel Logger::logwriting = DEBUGGING;
 
 void Logger::record(LogLevel level, string message)
 {
@@ -73,7 +73,7 @@ void Logger::traceFormat(string message, ...)
 
 void Logger::debug(string message)
 {
-	record(DEBUG, message);
+	record(DEBUGGING, message);
 }
 
 void Logger::debugFormat(string message, ...)
@@ -83,7 +83,7 @@ void Logger::debugFormat(string message, ...)
 	va_list args;
 	va_start(args, cstr);
 
-	record(DEBUG, format(cstr, args));
+	record(DEBUGGING, format(cstr, args));
 
 	va_end(args);
 }
@@ -194,7 +194,7 @@ string Logger::enumToString(LogLevel level)
 	{
 	case TRACE:
 		return "TRACE";
-	case DEBUG:
+	case DEBUGGING:
 		return "DEBUG";
 	case INFO:
 		return "INFO";

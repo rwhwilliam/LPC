@@ -23,7 +23,7 @@
 
 using namespace std;
 
-enum LogLevel {TRACE, DEBUG, INFO, WARN, ERROR};
+enum LogLevel {TRACE, DEBUGGING, INFO, WARN, ERROR};
 
 class Logger
 {
