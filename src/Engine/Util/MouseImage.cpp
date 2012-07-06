@@ -15,108 +15,52 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#include "Image.h"
+#include "MouseImage.h"
 
 #include <string>
 
 #include "SDL.h"
-#include "SDL_rotozoom.h"
 
-#include "ImageLoader.h"
-#include "Engine/Util/Util.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 
 using namespace std;
 
-Image::Image(string src)
-{	
-	Image::src = ImageLoader::loadImage(src);
+MouseImage::MouseImage(string src, int alpha) : x(0), y(0)
+{
+	Logger::debug("MouseImage Constructor");
+
+	img = new Image(src, alpha);
 }
 
-Image::Image(string src, int alpha)
+MouseImage::~MouseImage()
 {
-	Image::src = ImageLoader::loadImage(src);
+	delete img;
 
-	setAlpha(alpha);
+	Logger::debug("MouseImage Destructor");
 }
 
-Image::Image(string src, Uint8 r, Uint8 g, Uint8 b)
+MouseImage::MouseImage(const MouseImage& data)
 {
-	Image::src = ImageLoader::loadImage(src, r, g, b);
+	throw VillageException("MouseImage Copy Constructor");
 }
 
-Image::Image(string src, int alpha, Uint8 r, Uint8 g, Uint8 b)
+MouseImage& MouseImage::operator=(const MouseImage* rhs)
 {
-	Image::src = ImageLoader::loadImage(src, r, g, b);
-
-	setAlpha(alpha);
+	throw VillageException("MouseImage Assignment Operator");
 }
 
-Image::Image(string src, float scale)
+void MouseImage::raiseEvent(SDL_Event* event)
 {
-	Image::src = ImageLoader::loadImage(src, scale);
+	if(event->type == SDL_MOUSEMOTION)
+	{
+		x = event->motion.x - img->getWidth() / 2;
+		y = event->motion.y - img->getHeight() / 2;
+	}
 }
 
-Image::Image(string src, int alpha, float scale)
+void MouseImage::draw(SDL_Surface* screen)
 {
-	Image::src = ImageLoader::loadImage(src, scale);
-
-	setAlpha(alpha);
-}
-
-Image::Image(string src, Uint8 r, Uint8 g, Uint8 b, float scale)
-{
-	Image::src = ImageLoader::loadImage(src, r, g, b, scale);
-}
-
-Image::Image(string src, int alpha, Uint8 r, Uint8 g, Uint8 b, float scale)
-{
-	Image::src = ImageLoader::loadImage(src, r, g, b, scale);
-
-	setAlpha(alpha);
-}
-
-void Image::draw(int x, int y, SDL_Surface* screen)
-{
-	SDL_Rect offset;
-
-	offset.x = x;
-	offset.y = y;
-
-	SDL_BlitSurface(ImageLoader::getImage(src), NULL, screen, &offset);
-}
-
-Image::~Image()
-{
-
-}
-
-Image::Image(const Image& img)
-{
-	throw VillageException("Image Copy Constructor");
-}
-
-Image& Image::operator=(const Image* rhs)
-{
-	throw VillageException("Image Assignment Operator");
-}
-
-int Image::getWidth()
-{
-	return ImageLoader::getImage(src)->w;
-}
-
-int Image::getHeight()
-{
-	return ImageLoader::getImage(src)->h;
-}
-
-void Image::setAlpha(int alpha)
-{
-	SDL_SetAlpha(ImageLoader::getImage(src), SDL_SRCALPHA, (alpha % 256));
-}
-
-void Image::setScale(float scale)
-{
-	Image::src = ImageLoader::scaleImage(Image::src, scale);
+	img->draw(x, y, screen);
 }

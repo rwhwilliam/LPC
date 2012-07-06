@@ -19,7 +19,7 @@ FILE(GLOB State src/Engine/State/*.h src/Engine/State/*.cpp)
 FILE(GLOB Time src/Engine/Time/*.h src/Engine/Time/*.cpp)
 FILE(GLOB Util src/Engine/Util/*.h src/Engine/Util/*.cpp)
 
-File(GLOB VillagesStates src/Villages/States/*.h src/Village/States/*.cpp)
+File(GLOB VillagesStates src/Villages/States/*.h src/Villages/States/*.cpp)
 
 FILE(GLOB Config data/config/config.xml)
 FILE(GLOB Images data/images/*.png)

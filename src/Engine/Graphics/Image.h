@@ -42,6 +42,9 @@ public:
 
 	void draw(int x, int y, SDL_Surface* screen);
 
+	int getWidth();
+	int getHeight();
+
 	void setAlpha(int alpha);
 	void setScale(float scale);
 private:

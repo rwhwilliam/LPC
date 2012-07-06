@@ -15,39 +15,35 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#ifndef MOUSEIMAGE_H
+#define MOUSEIMAGE_H
 
 #include <string>
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
-#include "Engine/Graphics/TileMap.h"
-
 using namespace std;
 
-enum SIMMODE { NORMAL, PLACECASTLE };
+class Image;
 
-class SimState : public State
+class MouseImage
 {
 public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	MouseImage(string src, int alpha);
+	~MouseImage();
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
+	MouseImage(const MouseImage& data);
+	MouseImage& operator=(const MouseImage* rhs);
 
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event event);
-	void draw();
+	void raiseEvent(SDL_Event* event);
+	void draw(SDL_Surface* screen);
 
-	TileMap* getMap();
+	int getX() { return x; }
+	int getY() { return y; }
 
 private:
-	SIMMODE mode;
-	TileMap* map;
-
+	int x, y;
+	Image* img;
 };
 
 #endif
