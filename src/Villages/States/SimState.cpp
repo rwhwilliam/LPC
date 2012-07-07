@@ -25,6 +25,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
 using namespace tinyxml2;
@@ -42,7 +43,7 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 	int _width = atoi(doc.FirstChildElement("Map")->FirstChildElement("Width")->GetText());
 	int _height = atoi(doc.FirstChildElement("Map")->FirstChildElement("Height")->GetText());
 	int _layers = atoi(doc.FirstChildElement("Map")->FirstChildElement("Layers")->GetText());
-	map = new TileMap(_width, _height, 32, 32, _layers);
+	map = new ScrollingMap(_width, _height, 32, 32, _layers);
 
 	for(const XMLNode* node=doc.FirstChildElement("Map")->FirstChildElement("Tiles")->FirstChildElement("Tile");
 		node; node=node->NextSibling())
@@ -107,12 +108,12 @@ void SimState::update(float time, Uint8* keystrokes)
 
 void SimState::raiseEvent(SDL_Event event)
 {
-	
+	map->raiseEvent(&event);
 }
 
 void SimState::draw()
 {
 	SDL_FillRect(frame, &frame->clip_rect, SDL_MapRGB(frame->format, 0x00, 0x00, 0x00));
 
-	map->draw(0, 0, frame);
+	map->draw(frame);
 }

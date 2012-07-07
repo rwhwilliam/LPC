@@ -19,7 +19,8 @@ FILE(GLOB State src/Engine/State/*.h src/Engine/State/*.cpp)
 FILE(GLOB Time src/Engine/Time/*.h src/Engine/Time/*.cpp)
 FILE(GLOB Util src/Engine/Util/*.h src/Engine/Util/*.cpp)
 
-File(GLOB VillagesStates src/Villages/States/*.h src/Villages/States/*.cpp)
+FILE(GLOB VillagesStates src/Villages/States/*.h src/Villages/States/*.cpp)
+FILE(GLOB VillagesUtil src/Villages/Util/*.h src/Villages/Util/*.cpp)
 
 FILE(GLOB Config data/config/config.xml)
 FILE(GLOB Images data/images/*.png)
@@ -42,6 +43,7 @@ set (
 	${Util}
 
 	${VillagesStates}
+	${VillagesUtil}
 )
 
 set (
@@ -74,6 +76,7 @@ if(${WIN32})
 	source_group(Source\ Files\\Engine\\Util FILES ${Util})
 
 	source_group(Source\ Files\\Villages\\States FILES ${VillagesStates})
+	source_group(Source\ Files\\Villages\\Util FILES ${VillagesUtil})
 
 	link_libraries (
 		${SDL_LIBRARY}

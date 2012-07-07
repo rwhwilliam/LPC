@@ -10,6 +10,8 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Config.h"
 
+#include "Engine/Time/Timer.h"
+
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -47,8 +49,12 @@ int main(int argc, char* args[])
 
 		Logger::debugFormat("logging test");
 
+		Timer t;
+		
+
 		while(!quit)
 		{
+			t.start();
 			while(SDL_PollEvent(&event))
 			{
 				if(event.type == SDL_QUIT)
@@ -59,6 +65,8 @@ int main(int argc, char* args[])
 				stateManager.raiseEvent(event);
 			}
 
+			
+
 			Uint8 *keystates = SDL_GetKeyState(NULL);
 
 			SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
@@ -68,6 +76,10 @@ int main(int argc, char* args[])
 			stateManager.draw(screen);
 
 			SDL_Flip(screen);
+
+			
+			Logger::debugFormat("ms %i", t.get_ticks());
+			t.stop();
 		}
 
 		SoundLoader::cleanup();

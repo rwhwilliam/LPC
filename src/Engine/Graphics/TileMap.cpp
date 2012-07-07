@@ -123,7 +123,7 @@ void TileMap::draw(int xoffset, int yoffset, SDL_Surface* screen)
 					if(data[k][i + j * height] > 0)
 					{
 						//to speed up things, I'm going to assume the tiles needed are there
-						tiles[data[k][i + j * height]]->draw(i * tileWidth + xoffset, j * tileHeight + yoffset, screen);
+						tiles[data[k][i + j * height]]->draw(i * tileWidth - xoffset, j * tileHeight - yoffset, screen);
 					}
 				}
 			}

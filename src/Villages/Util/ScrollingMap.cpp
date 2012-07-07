@@ -15,39 +15,61 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
-
-#include <string>
+#include "ScrollingMap.h"
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
-#include "Villages/Util/ScrollingMap.h"
+#include "Engine/Util/Config.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
 
-using namespace std;
-
-enum SimMode { NORMAL, PLACECASTLE };
-
-class SimState : public State
+ScrollingMap::ScrollingMap(int width, int height, int tileWidth, int tileHeight, int layerCount) : TileMap(width, height, tileWidth, tileHeight, layerCount)
 {
-public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Logger::debugFormat("ScrollingMap Constructor");
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
+	xoffset = 0;
+	yoffset = 0;
+}
 
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event event);
-	void draw();
+ScrollingMap::~ScrollingMap()
+{
+	Logger::debugFormat("ScrollingMap Destructor");
+}
 
-	TileMap* getMap();
+ScrollingMap::ScrollingMap(const ScrollingMap& data) : TileMap(0, 0, 0, 0, 0)
+{
+	throw VillageException("ScrollingMap Copy Constructor");
+}
 
-private:
-	SimMode mode;
-	ScrollingMap* map;
+ScrollingMap& ScrollingMap::operator=(const ScrollingMap* rhs)
+{
+	throw VillageException("ScrollingMap Assignment Operator");
+}
 
-};
+void ScrollingMap::raiseEvent(SDL_Event* event)
+{
+	if(event->type == SDL_MOUSEMOTION)
+	{
+		if(event->motion.x <= 200)
+		{
+			xoffset = (xoffset - 5 < 0) ? 0 : xoffset - 5;
+		}
+		if(event->motion.y <= 200)
+		{
+			yoffset = (yoffset - 5 < 0) ? 0 : yoffset - 5;
+		}
+		if(event->motion.x >= atoi(Config::getConfig("ScreenWidth").c_str()) - 200)
+		{
+			xoffset += 5;
+		}
+		if(event->motion.y >= atoi(Config::getConfig("ScreenHeight").c_str()) - 200)
+		{
+			yoffset += 5;
+		}
+	}
+}
 
-#endif
+void ScrollingMap::draw(SDL_Surface* screen)
+{
+	TileMap::draw(xoffset, yoffset, screen);
+}

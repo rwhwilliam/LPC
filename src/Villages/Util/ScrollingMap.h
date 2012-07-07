@@ -15,39 +15,30 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
-
-#include <string>
+#ifndef SCROLLINGMAP_H
+#define SCROLLINGMAP_H
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
-#include "Villages/Util/ScrollingMap.h"
+#include "Engine/Graphics/TileMap.h"
 
-using namespace std;
-
-enum SimMode { NORMAL, PLACECASTLE };
-
-class SimState : public State
+class ScrollingMap : public TileMap
 {
 public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	ScrollingMap(int width, int height, int tileWidth, int tileHeight, int layerCount);
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
+	ScrollingMap(const ScrollingMap& img);
+	ScrollingMap& operator=(const ScrollingMap* rhs);
+	~ScrollingMap();
 
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event event);
-	void draw();
+	void raiseEvent(SDL_Event* event);
+	void draw(SDL_Surface* screen);
 
-	TileMap* getMap();
+	int getXOffset() { return xoffset; }
+	int getYOffset() { return yoffset; }
 
-private:
-	SimMode mode;
-	ScrollingMap* map;
-
+protected:
+	int xoffset, yoffset;
 };
 
 #endif
