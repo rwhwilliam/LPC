@@ -24,6 +24,7 @@
 
 #include "Engine/State/State.h"
 #include "Engine/Util/MouseImage.h"
+#include "Villages/Objects/Castle.h"
 #include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
@@ -40,7 +41,7 @@ public:
 	SimState& operator=(const SimState* rhs);
 
 	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event event);
+	void raiseEvent(SDL_Event* event);
 	void draw();
 
 	TileMap* getMap();
@@ -49,7 +50,7 @@ private:
 	SimMode mode;
 	ScrollingMap* map;
 	MouseImage* imageHover;
-
+	Castle* castle;
 };
 
 #endif

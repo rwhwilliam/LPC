@@ -40,7 +40,7 @@ public:
 	State* pop();
 
 	void draw(SDL_Surface* screen);
-	void raiseEvent(SDL_Event event);
+	void raiseEvent(SDL_Event* event);
 	void update(float time, Uint8* keystates);
 
 private:

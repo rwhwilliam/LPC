@@ -15,49 +15,53 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef STATE_H
-#define STATE_H
+#include "Castle.h"
+
+#include <string>
 
 #include "SDL.h"
-#include "SDL_image.h"
 
-class State
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
+
+using namespace std;
+
+Castle::Castle(string src, int xloc, int yloc, int width, int height) : xloc(xloc), yloc(yloc), width(width), height(height)
 {
-public:
-	virtual void update(float time, Uint8* keystates) = 0;
-	virtual void raiseEvent(SDL_Event* event) = 0;
-	virtual void draw() = 0;
-	
-	//unconventional...but this is what draws "frame" onto the screen
-	void flip(SDL_Surface* screen);
+	Logger::debug("Castle Constructor");
 
-	bool getShowBehind() { return showBehind; }
-	bool getRaiseBehind() { return raiseBehind; }
-	bool getExecuteBehind() { return executeBehind; }
-protected:
-	State(int width, int height, int xloc, int yloc);
-	~State();
+	img = new Image(src);
+}
 
-	State(const State& data);
-	State& operator=(const State* rhs);
+Castle::~Castle()
+{
+	delete img;
 
-	//if true, drawing will go another layer down
-	//using this you could draw a menu only half the screen over a game and still see it
-	bool showBehind;
+	Logger::debug("Castle Destructor");
+}
 
-	//if true, updates, but -not- usercontrol/input will go another layer down
-	//using this you can draw a menu and the game can still be running/animating beneath it
-	bool executeBehind;
+Castle::Castle(const Castle& data)
+{
+	throw VillageException("Castle Copy Constructor");
+}
 
-	//if true, raises SDL events 'below' this state to others
-	bool raiseBehind;
+Castle& Castle::operator=(const Castle* rhs)
+{
+	throw VillageException("Castle Assignment Operator");
+}
 
-	//the position and width/height of this 'frame'
-	int width, height;
-	int xloc, yloc;
+void Castle::update(float time, Uint8* keystrokes)
+{
 
-	//actual surface that is drawn
-	SDL_Surface* frame;
-};
+}
 
-#endif
+void Castle::raiseEvent(SDL_Event* event)
+{
+
+}
+
+void Castle::draw(int xoffset, int yoffset, SDL_Surface* screen)
+{
+	img->draw(xloc - xoffset, yloc - yoffset, screen);
+}

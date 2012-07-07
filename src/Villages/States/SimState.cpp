@@ -36,6 +36,8 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 	mode = S_PLACECASTLE;
 	imageHover = new MouseImage("castle.png", 128);
 
+	castle = NULL;
+
 
 	XMLDocument doc;
 	if (!doc.LoadFile(path.c_str()))
@@ -94,6 +96,9 @@ SimState::~SimState()
 
 	if(imageHover != NULL)
 		delete imageHover;
+
+	if(castle != NULL)
+		delete castle;
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -112,19 +117,28 @@ void SimState::update(float time, Uint8* keystrokes)
 
 }
 
-void SimState::raiseEvent(SDL_Event event)
+void SimState::raiseEvent(SDL_Event* event)
 {
-	map->raiseEvent(&event);
+	map->raiseEvent(event);
 
 	if(imageHover != NULL)
-		imageHover->raiseEvent(&event);
+		imageHover->raiseEvent(event);
 
-	if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+	if(event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
 	{
 		switch(mode)
 		{
 		case S_PLACECASTLE:
+			if(castle == NULL)
+			{
+				castle = new Castle("castle.png", imageHover->getX(), imageHover->getY(), 200, 200);
 
+				mode = S_NORMAL;
+			}
+			else
+			{
+				Logger::error("Tried to place a second castle");
+			}
 			break;
 		}
 	}
@@ -135,6 +149,9 @@ void SimState::draw()
 	SDL_FillRect(frame, &frame->clip_rect, SDL_MapRGB(frame->format, 0x00, 0x00, 0x00));
 
 	map->draw(frame);
+
+	if(castle != NULL)
+		castle->draw(map->getXOffset(), map->getYOffset(), frame);
 
 	if(imageHover != NULL)
 		imageHover->draw(frame);

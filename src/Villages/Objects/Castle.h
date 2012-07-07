@@ -15,49 +15,33 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef STATE_H
-#define STATE_H
+#ifndef CASTLE_H
+#define CASTLE_H
+
+#include <string>
 
 #include "SDL.h"
-#include "SDL_image.h"
 
-class State
+using namespace std;
+
+class Image;
+
+class Castle
 {
 public:
-	virtual void update(float time, Uint8* keystates) = 0;
-	virtual void raiseEvent(SDL_Event* event) = 0;
-	virtual void draw() = 0;
-	
-	//unconventional...but this is what draws "frame" onto the screen
-	void flip(SDL_Surface* screen);
+	Castle(string src, int xloc, int yloc, int width, int height);
+	~Castle();
 
-	bool getShowBehind() { return showBehind; }
-	bool getRaiseBehind() { return raiseBehind; }
-	bool getExecuteBehind() { return executeBehind; }
-protected:
-	State(int width, int height, int xloc, int yloc);
-	~State();
+	Castle(const Castle& data);
+	Castle& operator=(const Castle* rhs);
 
-	State(const State& data);
-	State& operator=(const State* rhs);
+	void update(float time, Uint8* keystrokes);
+	void raiseEvent(SDL_Event* event);
+	void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
-	//if true, drawing will go another layer down
-	//using this you could draw a menu only half the screen over a game and still see it
-	bool showBehind;
-
-	//if true, updates, but -not- usercontrol/input will go another layer down
-	//using this you can draw a menu and the game can still be running/animating beneath it
-	bool executeBehind;
-
-	//if true, raises SDL events 'below' this state to others
-	bool raiseBehind;
-
-	//the position and width/height of this 'frame'
-	int width, height;
-	int xloc, yloc;
-
-	//actual surface that is drawn
-	SDL_Surface* frame;
+private:
+	Image* img;
+	int xloc, yloc, width, height;
 };
 
 #endif

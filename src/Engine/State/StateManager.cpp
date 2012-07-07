@@ -73,7 +73,7 @@ void StateManager::update(float time, Uint8* keystates)
 	while(ittr != states.begin());
 }
 
-void StateManager::raiseEvent(SDL_Event event)
+void StateManager::raiseEvent(SDL_Event* event)
 {
 	vector<State*>::const_iterator ittr = states.end();
 

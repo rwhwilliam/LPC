@@ -19,6 +19,7 @@ FILE(GLOB State src/Engine/State/*.h src/Engine/State/*.cpp)
 FILE(GLOB Time src/Engine/Time/*.h src/Engine/Time/*.cpp)
 FILE(GLOB Util src/Engine/Util/*.h src/Engine/Util/*.cpp)
 
+FILE(GLOB VillagesObjects src/Villages/Objects/*.h src/Villages/Objects/*.cpp)
 FILE(GLOB VillagesStates src/Villages/States/*.h src/Villages/States/*.cpp)
 FILE(GLOB VillagesUtil src/Villages/Util/*.h src/Villages/Util/*.cpp)
 
@@ -42,6 +43,7 @@ set (
 	${Time}
 	${Util}
 
+	${VillagesObjects}
 	${VillagesStates}
 	${VillagesUtil}
 )
@@ -75,6 +77,7 @@ if(${WIN32})
 	source_group(Source\ Files\\Engine\\Time FILES ${Time})
 	source_group(Source\ Files\\Engine\\Util FILES ${Util})
 
+	source_group(Source\ Files\\Villages\\Objects FILES ${VillagesObjects})
 	source_group(Source\ Files\\Villages\\States FILES ${VillagesStates})
 	source_group(Source\ Files\\Villages\\Util FILES ${VillagesUtil})
 

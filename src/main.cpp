@@ -62,7 +62,7 @@ int main(int argc, char* args[])
 					quit = true;
 				}
 
-				stateManager.raiseEvent(event);
+				stateManager.raiseEvent(&event);
 			}
 
 			
