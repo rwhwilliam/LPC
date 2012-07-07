@@ -2,8 +2,15 @@
 
 #include "SDL.h"
 
+#include "Engine/Graphics/FontLoader.h"
+#include "Engine/Graphics/ImageLoader.h"
+#include "Engine/Sound/SoundLoader.h"
+#include "Engine/State/State.h"
+#include "Engine/State/StateManager.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Config.h"
+
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
@@ -21,6 +28,21 @@ int main(int argc, char* args[])
 
 		SDL_Surface* screen = SDL_SetVideoMode(atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 32, SDL_SWSURFACE);
 
+		if(!ImageLoader::init())
+		return 0;
+
+		if(!FontLoader::init())
+			return 0;
+
+		if(!SoundLoader::init())
+			return 0;
+
+		StateManager stateManager;
+
+		SimState* s = new SimState("data/maps/map1.xml", atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
+
+		stateManager.push(s);
+
 		bool quit = false;
 
 		Logger::debugFormat("logging test");
@@ -33,14 +55,24 @@ int main(int argc, char* args[])
 				{
 					quit = true;
 				}
+
+				stateManager.raiseEvent(event);
 			}
 
 			Uint8 *keystates = SDL_GetKeyState(NULL);
 
 			SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
 
+			stateManager.update(0, keystates);
+
+			stateManager.draw(screen);
+
 			SDL_Flip(screen);
 		}
+
+		SoundLoader::cleanup();
+		FontLoader::cleanup();
+		ImageLoader::cleanup();
 
 		SDL_EnableUNICODE(SDL_DISABLE);
 

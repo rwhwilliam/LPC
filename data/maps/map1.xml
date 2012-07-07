@@ -6,7 +6,7 @@
  	<Tiles>
  		<Tile>
  			<Id>1</Id>
- 			<Path>data/tiles/dirt-base.png</Path>
+ 			<Path>dirt-base.png</Path>
  		</Tile>
  	</Tiles>
  	<Data>

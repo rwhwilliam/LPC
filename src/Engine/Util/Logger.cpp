@@ -64,7 +64,7 @@ void Logger::traceFormat(string message, ...)
 	const char* cstr = message.c_str();
 
 	va_list args;
-	va_start(args, cstr);
+	va_start(args, message);
 
 	record(TRACE, format(cstr, args));
 
@@ -81,7 +81,7 @@ void Logger::debugFormat(string message, ...)
 	const char* cstr = message.c_str();
 
 	va_list args;
-	va_start(args, cstr);
+	va_start(args, message);
 
 	record(DEBUGGING, format(cstr, args));
 
@@ -98,7 +98,7 @@ void Logger::infoFormat(string message, ...)
 	const char* cstr = message.c_str();
 
 	va_list args;
-	va_start(args, cstr);
+	va_start(args, message);
 
 	record(INFO, format(cstr, args));
 
@@ -115,7 +115,7 @@ void Logger::warnFormat(string message, ...)
 	const char* cstr = message.c_str();
 
 	va_list args;
-	va_start(args, cstr);
+	va_start(args, message);
 
 	record(WARN, format(cstr, args));
 
@@ -132,7 +132,7 @@ void Logger::errorFormat(string message, ...)
 	const char* cstr = message.c_str();
 
 	va_list args;
-	va_start(args, cstr);
+	va_start(args, message);
 
 	record(ERROR, format(cstr, args));
 
