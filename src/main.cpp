@@ -54,7 +54,7 @@ int main(int argc, char* args[])
 
 		while(!quit)
 		{
-			t.start();
+			//t.start();
 			while(SDL_PollEvent(&event))
 			{
 				if(event.type == SDL_QUIT)
@@ -78,8 +78,8 @@ int main(int argc, char* args[])
 			SDL_Flip(screen);
 
 			
-			Logger::debugFormat("ms %i", t.get_ticks());
-			t.stop();
+			//Logger::debugFormat("ms %i", t.get_ticks());
+			//t.stop();
 		}
 
 		SoundLoader::cleanup();

@@ -46,7 +46,7 @@ public:
 
 	int getTileWidth() { return tileWidth; };
 	int getTileHeight() { return tileHeight; };
-private:
+protected:
 	int width, height;
 	int tileWidth, tileHeight;
 	int layerCount, lastLayerLoaded;

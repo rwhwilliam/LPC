@@ -112,9 +112,9 @@ void TileMap::draw(int xoffset, int yoffset, SDL_Surface* screen)
 {
 	for(int k = 0; k <= lastLayerLoaded; k++)
 	{
-		for(int j = yoffset / tileHeight; j < (yoffset + atoi(Config::getConfig("ScreenHeight").c_str())) / tileHeight; j++)
+		for(int j = yoffset / tileHeight; j <= (yoffset + atoi(Config::getConfig("ScreenHeight").c_str())) / tileHeight; j++)
 		{
-			for(int i = xoffset / tileWidth; i < (xoffset + atoi(Config::getConfig("ScreenWidth").c_str())) / tileWidth; i++)
+			for(int i = xoffset / tileWidth; i <= (xoffset + atoi(Config::getConfig("ScreenWidth").c_str())) / tileWidth; i++)
 			{
 				//is this a valid index?
 				if(data[k].size() > i + j * height)

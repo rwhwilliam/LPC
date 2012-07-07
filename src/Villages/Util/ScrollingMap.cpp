@@ -60,11 +60,15 @@ void ScrollingMap::raiseEvent(SDL_Event* event)
 		}
 		if(event->motion.x >= atoi(Config::getConfig("ScreenWidth").c_str()) - 200)
 		{
-			xoffset += 5;
+			int temp = width * tileWidth - atoi(Config::getConfig("ScreenWidth").c_str());
+
+			xoffset = (xoffset + 5 > temp) ? temp : xoffset + 5;
 		}
 		if(event->motion.y >= atoi(Config::getConfig("ScreenHeight").c_str()) - 200)
 		{
-			yoffset += 5;
+			int temp = height * tileHeight - atoi(Config::getConfig("ScreenHeight").c_str());
+
+			yoffset = (yoffset + 5 > temp) ? temp : yoffset + 5;
 		}
 	}
 }
