@@ -27,7 +27,7 @@
 
 using namespace std;
 
-enum SimMode { NORMAL, PLACECASTLE };
+enum SimMode { S_NORMAL, S_PLACECASTLE };
 
 class SimState : public State
 {

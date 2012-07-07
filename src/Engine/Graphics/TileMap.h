@@ -41,8 +41,8 @@ public:
 	void addLayer(int id, int dat[]);
 	void addTile(int id, Image* img);
 
-	void update(float time, Uint8* keystates);
-	void draw(int xoffset, int yoffset, SDL_Surface* screen);
+	virtual void update(float time, Uint8* keystates);
+	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
 	int getTileWidth() { return tileWidth; };
 	int getTileHeight() { return tileHeight; };

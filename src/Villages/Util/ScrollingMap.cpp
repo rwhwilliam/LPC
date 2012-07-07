@@ -50,26 +50,54 @@ void ScrollingMap::raiseEvent(SDL_Event* event)
 {
 	if(event->type == SDL_MOUSEMOTION)
 	{
-		if(event->motion.x <= 200)
+		int speed = 10;
+
+		if(event->motion.x <= 150)
 		{
-			xoffset = (xoffset - 5 < 0) ? 0 : xoffset - 5;
+			xoffset = (xoffset - speed < 0) ? 0 : xoffset - speed;
 		}
-		if(event->motion.y <= 200)
+		if(event->motion.y <= 150)
 		{
-			yoffset = (yoffset - 5 < 0) ? 0 : yoffset - 5;
+			yoffset = (yoffset - speed < 0) ? 0 : yoffset - speed;
 		}
-		if(event->motion.x >= atoi(Config::getConfig("ScreenWidth").c_str()) - 200)
+		if(event->motion.x >= atoi(Config::getConfig("ScreenWidth").c_str()) - 150)
 		{
 			int temp = width * tileWidth - atoi(Config::getConfig("ScreenWidth").c_str());
 
-			xoffset = (xoffset + 5 > temp) ? temp : xoffset + 5;
+			xoffset = (xoffset + speed > temp) ? temp : xoffset + speed;
 		}
-		if(event->motion.y >= atoi(Config::getConfig("ScreenHeight").c_str()) - 200)
+		if(event->motion.y >= atoi(Config::getConfig("ScreenHeight").c_str()) - 150)
 		{
 			int temp = height * tileHeight - atoi(Config::getConfig("ScreenHeight").c_str());
 
-			yoffset = (yoffset + 5 > temp) ? temp : yoffset + 5;
+			yoffset = (yoffset + speed > temp) ? temp : yoffset + speed;
 		}
+	}
+}
+
+void ScrollingMap::update(float time, Uint8* keystates)
+{
+	int speed = 10;
+
+	if(keystates[SDLK_w])
+	{
+		yoffset = (yoffset - speed < 0) ? 0 : yoffset - speed;
+	}
+	if(keystates[SDLK_s])
+	{
+		int temp = height * tileHeight - atoi(Config::getConfig("ScreenHeight").c_str());
+
+		yoffset = (yoffset + speed > temp) ? temp : yoffset + speed;
+	}
+	if(keystates[SDLK_a])
+	{
+		xoffset = (xoffset - speed < 0) ? 0 : xoffset - speed;
+	}
+	if(keystates[SDLK_d])
+	{
+		int temp = width * tileWidth - atoi(Config::getConfig("ScreenWidth").c_str());
+
+		xoffset = (xoffset + speed > temp) ? temp : xoffset + speed;
 	}
 }
 

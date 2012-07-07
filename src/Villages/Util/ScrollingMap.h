@@ -33,6 +33,7 @@ public:
 
 	void raiseEvent(SDL_Event* event);
 	void draw(SDL_Surface* screen);
+	void update(float time, Uint8* keystates);
 
 	int getXOffset() { return xoffset; }
 	int getYOffset() { return yoffset; }

@@ -32,7 +32,7 @@ using namespace tinyxml2;
 
 SimState::SimState(string path, int width, int height, int xloc, int yloc) : State(width, height, xloc, yloc)
 {
-	mode = PLACECASTLE;
+	mode = S_PLACECASTLE;
 
 	XMLDocument doc;
 	if (!doc.LoadFile(path.c_str()))

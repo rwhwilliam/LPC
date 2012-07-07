@@ -116,6 +116,9 @@ void TileMap::draw(int xoffset, int yoffset, SDL_Surface* screen)
 		{
 			for(int i = xoffset / tileWidth; i <= (xoffset + atoi(Config::getConfig("ScreenWidth").c_str())) / tileWidth; i++)
 			{
+				if(i >= width || j >= height)
+					continue;
+
 				//is this a valid index?
 				if(data[k].size() > i + j * height)
 				{
