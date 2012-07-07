@@ -17,11 +17,16 @@
 
 #include "ScrollingMap.h"
 
+#include <iostream>
+#include <stdlib.h>
+
 #include "SDL.h"
 
 #include "Engine/Util/Config.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+
+using namespace std;
 
 ScrollingMap::ScrollingMap(int width, int height, int tileWidth, int tileHeight, int layerCount) : TileMap(width, height, tileWidth, tileHeight, layerCount)
 {
