@@ -53,7 +53,7 @@ ScrollingMap& ScrollingMap::operator=(const ScrollingMap* rhs)
 
 void ScrollingMap::raiseEvent(SDL_Event* event)
 {
-	if(event->type == SDL_MOUSEMOTION)
+	/*if(event->type == SDL_MOUSEMOTION)
 	{
 		int speed = 10;
 
@@ -77,7 +77,7 @@ void ScrollingMap::raiseEvent(SDL_Event* event)
 
 			yoffset = (yoffset + speed > temp) ? temp : yoffset + speed;
 		}
-	}
+	}*/
 }
 
 void ScrollingMap::update(float time, Uint8* keystates)

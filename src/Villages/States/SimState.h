@@ -23,6 +23,7 @@
 #include "SDL.h"
 
 #include "Engine/State/State.h"
+#include "Engine/Util/MouseImage.h"
 #include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
@@ -47,6 +48,7 @@ public:
 private:
 	SimMode mode;
 	ScrollingMap* map;
+	MouseImage* imageHover;
 
 };
 

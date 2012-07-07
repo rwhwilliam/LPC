@@ -23,6 +23,7 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/MouseImage.h"
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Util/ScrollingMap.h"
@@ -33,11 +34,13 @@ using namespace tinyxml2;
 SimState::SimState(string path, int width, int height, int xloc, int yloc) : State(width, height, xloc, yloc)
 {
 	mode = S_PLACECASTLE;
+	imageHover = new MouseImage("castle.png", 128);
+
 
 	XMLDocument doc;
 	if (!doc.LoadFile(path.c_str()))
 	{
-		//Logger::errorFormat("Error loading Map File %s", path.c_str());
+		Logger::errorFormat("Error loading Map File %s", path.c_str());
 	}
 
 	int _width = atoi(doc.FirstChildElement("Map")->FirstChildElement("Width")->GetText());
@@ -88,6 +91,9 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 SimState::~SimState()
 {
 	delete map;
+
+	if(imageHover != NULL)
+		delete imageHover;
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -109,6 +115,19 @@ void SimState::update(float time, Uint8* keystrokes)
 void SimState::raiseEvent(SDL_Event event)
 {
 	map->raiseEvent(&event);
+
+	if(imageHover != NULL)
+		imageHover->raiseEvent(&event);
+
+	if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+	{
+		switch(mode)
+		{
+		case S_PLACECASTLE:
+
+			break;
+		}
+	}
 }
 
 void SimState::draw()
@@ -116,4 +135,7 @@ void SimState::draw()
 	SDL_FillRect(frame, &frame->clip_rect, SDL_MapRGB(frame->format, 0x00, 0x00, 0x00));
 
 	map->draw(frame);
+
+	if(imageHover != NULL)
+		imageHover->draw(frame);
 }
