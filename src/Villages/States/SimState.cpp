@@ -179,3 +179,19 @@ void SimState::draw()
 	if(actionBar != NULL)
 		actionBar->draw(frame);
 }
+
+void SimState::placeHouse()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEHOUSE;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		if(actionBar != NULL)
+			actionBar->setActive(false);
+
+		imageHover = new MouseImage("house.png", 128);
+	}
+}

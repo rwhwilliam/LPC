@@ -25,6 +25,7 @@
 #include "Engine/Gui/UI.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
@@ -56,5 +57,5 @@ ActionBar& ActionBar::operator=(const ActionBar* rhs)
 
 void ActionBar::placeHouse()
 {
-
+	state->placeHouse();
 }
