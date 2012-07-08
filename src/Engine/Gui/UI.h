@@ -39,8 +39,8 @@ public:
 	UI(const UI& data);
 	UI& operator=(const UI* rhs);
 
-	void raiseEvent(SDL_Event* event);
-	void draw(SDL_Surface* screen);
+	virtual void raiseEvent(SDL_Event* event);
+	virtual void draw(SDL_Surface* screen);
 
 	void addComponent(string src, Component* comp);
 	Component* getComponent(string src);

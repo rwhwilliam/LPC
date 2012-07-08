@@ -33,7 +33,10 @@ UI::UI(int x, int y, int width, int height, string backgroundSrc) : Component(x,
 {
 	Logger::debug("UI Constructor");
 
-	background = new Image(backgroundSrc);
+	if(backgroundSrc != "")
+		background = new Image(backgroundSrc);
+	else
+		background = NULL;
 }
 
 UI::UI(int x, int y, int width, int height, string backgroundSrc, Uint8 r, Uint8 g, Uint8 b) : Component(x, y, width, height)

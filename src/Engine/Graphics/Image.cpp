@@ -31,6 +31,8 @@ using namespace std;
 Image::Image(string src)
 {	
 	Image::src = ImageLoader::loadImage(src);
+
+	setAlpha(255);
 }
 
 Image::Image(string src, int alpha)
@@ -43,6 +45,8 @@ Image::Image(string src, int alpha)
 Image::Image(string src, Uint8 r, Uint8 g, Uint8 b)
 {
 	Image::src = ImageLoader::loadImage(src, r, g, b);
+
+	setAlpha(255);
 }
 
 Image::Image(string src, int alpha, Uint8 r, Uint8 g, Uint8 b)

@@ -6,11 +6,11 @@
 	</Config>
 	<Config>
 		<Name>ScreenWidth</Name>
-		<Value>640</Value>
+		<Value>1024</Value>
 	</Config>
 	<Config>
 		<Name>ScreenHeight</Name>
-		<Value>480</Value>
+		<Value>768</Value>
 	</Config>
 	<Config>
 		<Name>ImagePath</Name>

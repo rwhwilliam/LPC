@@ -15,45 +15,34 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#ifndef ACTIONBAR_H
+#define ACTIONBAR_H
 
 #include <string>
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
+#include "Engine/Gui/ClickableButton.h"
+#include "Engine/Gui/UI.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE };
+class SimState;
 
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-
-class SimState : public State
+class ActionBar : public UI
 {
 public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc);
+	~ActionBar();
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
-
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
-
-	ScrollingMap* getMap();
+	ActionBar(const ActionBar& data);
+	ActionBar& operator=(const ActionBar* rhs);
 
 private:
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
+	void placeHouse();
+
+	SimState* state;
+	ClickableButton<ActionBar>* buildHouse;
 };
 
 #endif

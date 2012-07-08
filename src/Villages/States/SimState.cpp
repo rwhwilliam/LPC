@@ -26,6 +26,8 @@
 #include "Engine/Util/MouseImage.h"
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/Gui/ActionBar.h"
+#include "Villages/Objects/Castle.h"
 #include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
@@ -37,6 +39,8 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 	imageHover = new MouseImage("castle.png", 128);
 
 	castle = NULL;
+
+	actionBar = NULL;
 
 
 	XMLDocument doc;
@@ -99,6 +103,9 @@ SimState::~SimState()
 
 	if(castle != NULL)
 		delete castle;
+	
+	if(actionBar != NULL)
+		delete actionBar;
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -121,6 +128,9 @@ void SimState::raiseEvent(SDL_Event* event)
 {
 	map->raiseEvent(event);
 
+	if(actionBar != NULL)
+		actionBar->raiseEvent(event);
+
 	if(imageHover != NULL)
 		imageHover->raiseEvent(event);
 
@@ -134,6 +144,16 @@ void SimState::raiseEvent(SDL_Event* event)
 				castle = new Castle("castle.png", imageHover->getX(), imageHover->getY(), 200, 200);
 
 				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+				
+				imageHover = NULL;
+
+				if(actionBar != NULL)
+					delete actionBar;
+
+				actionBar = new ActionBar(this, 40, 0, 400, 100, "");
 			}
 			else
 			{
@@ -155,4 +175,7 @@ void SimState::draw()
 
 	if(imageHover != NULL)
 		imageHover->draw(frame);
+
+	if(actionBar != NULL)
+		actionBar->draw(frame);
 }

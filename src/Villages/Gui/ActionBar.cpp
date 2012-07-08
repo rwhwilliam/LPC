@@ -15,45 +15,46 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#include "ActionBar.h"
 
 #include <string>
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
+#include "Engine/Gui/ClickableButton.h"
+#include "Engine/Gui/UI.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-
-class SimState : public State
+ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc) : UI(x, y, width, height, backgroundSrc)
 {
-public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Logger::debug("ActionBar Constructor");
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
+	ActionBar::state = state;
 
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
+	buildHouse = new ClickableButton<ActionBar>(x + 10, y + 10, 50, 50, "buildhouse-normal.png", "buildhouse-hover.png", "buildhouse-down.png", this, &ActionBar::placeHouse); 
 
-	ScrollingMap* getMap();
+	addComponent("buildHouse", buildHouse);
+}
 
-private:
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-};
+ActionBar::~ActionBar()
+{
+	Logger::debug("ActionBar Destructor");
+}
 
-#endif
+ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
+{
+	throw VillageException("ActionBar Copy Constructor");
+}
+
+ActionBar& ActionBar::operator=(const ActionBar* rhs)
+{
+	throw VillageException("ActionBar Assignment Operator");
+}
+
+void ActionBar::placeHouse()
+{
+
+}
