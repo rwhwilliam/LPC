@@ -15,17 +15,33 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef HOUSE_H
-#define HOUSE_H
+#ifndef OBJECT_H
+#define OBJECT_H
 
-class House
+#include <string>
+
+#include "SDL.h"
+
+using namespace std;
+
+class Image;
+
+class Object
 {
 public:
-	House(string src, int xloc, int yloc, int width, int height);
-	~House();
+	Object(string src, int xloc, int yloc, int width, int height);
+	~Object();
 
-	House(const House& data);
-	House& operator=(const House* rhs);
+	Object(const Object& data);
+	Object& operator=(const Object* rhs);
+
+	virtual void update(float time, Uint8* keystrokes);
+	virtual void raiseEvent(SDL_Event* event);
+	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
+
+private:
+	Image* img;
+	int xloc, yloc, width, height;
 };
 
 #endif

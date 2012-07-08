@@ -122,13 +122,23 @@ void SimState::update(float time, Uint8* keystrokes)
 {
 	map->update(time, keystrokes);
 
+	if(keystrokes[SDLK_ESCAPE] && mode != S_PLACECASTLE)
+	{
+		if(imageHover != NULL)
+		{
+			delete imageHover;
+			imageHover = NULL;
+
+			mode = S_NORMAL;
+		}
+	}
 }
 
 void SimState::raiseEvent(SDL_Event* event)
 {
 	map->raiseEvent(event);
 
-	if(actionBar != NULL)
+	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->raiseEvent(event);
 
 	if(imageHover != NULL)
@@ -176,7 +186,7 @@ void SimState::draw()
 	if(imageHover != NULL)
 		imageHover->draw(frame);
 
-	if(actionBar != NULL)
+	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->draw(frame);
 }
 
@@ -189,8 +199,8 @@ void SimState::placeHouse()
 		if(imageHover != NULL)
 			delete imageHover;
 
-		if(actionBar != NULL)
-			actionBar->setActive(false);
+		/*if(actionBar != NULL)
+			actionBar->setActive(false);*/
 
 		imageHover = new MouseImage("house.png", 128);
 	}
