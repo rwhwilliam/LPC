@@ -28,6 +28,7 @@
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Gui/ActionBar.h"
+#include "Villages/Objects/Object.h"
 #include "Villages/Objects/Castle.h"
 #include "Villages/Objects/House.h"
 #include "Villages/Util/ScrollingMap.h"

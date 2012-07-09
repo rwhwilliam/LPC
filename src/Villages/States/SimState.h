@@ -24,12 +24,11 @@
 #include "SDL.h"
 
 #include "Engine/State/State.h"
+#include "Engine/Util/MouseImage.h"
 
 using namespace std;
 
 enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE };
-
-enum MouseImageMode;
 
 class MouseImage;
 class Castle;
