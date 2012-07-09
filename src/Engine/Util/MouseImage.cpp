@@ -27,16 +27,20 @@
 
 using namespace std;
 
-MouseImage::MouseImage(string src, int alpha) : x(0), y(0)
+MouseImage::MouseImage(string goodSrc, string badSrc, int alpha) : x(0), y(0)
 {
 	Logger::debug("MouseImage Constructor");
 
-	img = new Image(src, alpha);
+	goodImg = new Image(goodSrc, alpha);
+	badImg = new Image(badSrc, alpha);
+
+	mode = MI_NORMAL;
 }
 
 MouseImage::~MouseImage()
 {
-	delete img;
+	delete goodImg;
+	delete badImg;
 
 	Logger::debug("MouseImage Destructor");
 }
@@ -55,12 +59,15 @@ void MouseImage::raiseEvent(SDL_Event* event)
 {
 	if(event->type == SDL_MOUSEMOTION)
 	{
-		x = event->motion.x - img->getWidth() / 2;
-		y = event->motion.y - img->getHeight() / 2;
+		x = event->motion.x - goodImg->getWidth() / 2;
+		y = event->motion.y - goodImg->getHeight() / 2;
 	}
 }
 
 void MouseImage::draw(SDL_Surface* screen)
 {
-	img->draw(x, y, screen);
+	if(mode == MI_NORMAL)
+		goodImg->draw(x, y, screen);
+	else
+		badImg->draw(x, y, screen);
 }

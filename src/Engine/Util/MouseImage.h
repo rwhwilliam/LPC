@@ -26,10 +26,12 @@
 
 using namespace std;
 
+enum MouseImageMode { MI_NORMAL, MI_BAD };
+
 class MouseImage
 {
 public:
-	MouseImage(string src, int alpha);
+	MouseImage(string goodSrc, string badSrc, int alpha);
 	~MouseImage();
 
 	MouseImage(const MouseImage& data);
@@ -38,14 +40,18 @@ public:
 	void raiseEvent(SDL_Event* event);
 	void draw(SDL_Surface* screen);
 
+	void setMode(MouseImageMode mode) { MouseImage::mode = mode; }
+
 	int getX() { return x; }
 	int getY() { return y; }
-	int getWidth() { return img->getWidth(); }
-	int getHeight() { return img->getHeight(); }
+	int getWidth() { return goodImg->getWidth(); }
+	int getHeight() { return goodImg->getHeight(); }
 
 private:
 	int x, y;
-	Image* img;
+	Image* goodImg;
+	Image* badImg;
+	MouseImageMode mode;
 };
 
 #endif

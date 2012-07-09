@@ -36,7 +36,7 @@ using namespace tinyxml2;
 SimState::SimState(string path, int width, int height, int xloc, int yloc) : State(width, height, xloc, yloc)
 {
 	mode = S_PLACECASTLE;
-	imageHover = new MouseImage("castle.png", 128);
+	imageHover = new MouseImage("castle.png", "castle.png", 128);
 
 	castle = NULL;
 
@@ -194,6 +194,6 @@ void SimState::placeHouse()
 		if(imageHover != NULL)
 			delete imageHover;
 
-		imageHover = new MouseImage("house.png", 128);
+		imageHover = new MouseImage("house.png", "house.png", 128);
 	}
 }
