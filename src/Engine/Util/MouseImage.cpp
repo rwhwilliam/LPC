@@ -24,15 +24,18 @@
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-MouseImage::MouseImage(string goodSrc, string badSrc, int alpha) : x(0), y(0)
+MouseImage::MouseImage(SimState* state, string goodSrc, string badSrc, int alpha) : x(0), y(0)
 {
 	Logger::debug("MouseImage Constructor");
 
 	goodImg = new Image(goodSrc, alpha);
 	badImg = new Image(badSrc, alpha);
+
+	MouseImage::state = state;
 
 	mode = MI_NORMAL;
 }
@@ -41,6 +44,8 @@ MouseImage::~MouseImage()
 {
 	delete goodImg;
 	delete badImg;
+
+	state = NULL;
 
 	Logger::debug("MouseImage Destructor");
 }
@@ -61,6 +66,8 @@ void MouseImage::raiseEvent(SDL_Event* event)
 	{
 		x = event->motion.x - goodImg->getWidth() / 2;
 		y = event->motion.y - goodImg->getHeight() / 2;
+
+		mode = state->checkCollision(this);
 	}
 }
 

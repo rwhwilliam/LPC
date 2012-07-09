@@ -30,7 +30,7 @@ class MouseImage;
 class Object
 {
 public:
-	Object(string src, int xloc, int yloc, int width, int height);
+	Object(string src, int xloc, int yloc);
 	~Object();
 
 	Object(const Object& data);

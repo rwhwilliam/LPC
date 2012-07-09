@@ -28,11 +28,14 @@
 
 using namespace std;
 
-Object::Object(string src, int xloc, int yloc, int width, int height) : xloc(xloc), yloc(yloc), width(width), height(height)
+Object::Object(string src, int xloc, int yloc) : xloc(xloc), yloc(yloc)
 {
 	Logger::debug("Object Constructor");
 
 	img = new Image(src);
+
+	width = img->getWidth();
+	height = img->getHeight();
 }
 
 Object::~Object()

@@ -28,6 +28,8 @@ using namespace std;
 
 enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE };
 
+enum MouseImageMode;
+
 class MouseImage;
 class Castle;
 class ScrollingMap;
@@ -47,6 +49,8 @@ public:
 	void draw();
 
 	ScrollingMap* getMap();
+
+	MouseImageMode checkCollision(MouseImage* img);
 
 	void placeHouse();
 

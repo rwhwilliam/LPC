@@ -28,7 +28,7 @@
 
 using namespace std;
 
-Castle::Castle(string src, int xloc, int yloc, int width, int height) : Object(src, xloc, yloc, width, height)
+Castle::Castle(string src, int xloc, int yloc) : Object(src, xloc, yloc)
 {
 	Logger::debug("Castle Constructor");
 }
@@ -38,7 +38,7 @@ Castle::~Castle()
 	Logger::debug("Castle Destructor");
 }
 
-Castle::Castle(const Castle& data) : Object("", 0, 0, 0, 0)
+Castle::Castle(const Castle& data) : Object("", 0, 0)
 {
 	throw VillageException("Castle Copy Constructor");
 }

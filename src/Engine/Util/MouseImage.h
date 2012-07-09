@@ -28,10 +28,12 @@ using namespace std;
 
 enum MouseImageMode { MI_NORMAL, MI_BAD };
 
+class SimState;
+
 class MouseImage
 {
 public:
-	MouseImage(string goodSrc, string badSrc, int alpha);
+	MouseImage(SimState* state, string goodSrc, string badSrc, int alpha);
 	~MouseImage();
 
 	MouseImage(const MouseImage& data);
@@ -52,6 +54,7 @@ private:
 	Image* goodImg;
 	Image* badImg;
 	MouseImageMode mode;
+	SimState* state;
 };
 
 #endif

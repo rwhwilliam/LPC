@@ -36,7 +36,7 @@ using namespace tinyxml2;
 SimState::SimState(string path, int width, int height, int xloc, int yloc) : State(width, height, xloc, yloc)
 {
 	mode = S_PLACECASTLE;
-	imageHover = new MouseImage("castle.png", "castle.png", 128);
+	imageHover = new MouseImage(this, "castle.png", "castle.png", 128);
 
 	castle = NULL;
 
@@ -151,7 +151,7 @@ void SimState::raiseEvent(SDL_Event* event)
 		case S_PLACECASTLE:
 			if(castle == NULL)
 			{
-				castle = new Castle("castle.png", imageHover->getX(), imageHover->getY(), 200, 200);
+				castle = new Castle("castle.png", imageHover->getX(), imageHover->getY());
 
 				mode = S_NORMAL;
 
@@ -185,6 +185,15 @@ void SimState::draw()
 		actionBar->draw(frame);
 }
 
+MouseImageMode SimState::checkCollision(MouseImage* img)
+{
+	if(castle != NULL)
+		if(castle->collides(img))
+			return MI_BAD;
+
+	return MI_NORMAL;
+}
+
 void SimState::placeHouse()
 {
 	if(mode == S_NORMAL)
@@ -194,6 +203,6 @@ void SimState::placeHouse()
 		if(imageHover != NULL)
 			delete imageHover;
 
-		imageHover = new MouseImage("house.png", "house.png", 128);
+		imageHover = new MouseImage(this, "house.png", "castle.png", 128);
 	}
 }

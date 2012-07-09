@@ -31,7 +31,7 @@ class Image;
 class Castle : public Object
 {
 public:
-	Castle(string src, int xloc, int yloc, int width, int height);
+	Castle(string src, int xloc, int yloc);
 	~Castle();
 
 	Castle(const Castle& data);
