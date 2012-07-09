@@ -24,24 +24,21 @@
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/Objects/Object.h"
 
 using namespace std;
 
-Castle::Castle(string src, int xloc, int yloc, int width, int height) : xloc(xloc), yloc(yloc), width(width), height(height)
+Castle::Castle(string src, int xloc, int yloc, int width, int height) : Object(src, xloc, yloc, width, height)
 {
 	Logger::debug("Castle Constructor");
-
-	img = new Image(src);
 }
 
 Castle::~Castle()
 {
-	delete img;
-
 	Logger::debug("Castle Destructor");
 }
 
-Castle::Castle(const Castle& data)
+Castle::Castle(const Castle& data) : Object("", 0, 0, 0, 0)
 {
 	throw VillageException("Castle Copy Constructor");
 }
@@ -49,19 +46,4 @@ Castle::Castle(const Castle& data)
 Castle& Castle::operator=(const Castle* rhs)
 {
 	throw VillageException("Castle Assignment Operator");
-}
-
-void Castle::update(float time, Uint8* keystrokes)
-{
-
-}
-
-void Castle::raiseEvent(SDL_Event* event)
-{
-
-}
-
-void Castle::draw(int xoffset, int yoffset, SDL_Surface* screen)
-{
-	img->draw(xloc - xoffset, yloc - yoffset, screen);
 }

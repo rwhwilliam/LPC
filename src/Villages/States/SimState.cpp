@@ -40,7 +40,7 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 
 	castle = NULL;
 
-	actionBar = NULL;
+	actionBar = new ActionBar(this, 40, 0, 400, 100, "");
 
 
 	XMLDocument doc;
@@ -159,11 +159,6 @@ void SimState::raiseEvent(SDL_Event* event)
 					delete imageHover;
 				
 				imageHover = NULL;
-
-				if(actionBar != NULL)
-					delete actionBar;
-
-				actionBar = new ActionBar(this, 40, 0, 400, 100, "");
 			}
 			else
 			{
@@ -198,9 +193,6 @@ void SimState::placeHouse()
 
 		if(imageHover != NULL)
 			delete imageHover;
-
-		/*if(actionBar != NULL)
-			actionBar->setActive(false);*/
 
 		imageHover = new MouseImage("house.png", 128);
 	}

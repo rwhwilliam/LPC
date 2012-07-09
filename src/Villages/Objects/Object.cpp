@@ -15,27 +15,64 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef CASTLE_H
-#define CASTLE_H
+#include "Object.h"
 
 #include <string>
 
 #include "SDL.h"
 
-#include "Object.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/MouseImage.h"
+#include "Engine/Util/VillageException.h"
 
 using namespace std;
 
-class Image;
-
-class Castle : public Object
+Object::Object(string src, int xloc, int yloc, int width, int height) : xloc(xloc), yloc(yloc), width(width), height(height)
 {
-public:
-	Castle(string src, int xloc, int yloc, int width, int height);
-	~Castle();
+	Logger::debug("Object Constructor");
 
-	Castle(const Castle& data);
-	Castle& operator=(const Castle* rhs);
-};
+	img = new Image(src);
+}
 
-#endif
+Object::~Object()
+{
+	delete img;
+
+	Logger::debug("Object Destructor");
+}
+
+Object::Object(const Object& data)
+{
+	throw VillageException("Object Copy Constructor");
+}
+
+Object& Object::operator=(const Object* rhs)
+{
+	throw VillageException("Object Assignment Operator");
+}
+
+void Object::update(float time, Uint8* keystrokes)
+{
+
+}
+
+void Object::raiseEvent(SDL_Event* event)
+{
+
+}
+
+void Object::draw(int xoffset, int yoffset, SDL_Surface* screen)
+{
+	img->draw(xloc - xoffset, yloc - yoffset, screen);
+}
+
+bool Object::collides(Object* obj)
+{
+	return (xloc + width >= obj->xloc && xloc <= obj->xloc + obj->width && yloc + height >= obj->yloc && yloc <= obj->yloc + obj->height);
+}
+
+bool Object::collides(MouseImage* obj)
+{
+	return (xloc + width >= obj->getX() && xloc <= obj->getX() + obj->getWidth() && yloc + height >= obj->getY() && yloc <= obj->getY() + obj->getHeight());
+}

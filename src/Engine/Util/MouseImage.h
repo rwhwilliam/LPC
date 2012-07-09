@@ -22,9 +22,9 @@
 
 #include "SDL.h"
 
-using namespace std;
+#include "Engine/Graphics/Image.h"
 
-class Image;
+using namespace std;
 
 class MouseImage
 {
@@ -40,6 +40,8 @@ public:
 
 	int getX() { return x; }
 	int getY() { return y; }
+	int getWidth() { return img->getWidth(); }
+	int getHeight() { return img->getHeight(); }
 
 private:
 	int x, y;

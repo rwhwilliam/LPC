@@ -25,6 +25,7 @@
 using namespace std;
 
 class Image;
+class MouseImage;
 
 class Object
 {
@@ -34,6 +35,9 @@ public:
 
 	Object(const Object& data);
 	Object& operator=(const Object* rhs);
+
+	bool collides(Object* obj);
+	bool collides(MouseImage* obj);
 
 	virtual void update(float time, Uint8* keystrokes);
 	virtual void raiseEvent(SDL_Event* event);
