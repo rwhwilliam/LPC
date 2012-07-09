@@ -28,56 +28,44 @@
 
 using namespace std;
 
-Image::Image(string src)
-{	
-	Image::src = ImageLoader::loadImage(src);
-
-	setAlpha(255);
-}
-
-Image::Image(string src, int alpha)
+Image::Image(string src) : alpha(255)
 {
 	Image::src = ImageLoader::loadImage(src);
-
-	setAlpha(alpha);
 }
 
-Image::Image(string src, Uint8 r, Uint8 g, Uint8 b)
+Image::Image(string src, int alpha) : alpha(255)
+{
+	Image::src = ImageLoader::loadImage(src);
+}
+
+Image::Image(string src, Uint8 r, Uint8 g, Uint8 b) : alpha(255)
 {
 	Image::src = ImageLoader::loadImage(src, r, g, b);
-
-	setAlpha(255);
 }
 
-Image::Image(string src, int alpha, Uint8 r, Uint8 g, Uint8 b)
+Image::Image(string src, int alpha, Uint8 r, Uint8 g, Uint8 b) : alpha(alpha)
 {
 	Image::src = ImageLoader::loadImage(src, r, g, b);
-
-	setAlpha(alpha);
 }
 
-Image::Image(string src, float scale)
+Image::Image(string src, float scale) : alpha(255)
 {
 	Image::src = ImageLoader::loadImage(src, scale);
 }
 
-Image::Image(string src, int alpha, float scale)
+Image::Image(string src, int alpha, float scale) : alpha(alpha)
 {
 	Image::src = ImageLoader::loadImage(src, scale);
-
-	setAlpha(alpha);
 }
 
-Image::Image(string src, Uint8 r, Uint8 g, Uint8 b, float scale)
+Image::Image(string src, Uint8 r, Uint8 g, Uint8 b, float scale) : alpha(255)
 {
 	Image::src = ImageLoader::loadImage(src, r, g, b, scale);
 }
 
-Image::Image(string src, int alpha, Uint8 r, Uint8 g, Uint8 b, float scale)
+Image::Image(string src, int alpha, Uint8 r, Uint8 g, Uint8 b, float scale) : alpha(alpha)
 {
 	Image::src = ImageLoader::loadImage(src, r, g, b, scale);
-
-	setAlpha(alpha);
 }
 
 void Image::draw(int x, int y, SDL_Surface* screen)
@@ -86,6 +74,9 @@ void Image::draw(int x, int y, SDL_Surface* screen)
 
 	offset.x = x;
 	offset.y = y;
+
+	if(alpha % 256 != 255)
+		SDL_SetAlpha(ImageLoader::getImage(src), SDL_SRCALPHA, (alpha % 256));
 
 	SDL_BlitSurface(ImageLoader::getImage(src), NULL, screen, &offset);
 }
@@ -117,7 +108,7 @@ int Image::getHeight()
 
 void Image::setAlpha(int alpha)
 {
-	SDL_SetAlpha(ImageLoader::getImage(src), SDL_SRCALPHA, (alpha % 256));
+	Image::alpha = alpha;
 }
 
 void Image::setScale(float scale)

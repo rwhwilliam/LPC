@@ -39,6 +39,8 @@ int main(int argc, char* args[])
 		if(!SoundLoader::init())
 			return 0;
 
+		SDL_WM_SetCaption( "Villages", NULL );
+
 		StateManager stateManager;
 
 		SimState* s = new SimState("data/maps/map1.xml", atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
