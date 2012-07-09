@@ -20,13 +20,9 @@
 
 #include <string>
 
-#include "SDL.h"
-
 #include "Object.h"
 
 using namespace std;
-
-class Image;
 
 class Castle : public Object
 {

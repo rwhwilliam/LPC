@@ -18,10 +18,16 @@
 #ifndef HOUSE_H
 #define HOUSE_H
 
-class House
+#include <string>
+
+#include "Object.h"
+
+using namespace std;
+
+class House : public Object
 {
 public:
-	House(string src, int xloc, int yloc, int width, int height);
+	House(string src, int xloc, int yloc);
 	~House();
 
 	House(const House& data);

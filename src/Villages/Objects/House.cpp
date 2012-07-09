@@ -15,55 +15,35 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#include "House.h"
 
 #include <string>
-#include <vector>
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
+#include "Villages/Objects/Object.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE };
-
-enum MouseImageMode;
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class House;
-
-class SimState : public State
+House::House(string src, int xloc, int yloc) : Object(src, xloc, yloc)
 {
-public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Logger::debug("House Constructor");
+}
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
+House::~House()
+{
+	Logger::debug("House Destructor");
+}
 
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
+House::House(const House& data) : Object("", 0, 0)
+{
+	throw VillageException("House Copy Constructor");
+}
 
-	ScrollingMap* getMap();
-
-	MouseImageMode checkCollision(MouseImage* img);
-
-	void placeHouse();
-
-private:
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<House*> houses;
-};
-
-#endif
+House& House::operator=(const House* rhs)
+{
+	throw VillageException("House Assignment Operator");
+}
