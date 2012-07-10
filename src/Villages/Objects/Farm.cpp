@@ -15,57 +15,35 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#include "Farm.h"
 
 #include <string>
-#include <vector>
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
-#include "Engine/Util/MouseImage.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
+#include "Villages/Objects/Object.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class House;
-class Farm;
-
-class SimState : public State
+Farm::Farm(string src, int xloc, int yloc) : Object(src, xloc, yloc)
 {
-public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Logger::debug("Farm Constructor");
+}
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
+Farm::~Farm()
+{
+	Logger::debug("Farm Destructor");
+}
 
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
+Farm::Farm(const Farm& data) : Object("", 0, 0)
+{
+	throw VillageException("Farm Copy Constructor");
+}
 
-	ScrollingMap* getMap();
-
-	MouseImageMode checkCollision(MouseImage* img);
-
-	void placeHouse();
-	void placeFarm();
-
-private:
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<House*> houses;
-	vector<Farm*> farms;
-};
-
-#endif
+Farm& Farm::operator=(const Farm* rhs)
+{
+	throw VillageException("Farm Assignment Operator");
+}

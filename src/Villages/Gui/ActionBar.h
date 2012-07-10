@@ -40,9 +40,11 @@ public:
 
 private:
 	void placeHouse();
+	void placeFarm();
 
 	SimState* state;
 	ClickableButton<ActionBar>* buildHouse;
+	ClickableButton<ActionBar>* buildFarm;
 };
 
 #endif

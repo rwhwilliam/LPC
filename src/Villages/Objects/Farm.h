@@ -15,57 +15,23 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#ifndef FARM_H
+#define FARM_H
 
 #include <string>
-#include <vector>
 
-#include "SDL.h"
-
-#include "Engine/State/State.h"
-#include "Engine/Util/MouseImage.h"
+#include "Object.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class House;
-class Farm;
-
-class SimState : public State
+class Farm : public Object
 {
 public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Farm(string src, int xloc, int yloc);
+	~Farm();
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
-
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
-
-	ScrollingMap* getMap();
-
-	MouseImageMode checkCollision(MouseImage* img);
-
-	void placeHouse();
-	void placeFarm();
-
-private:
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<House*> houses;
-	vector<Farm*> farms;
+	Farm(const Farm& data);
+	Farm& operator=(const Farm* rhs);
 };
 
 #endif

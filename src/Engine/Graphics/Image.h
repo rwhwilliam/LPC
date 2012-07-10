@@ -49,7 +49,7 @@ public:
 	void setScale(float scale);
 private:
 	string src;
-	int apha;
+	int alpha;
 };
 
 #endif

@@ -31,6 +31,7 @@
 #include "Villages/Objects/Object.h"
 #include "Villages/Objects/Castle.h"
 #include "Villages/Objects/House.h"
+#include "Villages/Objects/Farm.h"
 #include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
@@ -119,6 +120,16 @@ SimState::~SimState()
 	}
 
 	houses.clear();
+
+	vector<Farm*>::iterator fit;
+	for(fit = farms.begin(); fit != farms.end(); ++fit)
+	{
+		delete (*fit);
+
+		farms.erase(fit);
+	}
+
+	farms.clear();
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -139,6 +150,12 @@ void SimState::update(float time, Uint8* keystrokes)
 	for(hit = houses.begin(); hit != houses.end(); ++hit)
 	{
 		(*hit)->update(time, keystrokes);
+	}
+
+	vector<Farm*>::const_iterator fit;
+	for(fit = farms.begin(); fit != farms.end(); ++fit)
+	{
+		(*fit)->update(time, keystrokes);
 	}
 
 	if(keystrokes[SDLK_ESCAPE] && mode != S_PLACECASTLE)
@@ -168,6 +185,7 @@ void SimState::raiseEvent(SDL_Event* event)
 		switch(mode)
 		{
 		case S_PLACECASTLE:
+		{
 			if(castle == NULL)
 			{
 				castle = new Castle("castle.png", imageHover->getX(), imageHover->getY());
@@ -187,8 +205,10 @@ void SimState::raiseEvent(SDL_Event* event)
 				Logger::error("Tried to place a second castle");
 			}
 			break;
+		}
 
 		case S_PLACEHOUSE:
+		{
 			House* house = new House("house.png", imageHover->getX(), imageHover->getY());
 			houses.push_back(house);
 
@@ -202,6 +222,24 @@ void SimState::raiseEvent(SDL_Event* event)
 			imageHover = NULL;
 
 			break;
+		}
+
+		case S_PLACEFARM:
+		{
+			Farm* farm = new Farm("farm.png", imageHover->getX(), imageHover->getY());
+			farms.push_back(farm);
+
+			Logger::debugFormat("Farm placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+			mode = S_NORMAL;
+
+			if(imageHover != NULL)
+				delete imageHover;
+
+			imageHover = NULL;
+
+			break;
+		}
 		}
 	}
 }
@@ -229,6 +267,12 @@ void SimState::draw()
 	{
 		(*hit)->draw(xoffset, yoffset, frame);
 	}
+
+	vector<Farm*>::const_iterator fit;
+	for(fit = farms.begin(); fit != farms.end(); ++fit)
+	{
+		(*fit)->draw(xoffset, yoffset, frame);
+	}
 }
 
 MouseImageMode SimState::checkCollision(MouseImage* img)
@@ -240,6 +284,11 @@ MouseImageMode SimState::checkCollision(MouseImage* img)
 	vector<House*>::const_iterator hit;
 	for(hit = houses.begin(); hit != houses.end(); ++hit)
 		if((*hit)->collides(img))
+			return MI_BAD;
+
+	vector<Farm*>::const_iterator fit;
+	for(fit = farms.begin(); fit != farms.end(); ++fit)
+		if((*fit)->collides(img))
 			return MI_BAD;
 
 	return MI_NORMAL;
@@ -254,6 +303,19 @@ void SimState::placeHouse()
 		if(imageHover != NULL)
 			delete imageHover;
 
-		imageHover = new MouseImage(this, "house-hover.png", "castle.png", 128);
+		imageHover = new MouseImage(this, "house.png", "house.png", 128);
+	}
+}
+
+void SimState::placeFarm()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEFARM;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "farm.png", "farm.png", 128);
 	}
 }
