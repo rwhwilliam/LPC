@@ -244,6 +244,7 @@ void SimState::raiseEvent(SDL_Event* event)
 	}
 }
 
+
 void SimState::draw()
 {
 	SDL_FillRect(frame, &frame->clip_rect, SDL_MapRGB(frame->format, 0x00, 0x00, 0x00));
