@@ -15,35 +15,37 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#include "Farm.h"
+#ifndef BUILDING_H
+#define BUILDING_H
 
 #include <string>
 
 #include "SDL.h"
 
-#include "Engine/Graphics/Image.h"
-#include "Engine/Util/Logger.h"
-#include "Engine/Util/VillageException.h"
-#include "Villages/Objects/Object.h"
-
 using namespace std;
 
-Farm::Farm(string src, int xloc, int yloc) : Object(src, xloc, yloc)
-{
-	Logger::debug("Farm Constructor");
-}
+class Image;
+class MouseImage;
 
-Farm::~Farm()
+class Building
 {
-	Logger::debug("Farm Destructor");
-}
+public:
+	Building(string src, int xloc, int yloc);
+	~Building();
 
-Farm::Farm(const Farm& data) : Object("", 0, 0)
-{
-	throw VillageException("Farm Copy Constructor");
-}
+	Building(const Building& data);
+	Building& operator=(const Building* rhs);
 
-Farm& Farm::operator=(const Farm* rhs)
-{
-	throw VillageException("Farm Assignment Operator");
-}
+	bool collides(Building* obj);
+	bool collides(MouseImage* obj);
+
+	virtual void update(float time, Uint8* keystrokes);
+	virtual void raiseEvent(SDL_Event* event);
+	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
+
+private:
+	Image* img;
+	int xloc, yloc, width, height;
+};
+
+#endif

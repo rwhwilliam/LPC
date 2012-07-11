@@ -20,14 +20,14 @@
 
 #include <string>
 
-#include "Object.h"
+#include "Building.h"
 
 using namespace std;
 
-class Farm : public Object
+class Farm : public Building
 {
 public:
-	Farm(string src, int xloc, int yloc);
+	Farm(int xloc, int yloc);
 	~Farm();
 
 	Farm(const Farm& data);

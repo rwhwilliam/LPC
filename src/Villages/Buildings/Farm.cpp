@@ -15,7 +15,7 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#include "Object.h"
+#include "Farm.h"
 
 #include <string>
 
@@ -23,59 +23,27 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
-#include "Engine/Util/MouseImage.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/Building.h"
 
 using namespace std;
 
-Object::Object(string src, int xloc, int yloc) : xloc(xloc), yloc(yloc)
+Farm::Farm(int xloc, int yloc) : Building("FarmImage", xloc, yloc)
 {
-	Logger::debug("Object Constructor");
-
-	img = new Image(src);
-
-	width = img->getWidth();
-	height = img->getHeight();
+	Logger::debug("Farm Constructor");
 }
 
-Object::~Object()
+Farm::~Farm()
 {
-	delete img;
-
-	Logger::debug("Object Destructor");
+	Logger::debug("Farm Destructor");
 }
 
-Object::Object(const Object& data)
+Farm::Farm(const Farm& data) : Building("", 0, 0)
 {
-	throw VillageException("Object Copy Constructor");
+	throw VillageException("Farm Copy Constructor");
 }
 
-Object& Object::operator=(const Object* rhs)
+Farm& Farm::operator=(const Farm* rhs)
 {
-	throw VillageException("Object Assignment Operator");
-}
-
-void Object::update(float time, Uint8* keystrokes)
-{
-
-}
-
-void Object::raiseEvent(SDL_Event* event)
-{
-
-}
-
-void Object::draw(int xoffset, int yoffset, SDL_Surface* screen)
-{
-	img->draw(xloc - xoffset, yloc - yoffset, screen);
-}
-
-bool Object::collides(Object* obj)
-{
-	return (xloc + width >= obj->xloc && xloc <= obj->xloc + obj->width && yloc + height >= obj->yloc && yloc <= obj->yloc + obj->height);
-}
-
-bool Object::collides(MouseImage* obj)
-{
-	return (xloc + width >= obj->getX() && xloc <= obj->getX() + obj->getWidth() && yloc + height >= obj->getY() && yloc <= obj->getY() + obj->getHeight());
+	throw VillageException("Farm Assignment Operator");
 }

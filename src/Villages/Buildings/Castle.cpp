@@ -15,7 +15,7 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#include "House.h"
+#include "Castle.h"
 
 #include <string>
 
@@ -24,26 +24,26 @@
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
-#include "Villages/Objects/Object.h"
+#include "Villages/Buildings/Building.h"
 
 using namespace std;
 
-House::House(string src, int xloc, int yloc) : Object(src, xloc, yloc)
+Castle::Castle(int xloc, int yloc) : Building("CastleImage", xloc, yloc)
 {
-	Logger::debug("House Constructor");
+	Logger::debug("Castle Constructor");
 }
 
-House::~House()
+Castle::~Castle()
 {
-	Logger::debug("House Destructor");
+	Logger::debug("Castle Destructor");
 }
 
-House::House(const House& data) : Object("", 0, 0)
+Castle::Castle(const Castle& data) : Building("", 0, 0)
 {
-	throw VillageException("House Copy Constructor");
+	throw VillageException("Castle Copy Constructor");
 }
 
-House& House::operator=(const House* rhs)
+Castle& Castle::operator=(const Castle* rhs)
 {
-	throw VillageException("House Assignment Operator");
+	throw VillageException("Castle Assignment Operator");
 }

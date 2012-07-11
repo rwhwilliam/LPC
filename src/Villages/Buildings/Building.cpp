@@ -15,37 +15,68 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#include "Building.h"
 
 #include <string>
 
 #include "SDL.h"
 
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Config.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/MouseImage.h"
+#include "Engine/Util/VillageException.h"
+
 using namespace std;
 
-class Image;
-class MouseImage;
-
-class Object
+Building::Building(string src, int xloc, int yloc) : xloc(xloc), yloc(yloc)
 {
-public:
-	Object(string src, int xloc, int yloc);
-	~Object();
+	Logger::debug("Building Constructor");
 
-	Object(const Object& data);
-	Object& operator=(const Object* rhs);
+	img = new Image(Config::getConfig(src));
 
-	bool collides(Object* obj);
-	bool collides(MouseImage* obj);
+	width = img->getWidth();
+	height = img->getHeight();
+}
 
-	virtual void update(float time, Uint8* keystrokes);
-	virtual void raiseEvent(SDL_Event* event);
-	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
+Building::~Building()
+{
+	delete img;
 
-private:
-	Image* img;
-	int xloc, yloc, width, height;
-};
+	Logger::debug("Building Destructor");
+}
 
-#endif
+Building::Building(const Building& data)
+{
+	throw VillageException("Building Copy Constructor");
+}
+
+Building& Building::operator=(const Building* rhs)
+{
+	throw VillageException("Building Assignment Operator");
+}
+
+void Building::update(float time, Uint8* keystrokes)
+{
+
+}
+
+void Building::raiseEvent(SDL_Event* event)
+{
+
+}
+
+void Building::draw(int xoffset, int yoffset, SDL_Surface* screen)
+{
+	img->draw(xloc - xoffset, yloc - yoffset, screen);
+}
+
+bool Building::collides(Building* obj)
+{
+	return (xloc + width >= obj->xloc && xloc <= obj->xloc + obj->width && yloc + height >= obj->yloc && yloc <= obj->yloc + obj->height);
+}
+
+bool Building::collides(MouseImage* obj)
+{
+	return (xloc + width >= obj->getX() && xloc <= obj->getX() + obj->getWidth() && yloc + height >= obj->getY() && yloc <= obj->getY() + obj->getHeight());
+}

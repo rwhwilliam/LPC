@@ -28,10 +28,10 @@
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Gui/ActionBar.h"
-#include "Villages/Objects/Object.h"
-#include "Villages/Objects/Castle.h"
-#include "Villages/Objects/House.h"
-#include "Villages/Objects/Farm.h"
+#include "Villages/Buildings/Building.h"
+#include "Villages/Buildings/Castle.h"
+#include "Villages/Buildings/House.h"
+#include "Villages/Buildings/Farm.h"
 #include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
@@ -188,7 +188,7 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(castle == NULL)
 			{
-				castle = new Castle("castle.png", imageHover->getX(), imageHover->getY());
+				castle = new Castle(imageHover->getX(), imageHover->getY());
 
 				Logger::debugFormat("Castle placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
@@ -209,7 +209,7 @@ void SimState::raiseEvent(SDL_Event* event)
 
 		case S_PLACEHOUSE:
 		{
-			House* house = new House("house.png", imageHover->getX(), imageHover->getY());
+			House* house = new House(imageHover->getX(), imageHover->getY());
 			houses.push_back(house);
 
 			Logger::debugFormat("House placed at (%i, %i)", imageHover->getX(), imageHover->getY());
@@ -226,7 +226,7 @@ void SimState::raiseEvent(SDL_Event* event)
 
 		case S_PLACEFARM:
 		{
-			Farm* farm = new Farm("farm.png", imageHover->getX(), imageHover->getY());
+			Farm* farm = new Farm(imageHover->getX(), imageHover->getY());
 			farms.push_back(farm);
 
 			Logger::debugFormat("Farm placed at (%i, %i)", imageHover->getX(), imageHover->getY());

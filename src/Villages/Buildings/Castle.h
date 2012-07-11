@@ -15,23 +15,23 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef HOUSE_H
-#define HOUSE_H
+#ifndef CASTLE_H
+#define CASTLE_H
 
 #include <string>
 
-#include "Object.h"
+#include "Building.h"
 
 using namespace std;
 
-class House : public Object
+class Castle : public Building
 {
 public:
-	House(string src, int xloc, int yloc);
-	~House();
+	Castle(int xloc, int yloc);
+	~Castle();
 
-	House(const House& data);
-	House& operator=(const House* rhs);
+	Castle(const Castle& data);
+	Castle& operator=(const Castle* rhs);
 };
 
 #endif
