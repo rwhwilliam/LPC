@@ -32,4 +32,12 @@
 		<Name>MapPath</Name>
 		<Value>data/maps</Value>
 	</Config>
+	<Config>
+		<Name>CastleImage</Name>
+		<Value>castle.png</Value>
+	</Config>
+	<Config>
+		<Name>HouseImage</Name>
+		<Value>house.png</Value>
+	</Config>
 </Configuration>

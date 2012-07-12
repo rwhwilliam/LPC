@@ -83,7 +83,7 @@ if(${WIN32})
 
 	source_group(Source\ Files\\Villages\\Buildings FILES ${VillagesBuildings})
 	source_group(Source\ Files\\Villages\\Gui FILES ${VillagesGui})
-	source_group(Source\ Files\\Villages\\Objects FILEs ${VillagesObjects})
+	source_group(Source\ Files\\Villages\\Objects FILES ${VillagesObjects})
 	source_group(Source\ Files\\Villages\\States FILES ${VillagesStates})
 	source_group(Source\ Files\\Villages\\Util FILES ${VillagesUtil})
 
