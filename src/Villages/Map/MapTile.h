@@ -15,39 +15,32 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef BUILDING_H
-#define BUILDING_H
+#ifndef MAPTILE_H
+#define MAPTILE_H
 
 #include <string>
 
-#include "SDL.h"
+#include "Engine/Graphics/Image.h"
 
 using namespace std;
 
-class Image;
-class MouseImage;
-class MapTile;
-
-class Building
+class MapTile
 {
 public:
-	Building(string src, int xloc, int yloc);
-	~Building();
+	MapTile(string src, int xloc, int yloc);
+	~MapTile();
 
-	Building(const Building& data);
-	Building& operator=(const Building* rhs);
+	MapTile(const MapTile& data);
+	MapTile& operator=(const MapTile* rhs);
 
-	bool collides(Building* obj);
-	bool collides(MouseImage* obj);
-	bool collides(MapTile* obj);
-
-	virtual void update(float time, Uint8* keystrokes);
-	virtual void raiseEvent(SDL_Event* event);
-	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
+	int getX() { return xloc; }
+	int getY() { return yloc; }
+	int getWidth() { return img->getWidth(); }
+	int getHeight() { return img->getHeight(); }
 
 private:
 	Image* img;
-	int xloc, yloc, width, height;
+	int xloc, yloc;
 };
 
 #endif

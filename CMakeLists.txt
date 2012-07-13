@@ -21,6 +21,7 @@ FILE(GLOB Util src/Engine/Util/*.h src/Engine/Util/*.cpp)
 
 FILE(GLOB VillagesBuildings src/Villages/Buildings/*.h src/Villages/Buildings/*.cpp)
 FILE(GLOB VillagesGui src/Villages/Gui/*.h src/Villages/Gui/*.cpp)
+FILE(GLOB VillagesMap src/Villages/Map/*.h src/Villages/Map/*.cpp)
 FILE(GLOB VillagesObjects src/Villages/Objects/*.h src/Villages/Objects/*.cpp)
 FILE(GLOB VillagesStates src/Villages/States/*.h src/Villages/States/*.cpp)
 FILE(GLOB VillagesUtil src/Villages/Util/*.h src/Villages/Util/*.cpp)
@@ -47,6 +48,7 @@ set (
 
 	${VillagesBuildings}
 	${VillagesGui}
+	${VillagesMap}
 	${VillagesObjects}
 	${VillagesStates}
 	${VillagesUtil}
@@ -83,6 +85,7 @@ if(${WIN32})
 
 	source_group(Source\ Files\\Villages\\Buildings FILES ${VillagesBuildings})
 	source_group(Source\ Files\\Villages\\Gui FILES ${VillagesGui})
+	source_group(Source\ Files\\Villages\\Map FILES ${VillagesMap})
 	source_group(Source\ Files\\Villages\\Objects FILES ${VillagesObjects})
 	source_group(Source\ Files\\Villages\\States FILES ${VillagesStates})
 	source_group(Source\ Files\\Villages\\Util FILES ${VillagesUtil})

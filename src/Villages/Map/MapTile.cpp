@@ -15,39 +15,36 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef BUILDING_H
-#define BUILDING_H
+#include "MapTile.h"
 
 #include <string>
 
-#include "SDL.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
 
 using namespace std;
 
-class Image;
-class MouseImage;
-class MapTile;
-
-class Building
+MapTile::MapTile(string src, int xloc, int yloc) : xloc(xloc), yloc(yloc)
 {
-public:
-	Building(string src, int xloc, int yloc);
-	~Building();
+	Logger::debug("MapTile Constructor");
 
-	Building(const Building& data);
-	Building& operator=(const Building* rhs);
+	img = new Image(src, 255, 0, 255);
+}
 
-	bool collides(Building* obj);
-	bool collides(MouseImage* obj);
-	bool collides(MapTile* obj);
+MapTile::~MapTile()
+{
+	delete img;
 
-	virtual void update(float time, Uint8* keystrokes);
-	virtual void raiseEvent(SDL_Event* event);
-	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
+	Logger::debug("MapTile Destructor");
+}
 
-private:
-	Image* img;
-	int xloc, yloc, width, height;
-};
+MapTile::MapTile(const MapTile& data)
+{
+	throw VillageException("MapTile Copy Constructor");
+}
 
-#endif
+MapTile& MapTile::operator=(const MapTile* rhs)
+{
+	throw VillageException("MapTile Assignment Operator");
+}
