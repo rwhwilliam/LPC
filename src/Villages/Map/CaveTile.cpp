@@ -21,6 +21,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 
+
 CaveTile::CaveTile(int xloc, int yloc) : MapTile(Config::getConfig("CaveImage"), xloc, yloc)
 {
 	Logger::debug("CaveTile Constructor");
