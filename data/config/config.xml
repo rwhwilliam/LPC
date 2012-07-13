@@ -44,4 +44,8 @@
 		<Name>CaveImage</Name>
 		<Value>cave.png</Value>
 	</Config>
+	<Config>
+		<Name>ForestImage</Name>
+		<Value>tree.png</Value>
+	</Config>
 </Configuration>
