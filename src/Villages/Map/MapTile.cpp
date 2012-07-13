@@ -19,8 +19,11 @@
 
 #include <string>
 
+#include "SDL.h"
+
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/MouseImage.h"
 #include "Engine/Util/VillageException.h"
 
 using namespace std;
@@ -47,4 +50,14 @@ MapTile::MapTile(const MapTile& data)
 MapTile& MapTile::operator=(const MapTile* rhs)
 {
 	throw VillageException("MapTile Assignment Operator");
+}
+
+void MapTile::draw(int xoffset, int yoffset, SDL_Surface* screen)
+{
+	img->draw(xloc - xoffset, yloc - yoffset, screen);
+}
+
+bool MapTile::collides(MouseImage* obj)
+{
+	return (xloc + getWidth() >= obj->getX() && xloc <= obj->getX() + obj->getWidth() && yloc + getHeight() >= obj->getY() && yloc <= obj->getY() + obj->getHeight());
 }

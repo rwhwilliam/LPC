@@ -36,6 +36,7 @@ class ScrollingMap;
 class ActionBar;
 class House;
 class Farm;
+class CaveTile;
 
 class SimState : public State
 {
@@ -66,6 +67,8 @@ private:
 
 	vector<House*> houses;
 	vector<Farm*> farms;
+
+	vector<CaveTile*> caves;
 };
 
 #endif

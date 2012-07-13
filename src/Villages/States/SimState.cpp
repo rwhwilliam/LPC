@@ -32,6 +32,7 @@
 #include "Villages/Buildings/Castle.h"
 #include "Villages/Buildings/House.h"
 #include "Villages/Buildings/Farm.h"
+#include "Villages/Map/CaveTile.h"
 #include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
@@ -55,8 +56,10 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 
 	int _width = atoi(doc.FirstChildElement("Map")->FirstChildElement("Width")->GetText());
 	int _height = atoi(doc.FirstChildElement("Map")->FirstChildElement("Height")->GetText());
+	int _tilewidth = atoi(doc.FirstChildElement("Map")->FirstChildElement("TileWidth")->GetText());
+	int _tileheight = atoi(doc.FirstChildElement("Map")->FirstChildElement("TileHeight")->GetText());
 	int _layers = atoi(doc.FirstChildElement("Map")->FirstChildElement("Layers")->GetText());
-	map = new ScrollingMap(_width, _height, 32, 32, _layers);
+	map = new ScrollingMap(_width, _height, _tilewidth, _tileheight, _layers);
 
 	for(const XMLNode* node=doc.FirstChildElement("Map")->FirstChildElement("Tiles")->FirstChildElement("Tile");
 		node; node=node->NextSibling())
@@ -96,6 +99,16 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 
 		delete[] data;
 	}
+
+	for(const XMLNode* node=doc.FirstChildElement("Map")->FirstChildElement("Caves")->FirstChildElement("Cave");
+		node; node=node->NextSibling())
+	{
+		int _x = atoi(node->FirstChildElement("X")->GetText());
+		int _y = atoi(node->FirstChildElement("Y")->GetText());
+		CaveTile* cave = new CaveTile(_x, _y);
+
+		caves.push_back(cave);
+	}
 }
 
 SimState::~SimState()
@@ -130,6 +143,16 @@ SimState::~SimState()
 	}
 
 	farms.clear();
+
+	vector<CaveTile*>::iterator cit;
+	for(cit = caves.begin(); cit != caves.end(); ++cit)
+	{
+		delete (*cit);
+
+		caves.erase(cit);
+	}
+
+	caves.clear();
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -274,6 +297,12 @@ void SimState::draw()
 	{
 		(*fit)->draw(xoffset, yoffset, frame);
 	}
+
+	vector<CaveTile*>::const_iterator cit;
+	for(cit = caves.begin(); cit != caves.end(); ++cit)
+	{
+		(*cit)->draw(xoffset, yoffset, frame);
+	}
 }
 
 MouseImageMode SimState::checkCollision(MouseImage* img)
@@ -290,6 +319,11 @@ MouseImageMode SimState::checkCollision(MouseImage* img)
 	vector<Farm*>::const_iterator fit;
 	for(fit = farms.begin(); fit != farms.end(); ++fit)
 		if((*fit)->collides(img))
+			return MI_BAD;
+
+	vector<CaveTile*>::const_iterator cit;
+	for(cit = caves.begin(); cit != caves.end(); ++cit)
+		if((*cit)->collides(img))
 			return MI_BAD;
 
 	return MI_NORMAL;

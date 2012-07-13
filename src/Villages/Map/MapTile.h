@@ -20,9 +20,13 @@
 
 #include <string>
 
+#include "SDL.h"
+
 #include "Engine/Graphics/Image.h"
 
 using namespace std;
+
+class MouseImage;
 
 class MapTile
 {
@@ -33,10 +37,14 @@ public:
 	MapTile(const MapTile& data);
 	MapTile& operator=(const MapTile* rhs);
 
+	bool collides(MouseImage* obj);
+
 	int getX() { return xloc; }
 	int getY() { return yloc; }
 	int getWidth() { return img->getWidth(); }
 	int getHeight() { return img->getHeight(); }
+
+	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
 private:
 	Image* img;

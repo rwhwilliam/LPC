@@ -81,8 +81,3 @@ bool Building::collides(MouseImage* obj)
 {
 	return (xloc + width >= obj->getX() && xloc <= obj->getX() + obj->getWidth() && yloc + height >= obj->getY() && yloc <= obj->getY() + obj->getHeight());
 }
-
-bool Building::collides(MapTile* obj)
-{
-	return (xloc + width >= obj->getX() && xloc <= obj->getX() + obj->getWidth() && yloc + height >= obj->getY() && yloc <= obj->getY() + obj->getHeight());
-}

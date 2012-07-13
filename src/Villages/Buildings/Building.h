@@ -39,7 +39,6 @@ public:
 
 	bool collides(Building* obj);
 	bool collides(MouseImage* obj);
-	bool collides(MapTile* obj);
 
 	virtual void update(float time, Uint8* keystrokes);
 	virtual void raiseEvent(SDL_Event* event);
