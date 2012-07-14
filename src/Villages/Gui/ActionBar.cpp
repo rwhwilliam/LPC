@@ -35,11 +35,11 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 
 	ActionBar::state = state;
 
-	buildHouse = new ClickableButton<ActionBar>(x + 10, y + 10, 50, 50, "buildhouse-normal.png", "buildhouse-hover.png", "buildhouse-down.png", this, &ActionBar::placeHouse); 
+	buildHouse = new ClickableButton<ActionBar>(x + 10, y + 10, 50, 50, "house-button-normal.png", "house-button-hover.png", "house-button-pressed.png", this, &ActionBar::placeHouse); 
 
 	addComponent("buildHouse", buildHouse);
 
-	buildFarm = new ClickableButton<ActionBar>(x + 74, y + 10, 64, 64, "buildfarm.png", "buildfarm.png", "buildfarm.png", this, &ActionBar::placeFarm);
+	buildFarm = new ClickableButton<ActionBar>(x + 74, y + 10, 64, 64, "farm-button-normal.png", "farm-button-hover.png", "farm-button-pressed.png", this, &ActionBar::placeFarm);
 
 	addComponent("buildFarm", buildFarm);
 }

@@ -315,7 +315,7 @@ void SimState::placeHouse()
 		if(imageHover != NULL)
 			delete imageHover;
 
-		imageHover = new MouseImage(this, "house.png", "house.png", 128);
+		imageHover = new MouseImage(this, "house.png", "house-bad.png", 128);
 	}
 }
 
@@ -328,7 +328,7 @@ void SimState::placeFarm()
 		if(imageHover != NULL)
 			delete imageHover;
 
-		imageHover = new MouseImage(this, "farm.png", "farm.png", 128);
+		imageHover = new MouseImage(this, "farm.png", "farm-bad.png", 128);
 	}
 }
 

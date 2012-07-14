@@ -33,7 +33,7 @@ Building::Building(string src, int xloc, int yloc) : xloc(xloc), yloc(yloc)
 {
 	Logger::debug("Building Constructor");
 
-	img = new Image(Config::getConfig(src));
+	img = new Image(Config::getConfig(src), 255, 0, 255);
 
 	width = img->getWidth();
 	height = img->getHeight();

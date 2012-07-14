@@ -41,6 +41,10 @@
 		<Value>house.png</Value>
 	</Config>
 	<Config>
+		<Name>FarmImage</Name>
+		<Value>farm.png</Value>
+	</Config>
+	<Config>
 		<Name>CaveImage</Name>
 		<Value>cave.png</Value>
 	</Config>
