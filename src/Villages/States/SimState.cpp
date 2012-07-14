@@ -39,6 +39,7 @@
 using namespace std;
 using namespace tinyxml2;
 
+
 SimState::SimState(string path, int width, int height, int xloc, int yloc) : State(width, height, xloc, yloc)
 {
 	mode = S_PLACECASTLE;
