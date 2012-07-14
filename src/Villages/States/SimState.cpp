@@ -17,6 +17,7 @@
 
 #include "SimState.h"
 
+#include <cmath>
 #include <string>
 #include <vector>
 
@@ -33,6 +34,7 @@
 #include "Villages/Buildings/Castle.h"
 #include "Villages/Buildings/House.h"
 #include "Villages/Buildings/Farm.h"
+#include "Villages/Buildings/MiningCamp.h"
 #include "Villages/Map/CaveTile.h"
 #include "Villages/Util/MouseImage.h"
 #include "Villages/Util/ScrollingMap.h"
@@ -156,6 +158,16 @@ SimState::~SimState()
 	}
 
 	caves.clear();
+
+	vector<MiningCamp*>::iterator mit;
+	for(mit = camps.begin(); mit != camps.end(); ++mit)
+	{
+		delete (*mit);
+
+		camps.erase(mit);
+	}
+
+	camps.clear();
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -192,6 +204,12 @@ void SimState::update(float time, Uint8* keystrokes)
 	for(fit = farms.begin(); fit != farms.end(); ++fit)
 	{
 		(*fit)->update(time, keystrokes);
+	}
+
+	vector<MiningCamp*>::const_iterator mit;
+	for(mit = camps.begin(); mit != camps.end(); ++mit)
+	{
+		(*mit)->update(time, keystrokes);
 	}
 
 	if(keystrokes[SDLK_ESCAPE] && mode != S_PLACECASTLE)
@@ -285,6 +303,26 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACEMININGCAMP:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				MiningCamp* camp = new MiningCamp(imageHover->getX(), imageHover->getY());
+				camps.push_back(camp);
+
+				Logger::debugFormat("Mining Camp placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -305,6 +343,12 @@ void SimState::draw()
 	if(imageHover != NULL)
 		imageHover->draw(frame);
 
+	vector<CaveTile*>::const_iterator cit;
+	for(cit = caves.begin(); cit != caves.end(); ++cit)
+	{
+		(*cit)->draw(xoffset, yoffset, frame);
+	}
+
 	vector<House*>::const_iterator hit;
 	for(hit = houses.begin(); hit != houses.end(); ++hit)
 	{
@@ -317,10 +361,10 @@ void SimState::draw()
 		(*fit)->draw(xoffset, yoffset, frame);
 	}
 
-	vector<CaveTile*>::const_iterator cit;
-	for(cit = caves.begin(); cit != caves.end(); ++cit)
+	vector<MiningCamp*>::const_iterator mit;
+	for(mit = camps.begin(); mit != camps.end(); ++mit)
 	{
-		(*cit)->draw(xoffset, yoffset, frame);
+		(*mit)->draw(xoffset, yoffset, frame);
 	}
 
 	if(actionBar != NULL && mode == S_NORMAL)
@@ -353,6 +397,19 @@ void SimState::placeFarm()
 	}
 }
 
+void SimState::placeMiningCamp()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEMININGCAMP;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "miningcamp.png", "miningcamp-bad.png", 128);
+	}
+}
+
 EngineResult SimState::canBuild(int x, int y, int width, int height)
 {
 	if(castle != NULL)
@@ -369,6 +426,11 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 		if((*fit)->collides(x, y, width, height))
 			return E_BAD;
 
+	vector<MiningCamp*>::const_iterator mit;
+	for(mit = camps.begin(); mit != camps.end(); ++mit)
+		if((*mit)->collides(x, y, width, height))
+			return E_BAD;
+
 	vector<CaveTile*>::const_iterator cit;
 	for(cit = caves.begin(); cit != caves.end(); ++cit)
 		if((*cit)->collides(x, y, width, height))
@@ -379,6 +441,22 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	case S_PLACEHOUSE:
 
 		break;
+
+	case S_PLACEFARM:
+
+		break;
+
+	case S_PLACEMININGCAMP:
+	{
+		vector<CaveTile*>::const_iterator cit;
+		for(cit = caves.begin(); cit != caves.end(); ++cit)
+			if((abs(((*cit)->getX() + (*cit)->getWidth() / 2) - (x + width / 2)) <= 100) && (abs(((*cit)->getY() + (*cit)->getHeight() / 2) - (y + height / 2)) <= 100))
+				return E_GOOD;
+
+		return E_BAD;
+
+		break;
+	}
 	default:
 		//nothing to do here
 		break;

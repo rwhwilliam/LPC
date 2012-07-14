@@ -60,4 +60,8 @@
 		<Name>ForestImage</Name>
 		<Value>tree.png</Value>
 	</Config>
+	<Config>
+		<Name>MiningCampImage</Name>
+		<Value>miningcamp.png</Value>
+	</Config>
 </Configuration>

@@ -15,69 +15,23 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#ifndef MININGCAMP_H
+#define MININGCAMP_H
 
 #include <string>
-#include <vector>
 
-#include "SDL.h"
-
-#include "Engine/State/State.h"
-#include "Engine/Util/Enums.h"
-#include "Villages/Util/MouseImage.h"
+#include "Building.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class House;
-class Farm;
-class MiningCamp;
-class CaveTile;
-
-class SimState : public State
+class MiningCamp : public Building
 {
 public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	MiningCamp(int xloc, int yloc);
+	~MiningCamp();
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
-
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
-
-	ScrollingMap* getMap();
-	int getTileWidth();
-	int getTileHeight();
-
-	EngineResult canBuild(int x, int y, int width, int height);
-
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-
-private:
-
-	int tileWidth, tileHeight;
-	
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<House*> houses;
-	vector<Farm*> farms;
-	vector<MiningCamp*> camps;
-
-	vector<CaveTile*> caves;
+	MiningCamp(const MiningCamp& data);
+	MiningCamp& operator=(const MiningCamp* rhs);
 };
 
 #endif

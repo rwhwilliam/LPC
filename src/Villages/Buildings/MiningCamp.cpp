@@ -15,69 +15,35 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#include "MiningCamp.h"
 
 #include <string>
-#include <vector>
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
-#include "Engine/Util/Enums.h"
-#include "Villages/Util/MouseImage.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/Building.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class House;
-class Farm;
-class MiningCamp;
-class CaveTile;
-
-class SimState : public State
+MiningCamp::MiningCamp(int xloc, int yloc) : Building("MiningCampImage", xloc, yloc)
 {
-public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Logger::debug("MiningCamp Constructor");
+}
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
+MiningCamp::~MiningCamp()
+{
+	Logger::debug("MiningCamp Destructor");
+}
 
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
+MiningCamp::MiningCamp(const MiningCamp& data) : Building("", 0, 0)
+{
+	throw VillageException("MiningCamp Copy Constructor");
+}
 
-	ScrollingMap* getMap();
-	int getTileWidth();
-	int getTileHeight();
-
-	EngineResult canBuild(int x, int y, int width, int height);
-
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-
-private:
-
-	int tileWidth, tileHeight;
-	
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<House*> houses;
-	vector<Farm*> farms;
-	vector<MiningCamp*> camps;
-
-	vector<CaveTile*> caves;
-};
-
-#endif
+MiningCamp& MiningCamp::operator=(const MiningCamp* rhs)
+{
+	throw VillageException("MiningCamp Assignment Operator");
+}

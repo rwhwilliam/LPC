@@ -42,11 +42,19 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	buildFarm = new ClickableButton<ActionBar>(x + 74, y + 10, 64, 64, "farm-button-normal.png", "farm-button-hover.png", "farm-button-pressed.png", this, &ActionBar::placeFarm);
 
 	addComponent("buildFarm", buildFarm);
+
+	buildMiningCamp = new ClickableButton<ActionBar>(x + 138, y + 10, 64, 64, "miningcamp-button-normal.png", "miningcamp-button-hover.png", "miningcamp-button-pressed.png", this, &ActionBar::placeMiningCamp);
+
+	addComponent("buildMiningCamp", buildMiningCamp);
 }
 
 ActionBar::~ActionBar()
 {
 	Logger::debug("ActionBar Destructor");
+
+	delete buildHouse;
+	delete buildFarm;
+	delete buildMiningCamp;
 }
 
 ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
@@ -67,4 +75,9 @@ void ActionBar::placeHouse()
 void ActionBar::placeFarm()
 {
 	state->placeFarm();
+}
+
+void ActionBar::placeMiningCamp()
+{
+	state->placeMiningCamp();
 }
