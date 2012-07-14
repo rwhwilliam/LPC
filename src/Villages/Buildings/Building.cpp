@@ -24,7 +24,6 @@
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Config.h"
 #include "Engine/Util/Logger.h"
-#include "Engine/Util/MouseImage.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Map/MapTile.h"
 
@@ -72,12 +71,7 @@ void Building::draw(int xoffset, int yoffset, SDL_Surface* screen)
 	img->draw(xloc - xoffset, yloc - yoffset, screen);
 }
 
-bool Building::collides(Building* obj)
+bool Building::collides(int x, int y, int width, int height)
 {
-	return (xloc + width >= obj->xloc && xloc <= obj->xloc + obj->width && yloc + height >= obj->yloc && yloc <= obj->yloc + obj->height);
-}
-
-bool Building::collides(MouseImage* obj)
-{
-	return (xloc + width >= obj->getX() && xloc <= obj->getX() + obj->getWidth() && yloc + height >= obj->getY() && yloc <= obj->getY() + obj->getHeight());
+	return (xloc + width >= x && xloc <= x + width && yloc + height >= y && yloc <= y + height);
 }

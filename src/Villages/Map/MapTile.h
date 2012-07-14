@@ -37,7 +37,7 @@ public:
 	MapTile(const MapTile& data);
 	MapTile& operator=(const MapTile* rhs);
 
-	bool collides(MouseImage* obj);
+	bool collides(int x, int y, int width, int height);
 
 	int getX() { return xloc; }
 	int getY() { return yloc; }

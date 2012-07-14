@@ -37,8 +37,7 @@ public:
 	Building(const Building& data);
 	Building& operator=(const Building* rhs);
 
-	bool collides(Building* obj);
-	bool collides(MouseImage* obj);
+	bool collides(int x, int y, int width, int height);
 
 	virtual void update(float time, Uint8* keystrokes);
 	virtual void raiseEvent(SDL_Event* event);

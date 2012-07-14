@@ -23,8 +23,8 @@
 #include "tinyxml2.h"
 
 #include "Engine/Graphics/Image.h"
+#include "Engine/Util/Enums.h"
 #include "Engine/Util/Logger.h"
-#include "Engine/Util/MouseImage.h"
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Gui/ActionBar.h"
@@ -33,6 +33,7 @@
 #include "Villages/Buildings/House.h"
 #include "Villages/Buildings/Farm.h"
 #include "Villages/Map/CaveTile.h"
+#include "Villages/Util/MouseImage.h"
 #include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
@@ -305,30 +306,6 @@ void SimState::draw()
 	}
 }
 
-MouseImageMode SimState::checkCollision(MouseImage* img)
-{
-	if(castle != NULL)
-		if(castle->collides(img))
-			return MI_BAD;
-
-	vector<House*>::const_iterator hit;
-	for(hit = houses.begin(); hit != houses.end(); ++hit)
-		if((*hit)->collides(img))
-			return MI_BAD;
-
-	vector<Farm*>::const_iterator fit;
-	for(fit = farms.begin(); fit != farms.end(); ++fit)
-		if((*fit)->collides(img))
-			return MI_BAD;
-
-	vector<CaveTile*>::const_iterator cit;
-	for(cit = caves.begin(); cit != caves.end(); ++cit)
-		if((*cit)->collides(img))
-			return MI_BAD;
-
-	return MI_NORMAL;
-}
-
 void SimState::placeHouse()
 {
 	if(mode == S_NORMAL)
@@ -353,4 +330,38 @@ void SimState::placeFarm()
 
 		imageHover = new MouseImage(this, "farm.png", "farm.png", 128);
 	}
+}
+
+EngineResult SimState::canBuild(int x, int y, int width, int height)
+{
+	if(castle != NULL)
+	if(castle->collides(x, y, width, height))
+		return E_BAD;
+
+	vector<House*>::const_iterator hit;
+	for(hit = houses.begin(); hit != houses.end(); ++hit)
+		if((*hit)->collides(x, y, width, height))
+			return E_BAD;
+
+	vector<Farm*>::const_iterator fit;
+	for(fit = farms.begin(); fit != farms.end(); ++fit)
+		if((*fit)->collides(x, y, width, height))
+			return E_BAD;
+
+	vector<CaveTile*>::const_iterator cit;
+	for(cit = caves.begin(); cit != caves.end(); ++cit)
+		if((*cit)->collides(x, y, width, height))
+			return E_BAD;
+
+	switch(mode)
+	{
+	case S_PLACEHOUSE:
+
+		break;
+	default:
+		//nothing to do here
+		break;
+	}
+
+	return E_GOOD;
 }

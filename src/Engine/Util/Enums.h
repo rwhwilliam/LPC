@@ -15,62 +15,9 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#ifndef ENUMS_H
+#define ENUMS_H
 
-#include <string>
-#include <vector>
-
-#include "SDL.h"
-
-#include "Engine/State/State.h"
-#include "Engine/Util/Enums.h"
-#include "Villages/Util/MouseImage.h"
-
-using namespace std;
-
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class House;
-class Farm;
-class CaveTile;
-
-class SimState : public State
-{
-public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
-
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
-
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
-
-	ScrollingMap* getMap();
-
-	EngineResult canBuild(int x, int y, int width, int height);
-
-	void placeHouse();
-	void placeFarm();
-
-private:
-	
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<House*> houses;
-	vector<Farm*> farms;
-
-	vector<CaveTile*> caves;
-};
+enum EngineResult { E_GOOD, E_BAD};
 
 #endif

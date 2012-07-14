@@ -22,6 +22,7 @@
 #include "SDL.h"
 
 #include "Engine/Graphics/Image.h"
+#include "Engine/Util/Enums.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/States/SimState.h"
@@ -37,7 +38,7 @@ MouseImage::MouseImage(SimState* state, string goodSrc, string badSrc, int alpha
 
 	MouseImage::state = state;
 
-	mode = MI_NORMAL;
+	mode = E_GOOD;
 }
 
 MouseImage::~MouseImage()
@@ -67,13 +68,13 @@ void MouseImage::raiseEvent(SDL_Event* event)
 		x = event->motion.x - goodImg->getWidth() / 2;
 		y = event->motion.y - goodImg->getHeight() / 2;
 
-		mode = state->checkCollision(this);
+		mode = state->canBuild(x, y, getWidth(), getHeight());
 	}
 }
 
 void MouseImage::draw(SDL_Surface* screen)
 {
-	if(mode == MI_NORMAL)
+	if(mode == E_GOOD)
 		goodImg->draw(x, y, screen);
 	else
 		badImg->draw(x, y, screen);

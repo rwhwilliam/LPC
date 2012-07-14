@@ -23,10 +23,9 @@
 #include "SDL.h"
 
 #include "Engine/Graphics/Image.h"
+#include "Engine/Util/Enums.h"
 
 using namespace std;
-
-enum MouseImageMode { MI_NORMAL, MI_BAD };
 
 class SimState;
 
@@ -42,7 +41,7 @@ public:
 	void raiseEvent(SDL_Event* event);
 	void draw(SDL_Surface* screen);
 
-	void setMode(MouseImageMode mode) { MouseImage::mode = mode; }
+	void setMode(EngineResult mode) { MouseImage::mode = mode; }
 
 	int getX() { return x; }
 	int getY() { return y; }
@@ -53,7 +52,7 @@ private:
 	int x, y;
 	Image* goodImg;
 	Image* badImg;
-	MouseImageMode mode;
+	EngineResult mode;
 	SimState* state;
 };
 

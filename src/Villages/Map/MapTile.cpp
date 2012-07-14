@@ -23,7 +23,6 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
-#include "Engine/Util/MouseImage.h"
 #include "Engine/Util/VillageException.h"
 
 using namespace std;
@@ -57,7 +56,7 @@ void MapTile::draw(int xoffset, int yoffset, SDL_Surface* screen)
 	img->draw(xloc - xoffset, yloc - yoffset, screen);
 }
 
-bool MapTile::collides(MouseImage* obj)
+bool MapTile::collides(int x, int y, int width, int height)
 {
-	return (xloc + getWidth() >= obj->getX() && xloc <= obj->getX() + obj->getWidth() && yloc + getHeight() >= obj->getY() && yloc <= obj->getY() + obj->getHeight());
+	return (xloc + getWidth() >= x && xloc <= x + width && yloc + getHeight() >= y && yloc <= y + height);
 }
