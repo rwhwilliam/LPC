@@ -56,10 +56,20 @@ MapTile& MapTile::operator=(const MapTile* rhs)
 
 void MapTile::draw(int xoffset, int yoffset, SDL_Surface* screen)
 {
-	img->draw(xloc * state->getTileWidth() - xoffset, yloc * state->getTileHeight() - yoffset, screen);
+	img->draw(getMapX() - xoffset, getMapY() - yoffset, screen);
 }
 
 bool MapTile::collides(int x, int y, int width, int height)
 {
-	return (xloc + getWidth() >= x && xloc <= x + width && yloc + getHeight() >= y && yloc <= y + height);
+	return (getMapX() + getWidth() >= x && getMapX() <= x + width && getMapY() + getHeight() >= y && getMapY() <= y + height);
+}
+
+int MapTile::getMapX()
+{
+	return xloc * state->getTileWidth();
+}
+
+int MapTile::getMapY()
+{
+	return yloc * state->getTileHeight();
 }

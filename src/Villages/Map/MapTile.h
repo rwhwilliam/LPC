@@ -44,6 +44,8 @@ public:
 	int getY() { return yloc; }
 	int getWidth() { return img->getWidth(); }
 	int getHeight() { return img->getHeight(); }
+	int getMapX();
+	int getMapY();
 
 	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
 

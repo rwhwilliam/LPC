@@ -224,16 +224,19 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(castle == NULL)
 			{
-				castle = new Castle(imageHover->getX(), imageHover->getY());
+				if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+				{
+					castle = new Castle(imageHover->getX(), imageHover->getY());
 
-				Logger::debugFormat("Castle placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+					Logger::debugFormat("Castle placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-				mode = S_NORMAL;
+					mode = S_NORMAL;
 
-				if(imageHover != NULL)
-					delete imageHover;
+					if(imageHover != NULL)
+						delete imageHover;
 				
-				imageHover = NULL;
+					imageHover = NULL;
+				}
 
 			}
 			else
@@ -245,34 +248,40 @@ void SimState::raiseEvent(SDL_Event* event)
 
 		case S_PLACEHOUSE:
 		{
-			House* house = new House(imageHover->getX(), imageHover->getY());
-			houses.push_back(house);
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				House* house = new House(imageHover->getX(), imageHover->getY());
+				houses.push_back(house);
 
-			Logger::debugFormat("House placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("House placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-			mode = S_NORMAL;
+				mode = S_NORMAL;
 
-			if(imageHover != NULL)
-				delete imageHover;
+				if(imageHover != NULL)
+					delete imageHover;
 
-			imageHover = NULL;
+				imageHover = NULL;
+			}
 
 			break;
 		}
 
 		case S_PLACEFARM:
 		{
-			Farm* farm = new Farm(imageHover->getX(), imageHover->getY());
-			farms.push_back(farm);
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				Farm* farm = new Farm(imageHover->getX(), imageHover->getY());
+				farms.push_back(farm);
 
-			Logger::debugFormat("Farm placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Farm placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-			mode = S_NORMAL;
+				mode = S_NORMAL;
 
-			if(imageHover != NULL)
-				delete imageHover;
+				if(imageHover != NULL)
+					delete imageHover;
 
-			imageHover = NULL;
+				imageHover = NULL;
+			}
 
 			break;
 		}
