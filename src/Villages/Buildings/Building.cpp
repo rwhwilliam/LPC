@@ -73,5 +73,5 @@ void Building::draw(int xoffset, int yoffset, SDL_Surface* screen)
 
 bool Building::collides(int x, int y, int width, int height)
 {
-	return (xloc + width >= x && xloc <= x + width && yloc + height >= y && yloc <= y + height);
+	return (xloc + Building::width >= x && xloc <= x + width && yloc + Building::height >= y && yloc <= y + height);
 }

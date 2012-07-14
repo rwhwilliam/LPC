@@ -33,8 +33,8 @@ MouseImage::MouseImage(SimState* state, string goodSrc, string badSrc, int alpha
 {
 	Logger::debug("MouseImage Constructor");
 
-	goodImg = new Image(goodSrc, alpha);
-	badImg = new Image(badSrc, alpha);
+	goodImg = new Image(goodSrc, alpha, 255, 0, 255);
+	badImg = new Image(badSrc, alpha, 255, 0, 255);
 
 	MouseImage::state = state;
 

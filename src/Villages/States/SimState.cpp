@@ -305,9 +305,6 @@ void SimState::draw()
 	if(imageHover != NULL)
 		imageHover->draw(frame);
 
-	if(actionBar != NULL && mode == S_NORMAL)
-		actionBar->draw(frame);
-
 	vector<House*>::const_iterator hit;
 	for(hit = houses.begin(); hit != houses.end(); ++hit)
 	{
@@ -325,6 +322,9 @@ void SimState::draw()
 	{
 		(*cit)->draw(xoffset, yoffset, frame);
 	}
+
+	if(actionBar != NULL && mode == S_NORMAL)
+		actionBar->draw(frame);
 }
 
 void SimState::placeHouse()
@@ -356,8 +356,8 @@ void SimState::placeFarm()
 EngineResult SimState::canBuild(int x, int y, int width, int height)
 {
 	if(castle != NULL)
-	if(castle->collides(x, y, width, height))
-		return E_BAD;
+		if(castle->collides(x, y, width, height))
+			return E_BAD;
 
 	vector<House*>::const_iterator hit;
 	for(hit = houses.begin(); hit != houses.end(); ++hit)
