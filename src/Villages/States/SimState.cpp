@@ -450,7 +450,7 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	{
 		vector<CaveTile*>::const_iterator cit;
 		for(cit = caves.begin(); cit != caves.end(); ++cit)
-			if((abs(((*cit)->getX() + (*cit)->getWidth() / 2) - (x + width / 2)) <= 100) && (abs(((*cit)->getY() + (*cit)->getHeight() / 2) - (y + height / 2)) <= 100))
+			if((abs(((*cit)->getMapX() + (*cit)->getWidth() / 2) - (x + width / 2)) <= 200) && (abs(((*cit)->getMapY() + (*cit)->getHeight() / 2) - (y + height / 2)) <= 200))
 				return E_GOOD;
 
 		return E_BAD;
