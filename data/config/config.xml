@@ -13,6 +13,14 @@
 		<Value>768</Value>
 	</Config>
 	<Config>
+		<Name>TileWidth</Name>
+		<Value>32</Value>
+	</Config>
+	<Config>
+		<Name>TileHeight</Name>
+		<Value>32</Value>
+	</Config>
+	<Config>
 		<Name>ImagePath</Name>
 		<Value>data/images/</Value>
 	</Config>

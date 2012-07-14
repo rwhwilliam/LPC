@@ -20,9 +20,10 @@
 #include "Engine/Util/Config.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/States/SimState.h"
 
 
-ForestTile::ForestTile(int xloc, int yloc) : MapTile(Config::getConfig("ForestImage"), xloc, yloc)
+ForestTile::ForestTile(SimState* state, int xloc, int yloc) : MapTile(state, Config::getConfig("ForestImage"), xloc, yloc)
 {
 	Logger::debug("ForestTile Constructor");
 }
@@ -32,7 +33,7 @@ ForestTile::~ForestTile()
 	Logger::debug("ForestTile Destructor");
 }
 
-ForestTile::ForestTile(const ForestTile& data) : MapTile("", 0, 0)
+ForestTile::ForestTile(const ForestTile& data) : MapTile(NULL, "", 0, 0)
 {
 	throw VillageException("ForestTile Copy Constructor");
 }

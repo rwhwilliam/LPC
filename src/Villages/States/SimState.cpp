@@ -23,6 +23,7 @@
 #include "tinyxml2.h"
 
 #include "Engine/Graphics/Image.h"
+#include "Engine/Util/Config.h"
 #include "Engine/Util/Enums.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Tokenizer.h"
@@ -58,8 +59,8 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 
 	int _width = atoi(doc.FirstChildElement("Map")->FirstChildElement("Width")->GetText());
 	int _height = atoi(doc.FirstChildElement("Map")->FirstChildElement("Height")->GetText());
-	int _tilewidth = atoi(doc.FirstChildElement("Map")->FirstChildElement("TileWidth")->GetText());
-	int _tileheight = atoi(doc.FirstChildElement("Map")->FirstChildElement("TileHeight")->GetText());
+	int _tilewidth = atoi(Config::getConfig("TileWidth").c_str());
+	int _tileheight = atoi(Config::getConfig("TileHeight").c_str());
 	int _layers = atoi(doc.FirstChildElement("Map")->FirstChildElement("Layers")->GetText());
 	map = new ScrollingMap(_width, _height, _tilewidth, _tileheight, _layers);
 
@@ -107,7 +108,7 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 	{
 		int _x = atoi(node->FirstChildElement("X")->GetText());
 		int _y = atoi(node->FirstChildElement("Y")->GetText());
-		CaveTile* cave = new CaveTile(_x, _y);
+		CaveTile* cave = new CaveTile(this, _x, _y);
 
 		caves.push_back(cave);
 	}
@@ -165,6 +166,16 @@ SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
 SimState& SimState::operator=(const SimState* rhs)
 {
 	throw VillageException("SimState Assignment Operator");
+}
+
+int SimState::getTileWidth()
+{
+	return map->getTileWidth();
+}
+
+int SimState::getTileHeight()
+{
+	return map->getTileHeight();
 }
 
 void SimState::update(float time, Uint8* keystrokes)

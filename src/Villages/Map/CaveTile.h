@@ -20,10 +20,12 @@
 
 #include "MapTile.h"
 
+class SimState;
+
 class CaveTile : public MapTile
 {
 public:
-	CaveTile(int xloc, int yloc);
+	CaveTile(SimState* state, int xloc, int yloc);
 	~CaveTile();
 
 	CaveTile(const CaveTile& data);

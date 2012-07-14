@@ -2,8 +2,6 @@
  <Map>
  	<Width>50</Width>
  	<Height>50</Height>
- 	<TileWidth>32</TileWidth>
- 	<TileHeight>32</TileHeight>
  	<Layers>1</Layers>
  	<Tiles>
  		<Tile>

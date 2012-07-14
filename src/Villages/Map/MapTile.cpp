@@ -24,12 +24,15 @@
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-MapTile::MapTile(string src, int xloc, int yloc) : xloc(xloc), yloc(yloc)
+MapTile::MapTile(SimState* state, string src, int xloc, int yloc) : xloc(xloc), yloc(yloc)
 {
 	Logger::debug("MapTile Constructor");
+
+	MapTile::state = state;
 
 	img = new Image(src, 255, 0, 255);
 }
@@ -53,7 +56,7 @@ MapTile& MapTile::operator=(const MapTile* rhs)
 
 void MapTile::draw(int xoffset, int yoffset, SDL_Surface* screen)
 {
-	img->draw(xloc - xoffset, yloc - yoffset, screen);
+	img->draw(xloc * state->getTileWidth() - xoffset, yloc * state->getTileHeight() - yoffset, screen);
 }
 
 bool MapTile::collides(int x, int y, int width, int height)

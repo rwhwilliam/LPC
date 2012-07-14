@@ -20,9 +20,10 @@
 #include "Engine/Util/Config.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/States/SimState.h"
 
 
-CaveTile::CaveTile(int xloc, int yloc) : MapTile(Config::getConfig("CaveImage"), xloc, yloc)
+CaveTile::CaveTile(SimState* state, int xloc, int yloc) : MapTile(state, Config::getConfig("CaveImage"), xloc, yloc)
 {
 	Logger::debug("CaveTile Constructor");
 }
@@ -32,7 +33,7 @@ CaveTile::~CaveTile()
 	Logger::debug("CaveTile Destructor");
 }
 
-CaveTile::CaveTile(const CaveTile& data) : MapTile("", 0, 0)
+CaveTile::CaveTile(const CaveTile& data) : MapTile(NULL, "", 0, 0)
 {
 	throw VillageException("CaveTile Copy Constructor");
 }

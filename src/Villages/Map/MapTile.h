@@ -23,6 +23,7 @@
 #include "SDL.h"
 
 #include "Engine/Graphics/Image.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
@@ -31,7 +32,7 @@ class MouseImage;
 class MapTile
 {
 public:
-	MapTile(string src, int xloc, int yloc);
+	MapTile(SimState* state, string src, int xloc, int yloc);
 	~MapTile();
 
 	MapTile(const MapTile& data);
@@ -47,6 +48,7 @@ public:
 	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
 private:
+	SimState* state;
 	Image* img;
 	int xloc, yloc;
 };

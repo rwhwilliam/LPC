@@ -53,6 +53,8 @@ public:
 	void draw();
 
 	ScrollingMap* getMap();
+	int getTileWidth();
+	int getTileHeight();
 
 	EngineResult canBuild(int x, int y, int width, int height);
 
@@ -60,6 +62,8 @@ public:
 	void placeFarm();
 
 private:
+
+	int tileWidth, tileHeight;
 	
 	SimMode mode;
 	ScrollingMap* map;

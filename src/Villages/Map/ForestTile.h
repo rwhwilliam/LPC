@@ -20,10 +20,12 @@
 
 #include "MapTile.h"
 
+class SimState;
+
 class ForestTile : public MapTile
 {
 public:
-	ForestTile(int xloc, int yloc);
+	ForestTile(SimState* state, int xloc, int yloc);
 	~ForestTile();
 
 	ForestTile(const ForestTile& data);
