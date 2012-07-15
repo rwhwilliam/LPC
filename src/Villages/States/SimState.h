@@ -39,6 +39,7 @@ class House;
 class Farm;
 class MiningCamp;
 class CaveTile;
+class ForestTile;
 
 class SimState : public State
 {
@@ -78,6 +79,7 @@ private:
 	vector<MiningCamp*> camps;
 
 	vector<CaveTile*> caves;
+	vector<ForestTile*> forests;
 };
 
 #endif

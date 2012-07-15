@@ -76,4 +76,14 @@
  			<Y>20</Y>
  		</Cave>
  	</Caves>
+ 	<Forests>
+ 		<Forest>
+ 			<X>30</X>
+ 			<Y>5</Y>
+ 		</Forest>
+ 		<Forest>
+ 			<X>40</X>
+ 			<Y>10</Y>
+ 		</Forest>
+ 	</Forests>
  </Map>

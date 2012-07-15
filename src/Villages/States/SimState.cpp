@@ -36,6 +36,7 @@
 #include "Villages/Buildings/Farm.h"
 #include "Villages/Buildings/MiningCamp.h"
 #include "Villages/Map/CaveTile.h"
+#include "Villages/Map/ForestTile.h"
 #include "Villages/Util/MouseImage.h"
 #include "Villages/Util/ScrollingMap.h"
 
@@ -114,6 +115,16 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 
 		caves.push_back(cave);
 	}
+
+	for(const XMLNode* node=doc.FirstChildElement("Map")->FirstChildElement("Forests")->FirstChildElement("Forest");
+		node; node=node->NextSibling())
+	{
+		int _x = atoi(node->FirstChildElement("X")->GetText());
+		int _y = atoi(node->FirstChildElement("Y")->GetText());
+		ForestTile* forest = new ForestTile(this, _x, _y);
+
+		forests.push_back(forest);
+	}
 }
 
 SimState::~SimState()
@@ -168,6 +179,16 @@ SimState::~SimState()
 	}
 
 	camps.clear();
+
+	vector<ForestTile*>::iterator foit;
+	for(foit = forests.begin(); foit != forests.end(); ++foit)
+	{
+		delete (*foit);
+
+		forests.erase(foit);
+	}
+
+	forests.clear();
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -349,6 +370,12 @@ void SimState::draw()
 		(*cit)->draw(xoffset, yoffset, frame);
 	}
 
+	vector<ForestTile*>::const_iterator foit;
+	for(foit = forests.begin(); foit != forests.end(); ++foit)
+	{
+		(*foit)->draw(xoffset, yoffset, frame);
+	}
+
 	vector<House*>::const_iterator hit;
 	for(hit = houses.begin(); hit != houses.end(); ++hit)
 	{
@@ -434,6 +461,11 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	vector<CaveTile*>::const_iterator cit;
 	for(cit = caves.begin(); cit != caves.end(); ++cit)
 		if((*cit)->collides(x, y, width, height))
+			return E_BAD;
+
+	vector<ForestTile*>::const_iterator foit;
+	for(foit = forests.begin(); foit != forests.end(); ++foit)
+		if((*foit)->collides(x, y, width, height))
 			return E_BAD;
 
 	switch(mode)
