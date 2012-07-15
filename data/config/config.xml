@@ -64,4 +64,8 @@
 		<Name>MiningCampImage</Name>
 		<Value>miningcamp.png</Value>
 	</Config>
+	<Config>
+		<Name>MillImage</Name>
+		<Value>mill.png</Value>
+	</Config>
 </Configuration>

@@ -15,74 +15,35 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#include "Mill.h"
 
 #include <string>
-#include <vector>
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
-#include "Engine/Util/Enums.h"
-#include "Villages/Util/MouseImage.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/Building.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class House;
-class Farm;
-class MiningCamp;
-class Mill;
-class CaveTile;
-class ForestTile;
-
-class SimState : public State
+Mill::Mill(int xloc, int yloc) : Building("MillImage", xloc, yloc)
 {
-public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Logger::debug("Mill Constructor");
+}
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
+Mill::~Mill()
+{
+	Logger::debug("Mill Destructor");
+}
 
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
+Mill::Mill(const Mill& data) : Building("", 0, 0)
+{
+	throw VillageException("Mill Copy Constructor");
+}
 
-	ScrollingMap* getMap();
-	int getTileWidth();
-	int getTileHeight();
-
-	EngineResult canBuild(int x, int y, int width, int height);
-
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-
-private:
-
-	int tileWidth, tileHeight;
-	
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<House*> houses;
-	vector<Farm*> farms;
-	vector<MiningCamp*> camps;
-	vector<Mill*> mills;
-
-	vector<CaveTile*> caves;
-	vector<ForestTile*> forests;
-};
-
-#endif
+Mill& Mill::operator=(const Mill* rhs)
+{
+	throw VillageException("Mill Assignment Operator");
+}

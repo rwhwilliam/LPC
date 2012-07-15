@@ -35,6 +35,7 @@
 #include "Villages/Buildings/House.h"
 #include "Villages/Buildings/Farm.h"
 #include "Villages/Buildings/MiningCamp.h"
+#include "Villages/Buildings/Mill.h"
 #include "Villages/Map/CaveTile.h"
 #include "Villages/Map/ForestTile.h"
 #include "Villages/Util/MouseImage.h"
@@ -189,6 +190,16 @@ SimState::~SimState()
 	}
 
 	forests.clear();
+
+	vector<Mill*>::iterator miit;
+	for(miit = mills.begin(); miit != mills.end(); ++miit)
+	{
+		delete (*miit);
+
+		mills.erase(miit);
+	}
+
+	mills.clear();
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -231,6 +242,12 @@ void SimState::update(float time, Uint8* keystrokes)
 	for(mit = camps.begin(); mit != camps.end(); ++mit)
 	{
 		(*mit)->update(time, keystrokes);
+	}
+
+	vector<Mill*>::const_iterator miit;
+	for(miit = mills.begin(); miit != mills.end(); ++miit)
+	{
+		(*miit)->update(time, keystrokes);
 	}
 
 	if(keystrokes[SDLK_ESCAPE] && mode != S_PLACECASTLE)
@@ -344,6 +361,26 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACEMILL:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				Mill* mill = new Mill(imageHover->getX(), imageHover->getY());
+				mills.push_back(mill);
+
+				Logger::debugFormat("Mill placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -394,6 +431,12 @@ void SimState::draw()
 		(*mit)->draw(xoffset, yoffset, frame);
 	}
 
+	vector<Mill*>::const_iterator miit;
+	for(miit = mills.begin(); miit != mills.end(); ++miit)
+	{
+		(*miit)->draw(xoffset, yoffset, frame);
+	}
+
 	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->draw(frame);
 }
@@ -437,6 +480,19 @@ void SimState::placeMiningCamp()
 	}
 }
 
+void SimState::placeMill()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEMILL;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "mill.png", "mill-bad.png", 128);
+	}
+}
+
 EngineResult SimState::canBuild(int x, int y, int width, int height)
 {
 	if(castle != NULL)
@@ -456,6 +512,11 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	vector<MiningCamp*>::const_iterator mit;
 	for(mit = camps.begin(); mit != camps.end(); ++mit)
 		if((*mit)->collides(x, y, width, height))
+			return E_BAD;
+
+	vector<Mill*>::const_iterator miit;
+	for(miit = mills.begin(); miit != mills.end(); ++miit)
+		if((*miit)->collides(x, y, width, height))
 			return E_BAD;
 
 	vector<CaveTile*>::const_iterator cit;
@@ -489,6 +550,19 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 
 		break;
 	}
+
+	case S_PLACEMILL:
+	{
+		vector<ForestTile*>::const_iterator fit;
+		for(fit = forests.begin(); fit != forests.end(); ++fit)
+			if((abs(((*fit)->getMapX() + (*fit)->getWidth() / 2) - (x + width / 2)) <= 200) && (abs(((*fit)->getMapY() + (*fit)->getHeight() / 2) - (y + height / 2)) <= 200))
+				return E_GOOD;
+
+		return E_BAD;
+
+		break;
+	}
+	
 	default:
 		//nothing to do here
 		break;
