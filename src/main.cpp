@@ -14,7 +14,6 @@
 
 #include "Villages/States/SimState.h"
 
-
 using namespace std;
 
 SDL_Event event;
