@@ -43,12 +43,14 @@ private:
 	void placeFarm();
 	void placeMiningCamp();
 	void placeMill();
+	void placeWell();
 
 	SimState* state;
 	ClickableButton<ActionBar>* buildHouse;
 	ClickableButton<ActionBar>* buildFarm;
 	ClickableButton<ActionBar>* buildMiningCamp;
 	ClickableButton<ActionBar>* buildMill;
+	ClickableButton<ActionBar>* buildWell;
 };
 
 #endif

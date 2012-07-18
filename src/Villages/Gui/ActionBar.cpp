@@ -50,6 +50,10 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	buildMill = new ClickableButton<ActionBar>(x + 202, y + 10, 64, 64, "mill-button-normal.png", "mill-button-hover.png", "mill-button-pressed.png", this, &ActionBar::placeMill);
 
 	addComponent("buildMill", buildMill);
+
+	buildWell = new ClickableButton<ActionBar>(x + 266, y + 10, 64, 64, "well-button-normal.png", "well-button-hover.png", "well-button-pressed.png", this, &ActionBar::placeWell);
+
+	addComponent("buildWell", buildWell);
 }
 
 ActionBar::~ActionBar()
@@ -60,6 +64,7 @@ ActionBar::~ActionBar()
 	delete buildFarm;
 	delete buildMiningCamp;
 	delete buildMill;
+	delete buildWell;
 }
 
 ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
@@ -90,4 +95,9 @@ void ActionBar::placeMiningCamp()
 void ActionBar::placeMill()
 {
 	state->placeMill();
+}
+
+void ActionBar::placeWell()
+{
+	state->placeWell();
 }

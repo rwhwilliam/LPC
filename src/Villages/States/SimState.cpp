@@ -36,6 +36,7 @@
 #include "Villages/Buildings/Farm.h"
 #include "Villages/Buildings/MiningCamp.h"
 #include "Villages/Buildings/Mill.h"
+#include "Villages/Buildings/Well.h"
 #include "Villages/Map/CaveTile.h"
 #include "Villages/Map/ForestTile.h"
 #include "Villages/Util/MouseImage.h"
@@ -200,6 +201,16 @@ SimState::~SimState()
 	}
 
 	mills.clear();
+
+	vector<Well*>::iterator wit;
+	for(wit = wells.begin(); wit != wells.end(); ++wit)
+	{
+		delete (*wit);
+
+		wells.erase(wit);
+	}
+
+	wells.clear();
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -248,6 +259,12 @@ void SimState::update(float time, Uint8* keystrokes)
 	for(miit = mills.begin(); miit != mills.end(); ++miit)
 	{
 		(*miit)->update(time, keystrokes);
+	}
+
+	vector<Well*>::const_iterator wit;
+	for(wit = wells.begin(); wit != wells.end(); ++wit)
+	{
+		(*wit)->update(time, keystrokes);
 	}
 
 	if(keystrokes[SDLK_ESCAPE] && mode != S_PLACECASTLE)
@@ -381,6 +398,26 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACEWELL:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				Well* well = new Well(imageHover->getX(), imageHover->getY());
+				wells.push_back(well);
+
+				Logger::debugFormat("Well placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -435,6 +472,12 @@ void SimState::draw()
 	for(miit = mills.begin(); miit != mills.end(); ++miit)
 	{
 		(*miit)->draw(xoffset, yoffset, frame);
+	}
+
+	vector<Well*>::const_iterator wit;
+	for(wit = wells.begin(); wit != wells.end(); ++wit)
+	{
+		(*wit)->draw(xoffset, yoffset, frame);
 	}
 
 	if(actionBar != NULL && mode == S_NORMAL)
@@ -493,6 +536,19 @@ void SimState::placeMill()
 	}
 }
 
+void SimState::placeWell()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEWELL;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "well.png", "well-bad.png", 128);
+	}
+}
+
 EngineResult SimState::canBuild(int x, int y, int width, int height)
 {
 	if(castle != NULL)
@@ -517,6 +573,11 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	vector<Mill*>::const_iterator miit;
 	for(miit = mills.begin(); miit != mills.end(); ++miit)
 		if((*miit)->collides(x, y, width, height))
+			return E_BAD;
+
+	vector<Well*>::const_iterator wit;
+	for(wit = wells.begin(); wit != wells.end(); ++wit)
+		if((*wit)->collides(x, y, width, height))
 			return E_BAD;
 
 	vector<CaveTile*>::const_iterator cit;

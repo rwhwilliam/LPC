@@ -68,4 +68,8 @@
 		<Name>MillImage</Name>
 		<Value>mill.png</Value>
 	</Config>
+	<Config>
+		<Name>WellImage</Name>
+		<Value>well.png</Value>
+	</Config>
 </Configuration>

@@ -66,7 +66,6 @@ int main(int argc, char* args[])
 
 				stateManager.raiseEvent(&event);
 			}
-
 			
 
 			Uint8 *keystates = SDL_GetKeyState(NULL);
