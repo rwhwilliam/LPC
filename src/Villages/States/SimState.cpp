@@ -30,10 +30,12 @@
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Gui/ActionBar.h"
+#include "Villages/Buildings/Blacksmith.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
 #include "Villages/Buildings/House.h"
 #include "Villages/Buildings/Farm.h"
+#include "Villages/Buildings/Jeweler.h"
 #include "Villages/Buildings/MiningCamp.h"
 #include "Villages/Buildings/Mill.h"
 #include "Villages/Buildings/Tavern.h"
@@ -415,6 +417,46 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACEJEWELER:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				Jeweler* jeweler = new Jeweler(imageHover->getX(), imageHover->getY());
+				buildings.push_back(jeweler);
+
+				Logger::debugFormat("Jeweler placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
+
+		case S_PLACEBLACKSMITH:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				Blacksmith* blacksmith = new Blacksmith(imageHover->getX(), imageHover->getY());
+				buildings.push_back(blacksmith);
+
+				Logger::debugFormat("Blacksmith placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -558,6 +600,32 @@ void SimState::placeWeaver()
 			delete imageHover;
 
 		imageHover = new MouseImage(this, "weaver.png", "weaver-bad.png", 128);
+	}
+}
+
+void SimState::placeJeweler()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEJEWELER;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "jeweler.png", "jeweler-bad.png", 128);
+	}
+}
+
+void SimState::placeBlacksmith()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEBLACKSMITH;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "blacksmith.png", "blacksmith-bad.png", 128);
 	}
 }
 

@@ -84,4 +84,12 @@
 		<Name>WeaverImage</Name>
 		<Value>weaver.png</Value>
 	</Config>
+	<Config>
+		<Name>JewelerImage</Name>
+		<Value>jeweler.png</Value>
+	</Config>
+	<Config>
+		<Name>BlacksmithImage</Name>
+		<Value>blacksmith.png</Value>
+	</Config>
 </Configuration>

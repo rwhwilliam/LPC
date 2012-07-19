@@ -66,6 +66,14 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	buildWeaver = new ClickableButton<ActionBar>(x + 458, y + 10, 64, 64, "weaver-button-normal.png", "weaver-button-hover.png", "weaver-button-pressed.png", this, &ActionBar::placeWeaver);
 
 	addComponent("buildWeaver", buildWeaver);
+
+	buildJeweler = new ClickableButton<ActionBar>(x + 522, y + 10, 64, 64, "jeweler-button-normal.png", "jeweler-button-hover.png", "jeweler-button-pressed.png", this, &ActionBar::placeJeweler);
+
+	addComponent("buildJeweler", buildJeweler);
+
+	buildBlacksmith = new ClickableButton<ActionBar>(x + 586, y + 10, 64, 64, "blacksmith-button-normal.png", "blacksmith-button-hover.png", "blacksmith-button-pressed.png", this, &ActionBar::placeBlacksmith);
+
+	addComponent("buildBlacksmith", buildBlacksmith);
 }
 
 ActionBar::~ActionBar()
@@ -80,6 +88,8 @@ ActionBar::~ActionBar()
 	delete buildTavern;
 	delete buildTheatre;
 	delete buildWeaver;
+	delete buildJeweler;
+	delete buildBlacksmith;
 }
 
 ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
@@ -130,4 +140,14 @@ void ActionBar::placeTheatre()
 void ActionBar::placeWeaver()
 {
 	state->placeWeaver();
+}
+
+void ActionBar::placeJeweler()
+{
+	state->placeJeweler();
+}
+
+void ActionBar::placeBlacksmith()
+{
+	state->placeBlacksmith();
 }

@@ -15,74 +15,35 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#include "Blacksmith.h"
 
 #include <string>
-#include <vector>
 
 #include "SDL.h"
 
-#include "Engine/State/State.h"
-#include "Engine/Util/Enums.h"
-#include "Villages/Util/MouseImage.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/Building.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL, S_PLACEWELL, S_PLACETAVERN, S_PLACETHEATRE, S_PLACEWEAVER, S_PLACEJEWELER, S_PLACEBLACKSMITH };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class CaveTile;
-class ForestTile;
-class Building;
-
-class SimState : public State
+Blacksmith::Blacksmith(int xloc, int yloc) : Building("BlacksmithImage", xloc, yloc)
 {
-public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Logger::debug("Blacksmith Constructor");
+}
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
+Blacksmith::~Blacksmith()
+{
+	Logger::debug("Blacksmith Destructor");
+}
 
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
+Blacksmith::Blacksmith(const Blacksmith& data) : Building("", 0, 0)
+{
+	throw VillageException("Blacksmith Copy Constructor");
+}
 
-	ScrollingMap* getMap();
-	int getTileWidth();
-	int getTileHeight();
-
-	EngineResult canBuild(int x, int y, int width, int height);
-
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-	void placeJeweler();
-	void placeBlacksmith();
-
-private:
-
-	int tileWidth, tileHeight;
-	
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<Building*> buildings;
-
-	vector<CaveTile*> caves;
-	vector<ForestTile*> forests;
-};
-
-#endif
+Blacksmith& Blacksmith::operator=(const Blacksmith* rhs)
+{
+	throw VillageException("Blacksmith Assignment Operator");
+}
