@@ -72,4 +72,8 @@
 		<Name>WellImage</Name>
 		<Value>well.png</Value>
 	</Config>
+	<Config>
+		<Name>TavernImage</Name>
+		<Value>tavern.png</Value>
+	</Config>
 </Configuration>

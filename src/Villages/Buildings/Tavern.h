@@ -15,44 +15,23 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef ACTIONBAR_H
-#define ACTIONBAR_H
+#ifndef TAVERN_H
+#define TAVERN_H
 
 #include <string>
 
-#include "SDL.h"
-
-#include "Engine/Gui/ClickableButton.h"
-#include "Engine/Gui/UI.h"
+#include "Building.h"
 
 using namespace std;
 
-class SimState;
-
-class ActionBar : public UI
+class Tavern : public Building
 {
 public:
-	ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc);
-	~ActionBar();
+	Tavern(int xloc, int yloc);
+	~Tavern();
 
-	ActionBar(const ActionBar& data);
-	ActionBar& operator=(const ActionBar* rhs);
-
-private:
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-
-	SimState* state;
-	ClickableButton<ActionBar>* buildHouse;
-	ClickableButton<ActionBar>* buildFarm;
-	ClickableButton<ActionBar>* buildMiningCamp;
-	ClickableButton<ActionBar>* buildMill;
-	ClickableButton<ActionBar>* buildWell;
-	ClickableButton<ActionBar>* buildTavern;
+	Tavern(const Tavern& data);
+	Tavern& operator=(const Tavern* rhs);
 };
 
 #endif

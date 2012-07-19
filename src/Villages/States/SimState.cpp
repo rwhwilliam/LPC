@@ -36,6 +36,7 @@
 #include "Villages/Buildings/Farm.h"
 #include "Villages/Buildings/MiningCamp.h"
 #include "Villages/Buildings/Mill.h"
+#include "Villages/Buildings/Tavern.h"
 #include "Villages/Buildings/Well.h"
 #include "Villages/Map/CaveTile.h"
 #include "Villages/Map/ForestTile.h"
@@ -211,6 +212,16 @@ SimState::~SimState()
 	}
 
 	wells.clear();
+
+	vector<Tavern*>::iterator tit;
+	for(tit = taverns.begin(); tit != taverns.end(); ++tit)
+	{
+		delete (*tit);
+
+		taverns.erase(tit);
+	}
+
+	taverns.clear();
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -265,6 +276,12 @@ void SimState::update(float time, Uint8* keystrokes)
 	for(wit = wells.begin(); wit != wells.end(); ++wit)
 	{
 		(*wit)->update(time, keystrokes);
+	}
+
+	vector<Tavern*>::const_iterator tit;
+	for(tit =taverns.begin(); tit != taverns.end(); ++tit)
+	{
+		(*tit)->update(time, keystrokes);
 	}
 
 	if(keystrokes[SDLK_ESCAPE] && mode != S_PLACECASTLE)
@@ -418,6 +435,26 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACETAVERN:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				Tavern* tavern = new Tavern(imageHover->getX(), imageHover->getY());
+				taverns.push_back(tavern);
+
+				Logger::debugFormat("Tavern placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -478,6 +515,12 @@ void SimState::draw()
 	for(wit = wells.begin(); wit != wells.end(); ++wit)
 	{
 		(*wit)->draw(xoffset, yoffset, frame);
+	}
+
+	vector<Tavern*>::const_iterator tit;
+	for(tit = taverns.begin(); tit != taverns.end(); ++tit)
+	{
+		(*tit)->draw(xoffset, yoffset, frame);
 	}
 
 	if(actionBar != NULL && mode == S_NORMAL)
@@ -549,6 +592,19 @@ void SimState::placeWell()
 	}
 }
 
+void SimState::placeTavern()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACETAVERN;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "tavern.png", "tavern-bad.png", 128);
+	}
+}
+
 EngineResult SimState::canBuild(int x, int y, int width, int height)
 {
 	if(castle != NULL)
@@ -578,6 +634,11 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	vector<Well*>::const_iterator wit;
 	for(wit = wells.begin(); wit != wells.end(); ++wit)
 		if((*wit)->collides(x, y, width, height))
+			return E_BAD;
+
+	vector<Tavern*>::const_iterator tit;
+	for(tit = taverns.begin(); tit != taverns.end(); ++tit)
+		if((*tit)->collides(x, y, width, height))
 			return E_BAD;
 
 	vector<CaveTile*>::const_iterator cit;
