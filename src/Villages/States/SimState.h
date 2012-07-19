@@ -35,14 +35,15 @@ class MouseImage;
 class Castle;
 class ScrollingMap;
 class ActionBar;
-class House;
-class Farm;
-class MiningCamp;
-class Mill;
+//class House;
+//class Farm;
+//class MiningCamp;
+//class Mill;
 class CaveTile;
 class ForestTile;
-class Well;
-class Tavern;
+//class Well;
+//class Tavern;
+class Building;
 
 class SimState : public State
 {
@@ -80,12 +81,14 @@ private:
 	Castle* castle;
 	ActionBar* actionBar;
 
-	vector<House*> houses;
-	vector<Farm*> farms;
-	vector<MiningCamp*> camps;
-	vector<Mill*> mills;
-	vector<Well*> wells;
-	vector<Tavern*> taverns;
+	//vector<House*> houses;
+	//vector<Farm*> farms;
+	//vector<MiningCamp*> camps;
+	//vector<Mill*> mills;
+	//vector<Well*> wells;
+	//vector<Tavern*> taverns;
+
+	vector<Building*> buildings;
 
 	vector<CaveTile*> caves;
 	vector<ForestTile*> forests;
