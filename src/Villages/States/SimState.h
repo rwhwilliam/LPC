@@ -29,20 +29,14 @@
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL, S_PLACEWELL, S_PLACETAVERN };
+enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL, S_PLACEWELL, S_PLACETAVERN, S_PLACETHEATRE };
 
 class MouseImage;
 class Castle;
 class ScrollingMap;
 class ActionBar;
-//class House;
-//class Farm;
-//class MiningCamp;
-//class Mill;
 class CaveTile;
 class ForestTile;
-//class Well;
-//class Tavern;
 class Building;
 
 class SimState : public State
@@ -70,6 +64,7 @@ public:
 	void placeMill();
 	void placeWell();
 	void placeTavern();
+	void placeTheatre();
 
 private:
 

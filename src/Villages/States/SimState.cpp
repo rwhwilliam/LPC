@@ -37,6 +37,7 @@
 #include "Villages/Buildings/MiningCamp.h"
 #include "Villages/Buildings/Mill.h"
 #include "Villages/Buildings/Tavern.h"
+#include "Villages/Buildings/Theatre.h"
 #include "Villages/Buildings/Well.h"
 #include "Villages/Map/CaveTile.h"
 #include "Villages/Map/ForestTile.h"
@@ -373,6 +374,26 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACETHEATRE:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				Theatre* theatre = new Theatre(imageHover->getX(), imageHover->getY());
+				buildings.push_back(theatre);
+
+				Logger::debugFormat("Theatre placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -490,6 +511,19 @@ void SimState::placeTavern()
 			delete imageHover;
 
 		imageHover = new MouseImage(this, "tavern.png", "tavern-bad.png", 128);
+	}
+}
+
+void SimState::placeTheatre()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACETHEATRE;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "theatre.png", "theatre-bad.png", 128);
 	}
 }
 

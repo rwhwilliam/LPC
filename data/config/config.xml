@@ -76,4 +76,8 @@
 		<Name>TavernImage</Name>
 		<Value>tavern.png</Value>
 	</Config>
+	<Config>
+		<Name>TheatreImage</Name>
+		<Value>theatre.png</Value>
+	</Config>
 </Configuration>
