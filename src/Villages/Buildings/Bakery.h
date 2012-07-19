@@ -15,54 +15,23 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef ACTIONBAR_H
-#define ACTIONBAR_H
+#ifndef BAKERY_H
+#define BAKERY_H
 
 #include <string>
 
-#include "SDL.h"
-
-#include "Engine/Gui/ClickableButton.h"
-#include "Engine/Gui/UI.h"
+#include "Building.h"
 
 using namespace std;
 
-class SimState;
-
-class ActionBar : public UI
+class Bakery : public Building
 {
 public:
-	ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc);
-	~ActionBar();
+	Bakery(int xloc, int yloc);
+	~Bakery();
 
-	ActionBar(const ActionBar& data);
-	ActionBar& operator=(const ActionBar* rhs);
-
-private:
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-	void placeJeweler();
-	void placeBlacksmith();
-	void placeBakery();
-
-	SimState* state;
-	ClickableButton<ActionBar>* buildHouse;
-	ClickableButton<ActionBar>* buildFarm;
-	ClickableButton<ActionBar>* buildMiningCamp;
-	ClickableButton<ActionBar>* buildMill;
-	ClickableButton<ActionBar>* buildWell;
-	ClickableButton<ActionBar>* buildTavern;
-	ClickableButton<ActionBar>* buildTheatre;
-	ClickableButton<ActionBar>* buildWeaver;
-	ClickableButton<ActionBar>* buildJeweler;
-	ClickableButton<ActionBar>* buildBlacksmith;
-	ClickableButton<ActionBar>* buildBakery;
+	Bakery(const Bakery& data);
+	Bakery& operator=(const Bakery* rhs);
 };
 
 #endif

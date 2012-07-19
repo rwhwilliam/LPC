@@ -92,4 +92,8 @@
 		<Name>BlacksmithImage</Name>
 		<Value>blacksmith.png</Value>
 	</Config>
+	<Config>
+		<Name>BakeryImage</Name>
+		<Value>bakery.png</Value>
+	</Config>
 </Configuration>

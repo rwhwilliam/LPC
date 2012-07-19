@@ -30,6 +30,7 @@
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Gui/ActionBar.h"
+#include "Villages/Buildings/Bakery.h"
 #include "Villages/Buildings/Blacksmith.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
@@ -457,6 +458,26 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACEBAKERY:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				Bakery* bakery = new Bakery(imageHover->getX(), imageHover->getY());
+				buildings.push_back(bakery);
+
+				Logger::debugFormat("Bakery placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -626,6 +647,19 @@ void SimState::placeBlacksmith()
 			delete imageHover;
 
 		imageHover = new MouseImage(this, "blacksmith.png", "blacksmith-bad.png", 128);
+	}
+}
+
+void SimState::placeBakery()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEBAKERY;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "bakery.png", "bakery-bad.png", 128);
 	}
 }
 

@@ -74,6 +74,10 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	buildBlacksmith = new ClickableButton<ActionBar>(x + 586, y + 10, 64, 64, "blacksmith-button-normal.png", "blacksmith-button-hover.png", "blacksmith-button-pressed.png", this, &ActionBar::placeBlacksmith);
 
 	addComponent("buildBlacksmith", buildBlacksmith);
+
+	buildBakery = new ClickableButton<ActionBar>(x + 650, y + 10, 64, 64, "bakery-button-normal.png", "bakery-button-hover.png", "bakery-button-pressed.png", this, &ActionBar::placeBakery);
+
+	addComponent("buildBakery", buildBakery);
 }
 
 ActionBar::~ActionBar()
@@ -90,6 +94,7 @@ ActionBar::~ActionBar()
 	delete buildWeaver;
 	delete buildJeweler;
 	delete buildBlacksmith;
+	delete buildBakery;
 }
 
 ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
@@ -150,4 +155,9 @@ void ActionBar::placeJeweler()
 void ActionBar::placeBlacksmith()
 {
 	state->placeBlacksmith();
+}
+
+void ActionBar::placeBakery()
+{
+	state->placeBakery();
 }

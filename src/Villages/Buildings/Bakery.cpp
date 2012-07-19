@@ -15,54 +15,35 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef ACTIONBAR_H
-#define ACTIONBAR_H
+#include "Bakery.h"
 
 #include <string>
 
 #include "SDL.h"
 
-#include "Engine/Gui/ClickableButton.h"
-#include "Engine/Gui/UI.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/Building.h"
 
 using namespace std;
 
-class SimState;
-
-class ActionBar : public UI
+Bakery::Bakery(int xloc, int yloc) : Building("BakeryImage", xloc, yloc)
 {
-public:
-	ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc);
-	~ActionBar();
+	Logger::debug("Bakery Constructor");
+}
 
-	ActionBar(const ActionBar& data);
-	ActionBar& operator=(const ActionBar* rhs);
+Bakery::~Bakery()
+{
+	Logger::debug("Bakery Destructor");
+}
 
-private:
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-	void placeJeweler();
-	void placeBlacksmith();
-	void placeBakery();
+Bakery::Bakery(const Bakery& data) : Building("", 0, 0)
+{
+	throw VillageException("Bakery Copy Constructor");
+}
 
-	SimState* state;
-	ClickableButton<ActionBar>* buildHouse;
-	ClickableButton<ActionBar>* buildFarm;
-	ClickableButton<ActionBar>* buildMiningCamp;
-	ClickableButton<ActionBar>* buildMill;
-	ClickableButton<ActionBar>* buildWell;
-	ClickableButton<ActionBar>* buildTavern;
-	ClickableButton<ActionBar>* buildTheatre;
-	ClickableButton<ActionBar>* buildWeaver;
-	ClickableButton<ActionBar>* buildJeweler;
-	ClickableButton<ActionBar>* buildBlacksmith;
-	ClickableButton<ActionBar>* buildBakery;
-};
-
-#endif
+Bakery& Bakery::operator=(const Bakery* rhs)
+{
+	throw VillageException("Bakery Assignment Operator");
+}
