@@ -15,77 +15,23 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#ifndef MARKET_H
+#define MARKET_H
 
 #include <string>
-#include <vector>
 
-#include "SDL.h"
-
-#include "Engine/State/State.h"
-#include "Engine/Util/Enums.h"
-#include "Villages/Util/MouseImage.h"
+#include "Building.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL, S_PLACEWELL, S_PLACETAVERN, S_PLACETHEATRE, S_PLACEWEAVER, S_PLACEJEWELER, S_PLACEBLACKSMITH, S_PLACEBAKERY, S_PLACEGUARDSTATION, S_PLACEMARKET };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class CaveTile;
-class ForestTile;
-class Building;
-
-class SimState : public State
+class Market : public Building
 {
 public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Market(int xloc, int yloc);
+	~Market();
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
-
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
-
-	ScrollingMap* getMap();
-	int getTileWidth();
-	int getTileHeight();
-
-	EngineResult canBuild(int x, int y, int width, int height);
-
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-	void placeJeweler();
-	void placeBlacksmith();
-	void placeBakery();
-	void placeGuardStation();
-	void placeMarket();
-
-private:
-
-	int tileWidth, tileHeight;
-	
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<Building*> buildings;
-
-	vector<CaveTile*> caves;
-	vector<ForestTile*> forests;
+	Market(const Market& data);
+	Market& operator=(const Market* rhs);
 };
 
 #endif

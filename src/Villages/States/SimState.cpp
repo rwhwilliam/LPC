@@ -38,6 +38,7 @@
 #include "Villages/Buildings/House.h"
 #include "Villages/Buildings/Farm.h"
 #include "Villages/Buildings/Jeweler.h"
+#include "Villages/Buildings/Market.h"
 #include "Villages/Buildings/MiningCamp.h"
 #include "Villages/Buildings/Mill.h"
 #include "Villages/Buildings/Tavern.h"
@@ -499,6 +500,26 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACEMARKET:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				Market* market = new Market(imageHover->getX(), imageHover->getY());
+				buildings.push_back(market);
+
+				Logger::debugFormat("Market placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -694,6 +715,19 @@ void SimState::placeGuardStation()
 			delete imageHover;
 
 		imageHover = new MouseImage(this, "guardstation.png", "guardstation-bad.png", 128);
+	}
+}
+
+void SimState::placeMarket()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEMARKET;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "market.png", "market-bad.png", 128);
 	}
 }
 

@@ -100,4 +100,8 @@
 		<Name>GuardStationImage</Name>
 		<Value>guardstation.png</Value>
 	</Config>
+	<Config>
+		<Name>MarketImage</Name>
+		<Value>market.png</Value>
+	</Config>
 </Configuration>

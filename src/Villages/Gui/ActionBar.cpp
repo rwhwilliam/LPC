@@ -82,6 +82,10 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	buildGuardStation = new ClickableButton<ActionBar>(x + 714, y + 10, 64, 64, "guardstation-button-normal.png", "guardstation-button-hover.png", "guardstation-button-pressed.png", this, &ActionBar::placeGuardStation);
 
 	addComponent("buildGuardStation", buildGuardStation);
+
+	buildMarket = new ClickableButton<ActionBar>(x + 778, y + 10, 64, 64, "market-button-normal.png", "market-button-hover.png", "market-button-pressed.png", this, &ActionBar::placeMarket);
+
+	addComponent("buildMarket", buildMarket);
 }
 
 ActionBar::~ActionBar()
@@ -100,6 +104,7 @@ ActionBar::~ActionBar()
 	delete buildBlacksmith;
 	delete buildBakery;
 	delete buildGuardStation;
+	delete buildMarket;
 }
 
 ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
@@ -170,4 +175,9 @@ void ActionBar::placeBakery()
 void ActionBar::placeGuardStation()
 {
 	state->placeGuardStation();
+}
+
+void ActionBar::placeMarket()
+{
+	state->placeMarket();
 }

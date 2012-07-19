@@ -51,6 +51,7 @@ private:
 	void placeBlacksmith();
 	void placeBakery();
 	void placeGuardStation();
+	void placeMarket();
 
 	SimState* state;
 	ClickableButton<ActionBar>* buildHouse;
@@ -65,6 +66,7 @@ private:
 	ClickableButton<ActionBar>* buildBlacksmith;
 	ClickableButton<ActionBar>* buildBakery;
 	ClickableButton<ActionBar>* buildGuardStation;
+	ClickableButton<ActionBar>* buildMarket;
 };
 
 #endif
