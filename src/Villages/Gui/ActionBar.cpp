@@ -62,6 +62,10 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	buildTheatre = new ClickableButton<ActionBar>(x + 394, y + 10, 64, 64, "theatre-button-normal.png", "theatre-button-hover.png", "theatre-button-pressed.png", this, &ActionBar::placeTheatre);
 
 	addComponent("buildTheatre", buildTheatre);
+
+	buildWeaver = new ClickableButton<ActionBar>(x + 458, y + 10, 64, 64, "weaver-button-normal.png", "weaver-button-hover.png", "weaver-button-pressed.png", this, &ActionBar::placeWeaver);
+
+	addComponent("buildWeaver", buildWeaver);
 }
 
 ActionBar::~ActionBar()
@@ -75,6 +79,7 @@ ActionBar::~ActionBar()
 	delete buildWell;
 	delete buildTavern;
 	delete buildTheatre;
+	delete buildWeaver;
 }
 
 ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
@@ -120,4 +125,9 @@ void ActionBar::placeTavern()
 void ActionBar::placeTheatre()
 {
 	state->placeTheatre();
+}
+
+void ActionBar::placeWeaver()
+{
+	state->placeWeaver();
 }

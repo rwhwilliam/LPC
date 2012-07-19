@@ -15,72 +15,23 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef SIMSTATE_H
-#define SIMSTATE_H
+#ifndef WEAVER_H
+#define WEAVER_H
 
 #include <string>
-#include <vector>
 
-#include "SDL.h"
-
-#include "Engine/State/State.h"
-#include "Engine/Util/Enums.h"
-#include "Villages/Util/MouseImage.h"
+#include "Building.h"
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL, S_PLACEWELL, S_PLACETAVERN, S_PLACETHEATRE, S_PLACEWEAVER };
-
-class MouseImage;
-class Castle;
-class ScrollingMap;
-class ActionBar;
-class CaveTile;
-class ForestTile;
-class Building;
-
-class SimState : public State
+class Weaver : public Building
 {
 public:
-	SimState(string path, int width, int height, int xloc, int yloc);
-	~SimState();
+	Weaver(int xloc, int yloc);
+	~Weaver();
 
-	SimState(const SimState& data);
-	SimState& operator=(const SimState* rhs);
-
-	void update(float time, Uint8* keystrokes);
-	void raiseEvent(SDL_Event* event);
-	void draw();
-
-	ScrollingMap* getMap();
-	int getTileWidth();
-	int getTileHeight();
-
-	EngineResult canBuild(int x, int y, int width, int height);
-
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-
-private:
-
-	int tileWidth, tileHeight;
-	
-	SimMode mode;
-	ScrollingMap* map;
-	MouseImage* imageHover;
-	Castle* castle;
-	ActionBar* actionBar;
-
-	vector<Building*> buildings;
-
-	vector<CaveTile*> caves;
-	vector<ForestTile*> forests;
+	Weaver(const Weaver& data);
+	Weaver& operator=(const Weaver* rhs);
 };
 
 #endif

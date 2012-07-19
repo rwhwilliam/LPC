@@ -80,4 +80,8 @@
 		<Name>TheatreImage</Name>
 		<Value>theatre.png</Value>
 	</Config>
+	<Config>
+		<Name>WeaverImage</Name>
+		<Value>weaver.png</Value>
+	</Config>
 </Configuration>

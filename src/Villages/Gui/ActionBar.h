@@ -46,6 +46,7 @@ private:
 	void placeWell();
 	void placeTavern();
 	void placeTheatre();
+	void placeWeaver();
 
 	SimState* state;
 	ClickableButton<ActionBar>* buildHouse;
@@ -55,6 +56,7 @@ private:
 	ClickableButton<ActionBar>* buildWell;
 	ClickableButton<ActionBar>* buildTavern;
 	ClickableButton<ActionBar>* buildTheatre;
+	ClickableButton<ActionBar>* buildWeaver;
 };
 
 #endif
