@@ -15,56 +15,35 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef ACTIONBAR_H
-#define ACTIONBAR_H
+#include "GuardStation.h"
 
 #include <string>
 
 #include "SDL.h"
 
-#include "Engine/Gui/ClickableButton.h"
-#include "Engine/Gui/UI.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/Building.h"
 
 using namespace std;
 
-class SimState;
-
-class ActionBar : public UI
+GuardStation::GuardStation(int xloc, int yloc) : Building("GuardStationImage", xloc, yloc)
 {
-public:
-	ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc);
-	~ActionBar();
+	Logger::debug("GuardStation Constructor");
+}
 
-	ActionBar(const ActionBar& data);
-	ActionBar& operator=(const ActionBar* rhs);
+GuardStation::~GuardStation()
+{
+	Logger::debug("GuardStation Destructor");
+}
 
-private:
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-	void placeJeweler();
-	void placeBlacksmith();
-	void placeBakery();
-	void placeGuardStation();
+GuardStation::GuardStation(const GuardStation& data) : Building("", 0, 0)
+{
+	throw VillageException("GuardStation Copy Constructor");
+}
 
-	SimState* state;
-	ClickableButton<ActionBar>* buildHouse;
-	ClickableButton<ActionBar>* buildFarm;
-	ClickableButton<ActionBar>* buildMiningCamp;
-	ClickableButton<ActionBar>* buildMill;
-	ClickableButton<ActionBar>* buildWell;
-	ClickableButton<ActionBar>* buildTavern;
-	ClickableButton<ActionBar>* buildTheatre;
-	ClickableButton<ActionBar>* buildWeaver;
-	ClickableButton<ActionBar>* buildJeweler;
-	ClickableButton<ActionBar>* buildBlacksmith;
-	ClickableButton<ActionBar>* buildBakery;
-	ClickableButton<ActionBar>* buildGuardStation;
-};
-
-#endif
+GuardStation& GuardStation::operator=(const GuardStation* rhs)
+{
+	throw VillageException("GuardStation Assignment Operator");
+}

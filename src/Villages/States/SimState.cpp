@@ -34,6 +34,7 @@
 #include "Villages/Buildings/Blacksmith.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
+#include "Villages/Buildings/GuardStation.h"
 #include "Villages/Buildings/House.h"
 #include "Villages/Buildings/Farm.h"
 #include "Villages/Buildings/Jeweler.h"
@@ -478,6 +479,26 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACEGUARDSTATION:
+		{
+			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+			{
+				GuardStation* guardStation = new GuardStation(imageHover->getX(), imageHover->getY());
+				buildings.push_back(guardStation);
+
+				Logger::debugFormat("GuardStation placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_NORMAL;
+
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -660,6 +681,19 @@ void SimState::placeBakery()
 			delete imageHover;
 
 		imageHover = new MouseImage(this, "bakery.png", "bakery-bad.png", 128);
+	}
+}
+
+void SimState::placeGuardStation()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEGUARDSTATION;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "guardstation.png", "guardstation-bad.png", 128);
 	}
 }
 

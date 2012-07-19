@@ -96,4 +96,8 @@
 		<Name>BakeryImage</Name>
 		<Value>bakery.png</Value>
 	</Config>
+	<Config>
+		<Name>GuardStationImage</Name>
+		<Value>guardstation.png</Value>
+	</Config>
 </Configuration>
