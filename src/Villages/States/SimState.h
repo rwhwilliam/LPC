@@ -81,13 +81,6 @@ private:
 	Castle* castle;
 	ActionBar* actionBar;
 
-	//vector<House*> houses;
-	//vector<Farm*> farms;
-	//vector<MiningCamp*> camps;
-	//vector<Mill*> mills;
-	//vector<Well*> wells;
-	//vector<Tavern*> taverns;
-
 	vector<Building*> buildings;
 
 	vector<CaveTile*> caves;

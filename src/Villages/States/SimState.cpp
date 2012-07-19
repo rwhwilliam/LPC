@@ -151,26 +151,6 @@ SimState::~SimState()
 		buildings.erase(bit);
 	}
 
-	//vector<House*>::iterator hit;
-	//for(hit = houses.begin(); hit != houses.end(); ++hit)
-	//{
-	//	delete (*hit);
-
-	//	houses.erase(hit);
-	//}
-
-	//houses.clear();
-
-	//vector<Farm*>::iterator fit;
-	//for(fit = farms.begin(); fit != farms.end(); ++fit)
-	//{
-	//	delete (*fit);
-
-	//	farms.erase(fit);
-	//}
-
-	//farms.clear();
-
 	vector<CaveTile*>::iterator cit;
 	for(cit = caves.begin(); cit != caves.end(); ++cit)
 	{
@@ -181,16 +161,6 @@ SimState::~SimState()
 
 	caves.clear();
 
-	/*vector<MiningCamp*>::iterator mit;
-	for(mit = camps.begin(); mit != camps.end(); ++mit)
-	{
-		delete (*mit);
-
-		camps.erase(mit);
-	}
-
-	camps.clear();*/
-
 	vector<ForestTile*>::iterator foit;
 	for(foit = forests.begin(); foit != forests.end(); ++foit)
 	{
@@ -200,36 +170,6 @@ SimState::~SimState()
 	}
 
 	forests.clear();
-
-	/*vector<Mill*>::iterator miit;
-	for(miit = mills.begin(); miit != mills.end(); ++miit)
-	{
-		delete (*miit);
-
-		mills.erase(miit);
-	}
-
-	mills.clear();
-
-	vector<Well*>::iterator wit;
-	for(wit = wells.begin(); wit != wells.end(); ++wit)
-	{
-		delete (*wit);
-
-		wells.erase(wit);
-	}
-
-	wells.clear();
-
-	vector<Tavern*>::iterator tit;
-	for(tit = taverns.begin(); tit != taverns.end(); ++tit)
-	{
-		delete (*tit);
-
-		taverns.erase(tit);
-	}
-
-	taverns.clear();*/
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -261,42 +201,6 @@ void SimState::update(float time, Uint8* keystrokes)
 	{
 		(*bit)->update(time, keystrokes);
 	}
-
-	/*vector<House*>::const_iterator hit;
-	for(hit = houses.begin(); hit != houses.end(); ++hit)
-	{
-		(*hit)->update(time, keystrokes);
-	}
-
-	vector<Farm*>::const_iterator fit;
-	for(fit = farms.begin(); fit != farms.end(); ++fit)
-	{
-		(*fit)->update(time, keystrokes);
-	}
-
-	vector<MiningCamp*>::const_iterator mit;
-	for(mit = camps.begin(); mit != camps.end(); ++mit)
-	{
-		(*mit)->update(time, keystrokes);
-	}
-
-	vector<Mill*>::const_iterator miit;
-	for(miit = mills.begin(); miit != mills.end(); ++miit)
-	{
-		(*miit)->update(time, keystrokes);
-	}
-
-	vector<Well*>::const_iterator wit;
-	for(wit = wells.begin(); wit != wells.end(); ++wit)
-	{
-		(*wit)->update(time, keystrokes);
-	}
-
-	vector<Tavern*>::const_iterator tit;
-	for(tit =taverns.begin(); tit != taverns.end(); ++tit)
-	{
-		(*tit)->update(time, keystrokes);
-	}*/
 
 	if(keystrokes[SDLK_ESCAPE] && mode != S_PLACECASTLE)
 	{
@@ -355,7 +259,6 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				House* house = new House(imageHover->getX(), imageHover->getY());
-				//houses.push_back(house);
 				buildings.push_back(house);
 
 				Logger::debugFormat("House placed at (%i, %i)", imageHover->getX(), imageHover->getY());
@@ -376,7 +279,6 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				Farm* farm = new Farm(imageHover->getX(), imageHover->getY());
-				//farms.push_back(farm);
 				buildings.push_back(farm);
 
 				Logger::debugFormat("Farm placed at (%i, %i)", imageHover->getX(), imageHover->getY());
@@ -397,7 +299,6 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				MiningCamp* camp = new MiningCamp(imageHover->getX(), imageHover->getY());
-				//camps.push_back(camp);
 				buildings.push_back(camp);
 
 				Logger::debugFormat("Mining Camp placed at (%i, %i)", imageHover->getX(), imageHover->getY());
@@ -418,7 +319,6 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				Mill* mill = new Mill(imageHover->getX(), imageHover->getY());
-				//mills.push_back(mill);
 				buildings.push_back(mill);
 
 				Logger::debugFormat("Mill placed at (%i, %i)", imageHover->getX(), imageHover->getY());
@@ -439,7 +339,6 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				Well* well = new Well(imageHover->getX(), imageHover->getY());
-				//wells.push_back(well);
 				buildings.push_back(well);
 
 				Logger::debugFormat("Well placed at (%i, %i)", imageHover->getX(), imageHover->getY());
@@ -460,7 +359,6 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				Tavern* tavern = new Tavern(imageHover->getX(), imageHover->getY());
-				//taverns.push_back(tavern);
 				buildings.push_back(tavern);
 
 				Logger::debugFormat("Tavern placed at (%i, %i)", imageHover->getX(), imageHover->getY());
@@ -512,42 +410,6 @@ void SimState::draw()
 	{
 		(*bit)->draw(xoffset, yoffset, frame);
 	}
-
-	/*vector<House*>::const_iterator hit;
-	for(hit = houses.begin(); hit != houses.end(); ++hit)
-	{
-		(*hit)->draw(xoffset, yoffset, frame);
-	}
-
-	vector<Farm*>::const_iterator fit;
-	for(fit = farms.begin(); fit != farms.end(); ++fit)
-	{
-		(*fit)->draw(xoffset, yoffset, frame);
-	}
-
-	vector<MiningCamp*>::const_iterator mit;
-	for(mit = camps.begin(); mit != camps.end(); ++mit)
-	{
-		(*mit)->draw(xoffset, yoffset, frame);
-	}
-
-	vector<Mill*>::const_iterator miit;
-	for(miit = mills.begin(); miit != mills.end(); ++miit)
-	{
-		(*miit)->draw(xoffset, yoffset, frame);
-	}
-
-	vector<Well*>::const_iterator wit;
-	for(wit = wells.begin(); wit != wells.end(); ++wit)
-	{
-		(*wit)->draw(xoffset, yoffset, frame);
-	}
-
-	vector<Tavern*>::const_iterator tit;
-	for(tit = taverns.begin(); tit != taverns.end(); ++tit)
-	{
-		(*tit)->draw(xoffset, yoffset, frame);
-	}*/
 
 	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->draw(frame);
@@ -641,36 +503,6 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	for(bit = buildings.begin(); bit != buildings.end(); ++bit)
 		if((*bit)->collides(x, y, width, height))
 			return E_BAD;
-
-	/*vector<House*>::const_iterator hit;
-	for(hit = houses.begin(); hit != houses.end(); ++hit)
-		if((*hit)->collides(x, y, width, height))
-			return E_BAD;
-
-	vector<Farm*>::const_iterator fit;
-	for(fit = farms.begin(); fit != farms.end(); ++fit)
-		if((*fit)->collides(x, y, width, height))
-			return E_BAD;
-
-	vector<MiningCamp*>::const_iterator mit;
-	for(mit = camps.begin(); mit != camps.end(); ++mit)
-		if((*mit)->collides(x, y, width, height))
-			return E_BAD;
-
-	vector<Mill*>::const_iterator miit;
-	for(miit = mills.begin(); miit != mills.end(); ++miit)
-		if((*miit)->collides(x, y, width, height))
-			return E_BAD;
-
-	vector<Well*>::const_iterator wit;
-	for(wit = wells.begin(); wit != wells.end(); ++wit)
-		if((*wit)->collides(x, y, width, height))
-			return E_BAD;
-
-	vector<Tavern*>::const_iterator tit;
-	for(tit = taverns.begin(); tit != taverns.end(); ++tit)
-		if((*tit)->collides(x, y, width, height))
-			return E_BAD;*/
 
 	vector<CaveTile*>::const_iterator cit;
 	for(cit = caves.begin(); cit != caves.end(); ++cit)
