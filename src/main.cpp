@@ -18,7 +18,6 @@ using namespace std;
 
 SDL_Event event;
 
-
 int main(int argc, char* args[])
 {
 	try
