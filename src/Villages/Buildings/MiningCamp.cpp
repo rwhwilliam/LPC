@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-MiningCamp::MiningCamp(int xloc, int yloc) : Building("MiningCampImage", xloc, yloc)
+MiningCamp::MiningCamp(SimState* state, int xloc, int yloc) : Building(state, "MiningCampImage", xloc, yloc)
 {
 	Logger::debug("MiningCamp Constructor");
 }
@@ -38,7 +39,7 @@ MiningCamp::~MiningCamp()
 	Logger::debug("MiningCamp Destructor");
 }
 
-MiningCamp::MiningCamp(const MiningCamp& data) : Building("", 0, 0)
+MiningCamp::MiningCamp(const MiningCamp& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("MiningCamp Copy Constructor");
 }

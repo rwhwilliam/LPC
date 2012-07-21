@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-Jeweler::Jeweler(int xloc, int yloc) : Building("JewelerImage", xloc, yloc)
+Jeweler::Jeweler(SimState* state, int xloc, int yloc) : Building(state, "JewelerImage", xloc, yloc)
 {
 	Logger::debug("Jeweler Constructor");
 }
@@ -38,7 +39,7 @@ Jeweler::~Jeweler()
 	Logger::debug("Jeweler Destructor");
 }
 
-Jeweler::Jeweler(const Jeweler& data) : Building("", 0, 0)
+Jeweler::Jeweler(const Jeweler& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("Jeweler Copy Constructor");
 }

@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-Mill::Mill(int xloc, int yloc) : Building("MillImage", xloc, yloc)
+Mill::Mill(SimState* state, int xloc, int yloc) : Building(state, "MillImage", xloc, yloc)
 {
 	Logger::debug("Mill Constructor");
 }
@@ -38,7 +39,7 @@ Mill::~Mill()
 	Logger::debug("Mill Destructor");
 }
 
-Mill::Mill(const Mill& data) : Building("", 0, 0)
+Mill::Mill(const Mill& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("Mill Copy Constructor");
 }

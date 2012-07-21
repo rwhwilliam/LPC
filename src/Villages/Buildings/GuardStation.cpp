@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-GuardStation::GuardStation(int xloc, int yloc) : Building("GuardStationImage", xloc, yloc)
+GuardStation::GuardStation(SimState* state, int xloc, int yloc) : Building(state, "GuardStationImage", xloc, yloc)
 {
 	Logger::debug("GuardStation Constructor");
 }
@@ -38,7 +39,7 @@ GuardStation::~GuardStation()
 	Logger::debug("GuardStation Destructor");
 }
 
-GuardStation::GuardStation(const GuardStation& data) : Building("", 0, 0)
+GuardStation::GuardStation(const GuardStation& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("GuardStation Copy Constructor");
 }

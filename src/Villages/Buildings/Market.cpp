@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-Market::Market(int xloc, int yloc) : Building("MarketImage", xloc, yloc)
+Market::Market(SimState* state, int xloc, int yloc) : Building(state, "MarketImage", xloc, yloc)
 {
 	Logger::debug("Market Constructor");
 }
@@ -38,7 +39,7 @@ Market::~Market()
 	Logger::debug("Market Destructor");
 }
 
-Market::Market(const Market& data) : Building("", 0, 0)
+Market::Market(const Market& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("Market Copy Constructor");
 }

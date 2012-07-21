@@ -24,10 +24,12 @@
 
 using namespace std;
 
+class SimState;
+
 class Weaver : public Building
 {
 public:
-	Weaver(int xloc, int yloc);
+	Weaver(SimState* state, int xloc, int yloc);
 	~Weaver();
 
 	Weaver(const Weaver& data);

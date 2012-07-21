@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-Well::Well(int xloc, int yloc) : Building("WellImage", xloc, yloc)
+Well::Well(SimState* state, int xloc, int yloc) : Building(state, "WellImage", xloc, yloc)
 {
 	Logger::debug("Well Constructor");
 }
@@ -38,7 +39,7 @@ Well::~Well()
 	Logger::debug("Well Destructor");
 }
 
-Well::Well(const Well& data) : Building("", 0, 0)
+Well::Well(const Well& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("Well Copy Constructor");
 }

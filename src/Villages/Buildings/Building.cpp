@@ -29,9 +29,11 @@
 
 using namespace std;
 
-Building::Building(string src, int xloc, int yloc) : xloc(xloc), yloc(yloc)
+Building::Building(SimState* state, string src, int xloc, int yloc) : xloc(xloc), yloc(yloc)
 {
 	Logger::debug("Building Constructor");
+
+	Building::state = state;
 
 	img = new Image(Config::getConfig(src), 255, 0, 255);
 
@@ -73,5 +75,5 @@ void Building::draw(int xoffset, int yoffset, SDL_Surface* screen)
 
 bool Building::collides(int x, int y, int width, int height)
 {
-	return (xloc + Building::width >= x && xloc <= x + width && yloc + Building::height >= y && yloc <= y + height);
+	return (xloc + Building::width - state->getXOffset() >= x && xloc - state->getXOffset() <= x + width && yloc + Building::height - state->getYOffset() >= y && yloc - state->getYOffset() <= y + height);
 }

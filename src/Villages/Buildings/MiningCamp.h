@@ -24,10 +24,12 @@
 
 using namespace std;
 
+class SimState;
+
 class MiningCamp : public Building
 {
 public:
-	MiningCamp(int xloc, int yloc);
+	MiningCamp(SimState* state, int xloc, int yloc);
 	~MiningCamp();
 
 	MiningCamp(const MiningCamp& data);

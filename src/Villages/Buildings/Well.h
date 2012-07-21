@@ -24,10 +24,12 @@
 
 using namespace std;
 
+class SimState;
+
 class Well : public Building
 {
 public:
-	Well(int xloc, int yloc);
+	Well(SimState* state, int xloc, int yloc);
 	~Well();
 
 	Well(const Well& data);

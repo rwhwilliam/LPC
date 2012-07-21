@@ -24,10 +24,12 @@
 
 using namespace std;
 
+class SimState;
+
 class Blacksmith : public Building
 {
 public:
-	Blacksmith(int xloc, int yloc);
+	Blacksmith(SimState* state, int xloc, int yloc);
 	~Blacksmith();
 
 	Blacksmith(const Blacksmith& data);

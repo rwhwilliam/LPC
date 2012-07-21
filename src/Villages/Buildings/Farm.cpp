@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-Farm::Farm(int xloc, int yloc) : Building("FarmImage", xloc, yloc)
+Farm::Farm(SimState* state, int xloc, int yloc) : Building(state, "FarmImage", xloc, yloc)
 {
 	Logger::debug("Farm Constructor");
 }
@@ -38,7 +39,7 @@ Farm::~Farm()
 	Logger::debug("Farm Destructor");
 }
 
-Farm::Farm(const Farm& data) : Building("", 0, 0)
+Farm::Farm(const Farm& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("Farm Copy Constructor");
 }

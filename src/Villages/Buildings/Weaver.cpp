@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-Weaver::Weaver(int xloc, int yloc) : Building("WeaverImage", xloc, yloc)
+Weaver::Weaver(SimState* state, int xloc, int yloc) : Building(state, "WeaverImage", xloc, yloc)
 {
 	Logger::debug("Weaver Constructor");
 }
@@ -38,7 +39,7 @@ Weaver::~Weaver()
 	Logger::debug("Weaver Destructor");
 }
 
-Weaver::Weaver(const Weaver& data) : Building("", 0, 0)
+Weaver::Weaver(const Weaver& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("Weaver Copy Constructor");
 }

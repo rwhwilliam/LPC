@@ -24,10 +24,12 @@
 
 using namespace std;
 
+class SimState;
+
 class Theatre : public Building
 {
 public:
-	Theatre(int xloc, int yloc);
+	Theatre(SimState* state, int xloc, int yloc);
 	~Theatre();
 
 	Theatre(const Theatre& data);

@@ -24,10 +24,12 @@
 
 using namespace std;
 
+class SimState;
+
 class Market : public Building
 {
 public:
-	Market(int xloc, int yloc);
+	Market(SimState* state, int xloc, int yloc);
 	~Market();
 
 	Market(const Market& data);

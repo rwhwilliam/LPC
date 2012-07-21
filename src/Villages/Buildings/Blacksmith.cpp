@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-Blacksmith::Blacksmith(int xloc, int yloc) : Building("BlacksmithImage", xloc, yloc)
+Blacksmith::Blacksmith(SimState* state, int xloc, int yloc) : Building(state, "BlacksmithImage", xloc, yloc)
 {
 	Logger::debug("Blacksmith Constructor");
 }
@@ -38,7 +39,7 @@ Blacksmith::~Blacksmith()
 	Logger::debug("Blacksmith Destructor");
 }
 
-Blacksmith::Blacksmith(const Blacksmith& data) : Building("", 0, 0)
+Blacksmith::Blacksmith(const Blacksmith& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("Blacksmith Copy Constructor");
 }

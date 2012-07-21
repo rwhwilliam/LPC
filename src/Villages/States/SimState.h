@@ -55,6 +55,8 @@ public:
 	ScrollingMap* getMap();
 	int getTileWidth();
 	int getTileHeight();
+	int getXOffset();
+	int getYOffset();
 
 	EngineResult canBuild(int x, int y, int width, int height);
 

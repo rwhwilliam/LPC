@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-Tavern::Tavern(int xloc, int yloc) : Building("TavernImage", xloc, yloc)
+Tavern::Tavern(SimState* state, int xloc, int yloc) : Building(state, "TavernImage", xloc, yloc)
 {
 	Logger::debug("Tavern Constructor");
 }
@@ -38,7 +39,7 @@ Tavern::~Tavern()
 	Logger::debug("Tavern Destructor");
 }
 
-Tavern::Tavern(const Tavern& data) : Building("", 0, 0)
+Tavern::Tavern(const Tavern& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("Tavern Copy Constructor");
 }

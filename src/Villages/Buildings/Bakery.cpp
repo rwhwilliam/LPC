@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-Bakery::Bakery(int xloc, int yloc) : Building("BakeryImage", xloc, yloc)
+Bakery::Bakery(SimState* state, int xloc, int yloc) : Building(state, "BakeryImage", xloc, yloc)
 {
 	Logger::debug("Bakery Constructor");
 }
@@ -38,7 +39,7 @@ Bakery::~Bakery()
 	Logger::debug("Bakery Destructor");
 }
 
-Bakery::Bakery(const Bakery& data) : Building("", 0, 0)
+Bakery::Bakery(const Bakery& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("Bakery Copy Constructor");
 }

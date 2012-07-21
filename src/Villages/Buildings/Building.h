@@ -27,11 +27,12 @@ using namespace std;
 class Image;
 class MouseImage;
 class MapTile;
+class SimState;
 
 class Building
 {
 public:
-	Building(string src, int xloc, int yloc);
+	Building(SimState* state, string src, int xloc, int yloc);
 	~Building();
 
 	Building(const Building& data);
@@ -46,6 +47,7 @@ public:
 private:
 	Image* img;
 	int xloc, yloc, width, height;
+	SimState* state;
 };
 
 #endif

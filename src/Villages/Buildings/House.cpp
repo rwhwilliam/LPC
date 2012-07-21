@@ -25,10 +25,11 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-House::House(int xloc, int yloc) : Building("HouseImage", xloc, yloc)
+House::House(SimState* state, int xloc, int yloc) : Building(state, "HouseImage", xloc, yloc)
 {
 	Logger::debug("House Constructor");
 }
@@ -38,7 +39,7 @@ House::~House()
 	Logger::debug("House Destructor");
 }
 
-House::House(const House& data) : Building("", 0, 0)
+House::House(const House& data) : Building(NULL, "", 0, 0)
 {
 	throw VillageException("House Copy Constructor");
 }

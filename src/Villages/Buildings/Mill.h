@@ -24,10 +24,12 @@
 
 using namespace std;
 
+class SimState;
+
 class Mill : public Building
 {
 public:
-	Mill(int xloc, int yloc);
+	Mill(SimState* state, int xloc, int yloc);
 	~Mill();
 
 	Mill(const Mill& data);

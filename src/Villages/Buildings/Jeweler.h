@@ -24,10 +24,12 @@
 
 using namespace std;
 
+class SimState;
+
 class Jeweler : public Building
 {
 public:
-	Jeweler(int xloc, int yloc);
+	Jeweler(SimState* state, int xloc, int yloc);
 	~Jeweler();
 
 	Jeweler(const Jeweler& data);

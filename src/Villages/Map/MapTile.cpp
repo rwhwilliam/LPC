@@ -25,6 +25,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/States/SimState.h"
+#include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
 
@@ -61,7 +62,7 @@ void MapTile::draw(int xoffset, int yoffset, SDL_Surface* screen)
 
 bool MapTile::collides(int x, int y, int width, int height)
 {
-	return (getMapX() + getWidth() >= x && getMapX() <= x + width && getMapY() + getHeight() >= y && getMapY() <= y + height);
+	return (getMapX() + getWidth() - state->getXOffset() >= x && getMapX() - state->getXOffset() <= x + width && getMapY() + getHeight() - state->getYOffset() >= y && getMapY() - state->getYOffset() <= y + height);
 }
 
 int MapTile::getMapX()

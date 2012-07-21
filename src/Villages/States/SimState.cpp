@@ -199,6 +199,16 @@ int SimState::getTileHeight()
 	return map->getTileHeight();
 }
 
+int SimState::getXOffset()
+{
+	return map->getXOffset();
+}
+
+int SimState::getYOffset()
+{
+	return map->getYOffset();
+}
+
 void SimState::update(float time, Uint8* keystrokes)
 {
 	map->update(time, keystrokes);
@@ -241,9 +251,9 @@ void SimState::raiseEvent(SDL_Event* event)
 			{
 				if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 				{
-					castle = new Castle(imageHover->getX(), imageHover->getY());
+					castle = new Castle(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
-					Logger::debugFormat("Castle placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+					Logger::debugFormat("Castle placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 					mode = S_NORMAL;
 
@@ -265,10 +275,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				House* house = new House(imageHover->getX(), imageHover->getY());
+				House* house = new House(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(house);
 
-				Logger::debugFormat("House placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("House placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -285,10 +295,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Farm* farm = new Farm(imageHover->getX(), imageHover->getY());
+				Farm* farm = new Farm(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(farm);
 
-				Logger::debugFormat("Farm placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Farm placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -305,10 +315,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				MiningCamp* camp = new MiningCamp(imageHover->getX(), imageHover->getY());
+				MiningCamp* camp = new MiningCamp(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(camp);
 
-				Logger::debugFormat("Mining Camp placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Mining Camp placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -325,10 +335,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Mill* mill = new Mill(imageHover->getX(), imageHover->getY());
+				Mill* mill = new Mill(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(mill);
 
-				Logger::debugFormat("Mill placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Mill placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -345,10 +355,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Well* well = new Well(imageHover->getX(), imageHover->getY());
+				Well* well = new Well(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(well);
 
-				Logger::debugFormat("Well placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Well placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -365,10 +375,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Tavern* tavern = new Tavern(imageHover->getX(), imageHover->getY());
+				Tavern* tavern = new Tavern(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(tavern);
 
-				Logger::debugFormat("Tavern placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Tavern placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -385,10 +395,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Theatre* theatre = new Theatre(imageHover->getX(), imageHover->getY());
+				Theatre* theatre = new Theatre(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(theatre);
 
-				Logger::debugFormat("Theatre placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Theatre placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -405,10 +415,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Weaver* weaver = new Weaver(imageHover->getX(), imageHover->getY());
+				Weaver* weaver = new Weaver(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(weaver);
 
-				Logger::debugFormat("Weaver placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Weaver placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -425,10 +435,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Jeweler* jeweler = new Jeweler(imageHover->getX(), imageHover->getY());
+				Jeweler* jeweler = new Jeweler(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(jeweler);
 
-				Logger::debugFormat("Jeweler placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Jeweler placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -445,10 +455,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Blacksmith* blacksmith = new Blacksmith(imageHover->getX(), imageHover->getY());
+				Blacksmith* blacksmith = new Blacksmith(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(blacksmith);
 
-				Logger::debugFormat("Blacksmith placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Blacksmith placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -465,10 +475,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Bakery* bakery = new Bakery(imageHover->getX(), imageHover->getY());
+				Bakery* bakery = new Bakery(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(bakery);
 
-				Logger::debugFormat("Bakery placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Bakery placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -485,10 +495,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				GuardStation* guardStation = new GuardStation(imageHover->getX(), imageHover->getY());
+				GuardStation* guardStation = new GuardStation(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(guardStation);
 
-				Logger::debugFormat("GuardStation placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("GuardStation placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -505,10 +515,10 @@ void SimState::raiseEvent(SDL_Event* event)
 		{
 			if(canBuild(imageHover->getX(), imageHover->getY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
-				Market* market = new Market(imageHover->getX(), imageHover->getY());
+				Market* market = new Market(this, imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 				buildings.push_back(market);
 
-				Logger::debugFormat("Market placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				Logger::debugFormat("Market placed at (%i, %i)", imageHover->getX() + map->getXOffset(), imageHover->getY() + map->getYOffset());
 
 				mode = S_NORMAL;
 
@@ -766,7 +776,7 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	{
 		vector<CaveTile*>::const_iterator cit;
 		for(cit = caves.begin(); cit != caves.end(); ++cit)
-			if((abs(((*cit)->getMapX() + (*cit)->getWidth() / 2) - (x + width / 2)) <= 200) && (abs(((*cit)->getMapY() + (*cit)->getHeight() / 2) - (y + height / 2)) <= 200))
+			if((abs(((*cit)->getMapX() + (*cit)->getWidth() / 2 - map->getXOffset()) - (x + width / 2)) <= 200) && (abs(((*cit)->getMapY() + (*cit)->getHeight() / 2 - map->getYOffset()) - (y + height / 2)) <= 200))
 				return E_GOOD;
 
 		return E_BAD;
@@ -778,7 +788,7 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	{
 		vector<ForestTile*>::const_iterator fit;
 		for(fit = forests.begin(); fit != forests.end(); ++fit)
-			if((abs(((*fit)->getMapX() + (*fit)->getWidth() / 2) - (x + width / 2)) <= 200) && (abs(((*fit)->getMapY() + (*fit)->getHeight() / 2) - (y + height / 2)) <= 200))
+			if((abs(((*fit)->getMapX() + (*fit)->getWidth() / 2 - map->getXOffset()) - (x + width / 2)) <= 200) && (abs(((*fit)->getMapY() + (*fit)->getHeight() / 2 - map->getYOffset()) - (y + height / 2)) <= 200))
 				return E_GOOD;
 
 		return E_BAD;
