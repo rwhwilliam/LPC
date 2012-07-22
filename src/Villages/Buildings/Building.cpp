@@ -70,10 +70,20 @@ void Building::raiseEvent(SDL_Event* event)
 
 void Building::draw(int xoffset, int yoffset, SDL_Surface* screen)
 {
-	img->draw(xloc - xoffset, yloc - yoffset, screen);
+	img->draw(getMapX() - xoffset, getMapY() - yoffset, screen);
 }
 
 bool Building::collides(int x, int y, int width, int height)
 {
-	return (xloc + Building::width - state->getXOffset() >= x && xloc - state->getXOffset() <= x + width && yloc + Building::height - state->getYOffset() >= y && yloc - state->getYOffset() <= y + height);
+	return (getMapX() + Building::width - state->getXOffset() > x && getMapX() - state->getXOffset() < x + width && getMapY() + Building::height - state->getYOffset() > y && getMapY() - state->getYOffset() < y + height);
+}
+
+int Building::getMapX()
+{
+	return xloc * state->getTileWidth();
+}
+
+int Building::getMapY()
+{
+	return yloc * state->getTileHeight();
 }

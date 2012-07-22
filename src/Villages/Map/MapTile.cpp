@@ -62,7 +62,7 @@ void MapTile::draw(int xoffset, int yoffset, SDL_Surface* screen)
 
 bool MapTile::collides(int x, int y, int width, int height)
 {
-	return (getMapX() + getWidth() - state->getXOffset() >= x && getMapX() - state->getXOffset() <= x + width && getMapY() + getHeight() - state->getYOffset() >= y && getMapY() - state->getYOffset() <= y + height);
+	return (getMapX() + getWidth() - state->getXOffset() > x && getMapX() - state->getXOffset() < x + width && getMapY() + getHeight() - state->getYOffset() > y && getMapY() - state->getYOffset() < y + height);
 }
 
 int MapTile::getMapX()

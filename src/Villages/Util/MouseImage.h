@@ -39,17 +39,21 @@ public:
 	MouseImage& operator=(const MouseImage* rhs);
 
 	void raiseEvent(SDL_Event* event);
+	void update(float time, Uint8* keystates);
 	void draw(SDL_Surface* screen);
 
 	void setMode(EngineResult mode) { MouseImage::mode = mode; }
 
 	int getX() { return x; }
 	int getY() { return y; }
+	int getMapX() { return mapX; }
+	int getMapY() { return mapY; }
 	int getWidth() { return goodImg->getWidth(); }
 	int getHeight() { return goodImg->getHeight(); }
 
 private:
 	int x, y;
+	int mapX, mapY;
 	Image* goodImg;
 	Image* badImg;
 	EngineResult mode;

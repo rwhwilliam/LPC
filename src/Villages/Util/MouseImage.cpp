@@ -65,17 +65,50 @@ void MouseImage::raiseEvent(SDL_Event* event)
 {
 	if(event->type == SDL_MOUSEMOTION)
 	{
-		x = event->motion.x - goodImg->getWidth() / 2;
-		y = event->motion.y - goodImg->getHeight() / 2;
+		x = (event->motion.x - goodImg->getWidth() / 2) + state->getXOffset();
+		y = (event->motion.y - goodImg->getHeight() / 2) + state -> getYOffset();
 
-		mode = state->canBuild(x, y, getWidth(), getHeight());
+		x -= x % state->getTileWidth();
+		y -= y % state->getTileHeight();
+
+		mapX = x - state->getXOffset();
+		mapY = y - state->getYOffset();
+
+		x /= state->getTileWidth();
+		y /= state->getTileHeight();
+
+		mode = state->canBuild(mapX, mapY, getWidth(), getHeight());
+	}
+}
+
+void MouseImage::update(float time, Uint8* keystates)
+{
+	if(keystates[SDLK_w] || keystates[SDLK_s] || keystates[SDLK_a] || keystates[SDLK_d])
+	{
+		//the map might have been scrolled
+		int mouseX, mouseY;
+		SDL_GetMouseState(&mouseX, &mouseY);
+
+		int tempX = (mouseX - goodImg->getWidth() / 2) + state->getXOffset();
+		int tempY = (mouseY - goodImg->getHeight() / 2) + state->getYOffset();
+
+		tempX -= tempX % state->getTileWidth();
+		tempY -= tempY % state->getTileHeight();
+
+		mapX = tempX - state->getXOffset();
+		mapY = tempY - state->getYOffset();
+
+		x = tempX / state->getTileWidth();
+		y = tempY / state->getTileHeight();
+
+		mode = state->canBuild(mapX, mapY, getWidth(), getHeight());
 	}
 }
 
 void MouseImage::draw(SDL_Surface* screen)
 {
 	if(mode == E_GOOD)
-		goodImg->draw(x, y, screen);
+		goodImg->draw(mapX, mapY, screen);
 	else
-		badImg->draw(x, y, screen);
+		badImg->draw(mapX, mapY, screen);
 }

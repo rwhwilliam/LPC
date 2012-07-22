@@ -38,6 +38,9 @@ public:
 	Building(const Building& data);
 	Building& operator=(const Building* rhs);
 
+	int getMapX();
+	int getMapY();
+
 	bool collides(int x, int y, int width, int height);
 
 	virtual void update(float time, Uint8* keystrokes);
