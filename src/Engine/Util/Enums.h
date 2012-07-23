@@ -18,6 +18,6 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-enum EngineResult { E_GOOD, E_BAD};
+enum EngineResult { E_GOOD, E_BAD, E_BADROAD};
 
 #endif

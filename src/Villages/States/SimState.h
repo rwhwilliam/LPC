@@ -18,6 +18,7 @@
 #ifndef SIMSTATE_H
 #define SIMSTATE_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -29,7 +30,7 @@
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL, S_PLACEWELL, S_PLACETAVERN, S_PLACETHEATRE, S_PLACEWEAVER, S_PLACEJEWELER, S_PLACEBLACKSMITH, S_PLACEBAKERY, S_PLACEGUARDSTATION, S_PLACEMARKET };
+enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL, S_PLACEWELL, S_PLACETAVERN, S_PLACETHEATRE, S_PLACEWEAVER, S_PLACEJEWELER, S_PLACEBLACKSMITH, S_PLACEBAKERY, S_PLACEGUARDSTATION, S_PLACEMARKET, S_PLACEROADSTART, S_PLACEROADEND };
 
 class MouseImage;
 class Castle;
@@ -38,6 +39,8 @@ class ActionBar;
 class CaveTile;
 class ForestTile;
 class Building;
+class RoadFactory;
+class Road;
 
 class SimState : public State
 {
@@ -57,6 +60,7 @@ public:
 	int getTileHeight();
 	int getXOffset();
 	int getYOffset();
+	map<string, Road*>* getRoads() { return &roads; }
 
 	EngineResult canBuild(int x, int y, int width, int height);
 
@@ -73,9 +77,9 @@ public:
 	void placeBakery();
 	void placeGuardStation();
 	void placeMarket();
+	void placeRoad();
 
 private:
-
 	int tileWidth, tileHeight;
 	
 	SimMode mode;
@@ -88,6 +92,10 @@ private:
 
 	vector<CaveTile*> caves;
 	vector<ForestTile*> forests;
+
+	RoadFactory* roadCreator;
+
+	std::map<string, Road*> roads;
 };
 
 #endif

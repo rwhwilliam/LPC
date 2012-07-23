@@ -86,6 +86,10 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	buildMarket = new ClickableButton<ActionBar>(x + 778, y + 10, 64, 64, "market-button-normal.png", "market-button-hover.png", "market-button-pressed.png", this, &ActionBar::placeMarket);
 
 	addComponent("buildMarket", buildMarket);
+
+	buildRoad = new ClickableButton<ActionBar>(x + 842, y + 10, 64, 64, "road-button-normal.png", "road-button-hover.png", "road-button-pressed.png", this, &ActionBar::placeRoad);
+
+	addComponent("buildRoad", buildRoad);
 }
 
 ActionBar::~ActionBar()
@@ -105,6 +109,7 @@ ActionBar::~ActionBar()
 	delete buildBakery;
 	delete buildGuardStation;
 	delete buildMarket;
+	delete buildRoad;
 }
 
 ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
@@ -180,4 +185,9 @@ void ActionBar::placeGuardStation()
 void ActionBar::placeMarket()
 {
 	state->placeMarket();
+}
+
+void ActionBar::placeRoad()
+{
+	state->placeRoad();
 }

@@ -20,6 +20,7 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "tinyxml2.h"
 
@@ -47,12 +48,13 @@
 #include "Villages/Buildings/Well.h"
 #include "Villages/Map/CaveTile.h"
 #include "Villages/Map/ForestTile.h"
+#include "Villages/Objects/Road.h"
+#include "Villages/Objects/RoadFactory.h"
 #include "Villages/Util/MouseImage.h"
 #include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
 using namespace tinyxml2;
-
 
 SimState::SimState(string path, int width, int height, int xloc, int yloc) : State(width, height, xloc, yloc)
 {
@@ -63,6 +65,7 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 
 	actionBar = new ActionBar(this, 40, 0, 400, 100, "");
 
+	roadCreator = NULL;
 
 	XMLDocument doc;
 	if (!doc.LoadFile(path.c_str()))
@@ -150,6 +153,9 @@ SimState::~SimState()
 	if(actionBar != NULL)
 		delete actionBar;
 
+	if(roadCreator != NULL)
+		delete roadCreator;
+
 	vector<Building*>::iterator bit;
 	for(bit = buildings.begin(); bit != buildings.end(); ++bit)
 	{
@@ -177,6 +183,16 @@ SimState::~SimState()
 	}
 
 	forests.clear();
+
+	std::map<string, Road*>::iterator rit;
+	for(rit = roads.begin(); rit != roads.end(); ++rit)
+	{
+		delete rit->second;
+
+		roads.erase(rit);
+	}
+
+	roads.clear();
 }
 
 SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
@@ -231,6 +247,14 @@ void SimState::update(float time, Uint8* keystrokes)
 
 			mode = S_NORMAL;
 		}
+		
+		if(roadCreator != NULL)
+		{
+			delete roadCreator;
+			roadCreator = NULL;
+
+			mode = S_NORMAL;
+		}
 	}
 }
 
@@ -243,6 +267,9 @@ void SimState::raiseEvent(SDL_Event* event)
 
 	if(imageHover != NULL)
 		imageHover->raiseEvent(event);
+
+	if(roadCreator != NULL && mode == S_PLACEROADEND)
+		roadCreator->raiseEvent(event);
 
 	if(event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
 	{
@@ -533,6 +560,45 @@ void SimState::raiseEvent(SDL_Event* event)
 
 			break;
 		}
+
+		case S_PLACEROADSTART:
+		{
+			if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) != E_BAD)
+			{
+				Logger::debugFormat("Placed Road Start at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+				mode = S_PLACEROADEND;
+
+				if(roadCreator != NULL)
+					delete roadCreator;
+
+				roadCreator = new RoadFactory(this, imageHover->getX(), imageHover->getY());
+			
+				if(imageHover != NULL)
+					delete imageHover;
+
+				imageHover = NULL;
+			}
+
+			break;
+		}
+
+		case S_PLACEROADEND:
+		{
+			if(roadCreator->canBuild())
+			{
+				Logger::debugFormat("Placed Road End at (%i, %i)", roadCreator->getFinishX(), roadCreator->getFinishY());
+
+				mode = S_NORMAL;
+
+				roadCreator->createRoad();
+
+				delete roadCreator;
+				roadCreator = NULL;
+			}
+
+			break;
+		}
 		}
 	}
 }
@@ -570,6 +636,15 @@ void SimState::draw()
 	{
 		(*bit)->draw(xoffset, yoffset, frame);
 	}
+
+	std::map<string, Road*>::const_iterator rit;
+	for(rit = roads.begin(); rit != roads.end(); ++rit)
+	{
+		rit->second->draw(xoffset, yoffset, frame);
+	}
+
+	if(roadCreator != NULL && mode == S_PLACEROADEND)
+		roadCreator->draw(xoffset, yoffset, frame);
 
 	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->draw(frame);
@@ -744,6 +819,19 @@ void SimState::placeMarket()
 	}
 }
 
+void SimState::placeRoad()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEROADSTART;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "road-horizontal.png", "road-horizontal.png", 128);
+	}
+}
+
 EngineResult SimState::canBuild(int x, int y, int width, int height)
 {
 	if(castle != NULL)
@@ -764,6 +852,11 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	for(foit = forests.begin(); foit != forests.end(); ++foit)
 		if((*foit)->collides(x, y, width, height))
 			return E_BAD;
+
+	std::map<string, Road*>::const_iterator rit;
+	for(rit = roads.begin(); rit != roads.end(); ++rit)
+		if(rit->second->collides(x, y, width, height))
+			return E_BADROAD;
 
 	switch(mode)
 	{

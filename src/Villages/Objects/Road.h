@@ -15,60 +15,39 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef ACTIONBAR_H
-#define ACTIONBAR_H
+#ifndef ROAD_H
+#define ROAD_H
 
-#include <string>
-
-#include "SDL.h"
-
-#include "Engine/Gui/ClickableButton.h"
-#include "Engine/Gui/UI.h"
-
-using namespace std;
+#include "Engine/Graphics/Image.h"
 
 class SimState;
 
-class ActionBar : public UI
+class Road
 {
 public:
-	ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc);
-	~ActionBar();
+	Road(SimState* state, int x, int y);
+	~Road();
 
-	ActionBar(const ActionBar& data);
-	ActionBar& operator=(const ActionBar* rhs);
+	Road(const Road& data);
+	Road& operator=(const Road* rhs);
+
+	int getX() { return xloc; }
+	int getY() { return yloc; }
+	int getMapX();
+	int getMapY();
+	int getWidth() { return img->getWidth(); }
+	int getHeight() { return img->getHeight(); }
+	Road* getRoad(int x, int y);
+
+	void calculateMode();
+	bool collides(int x, int y, int width, int height);
+
+	void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
 private:
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-	void placeJeweler();
-	void placeBlacksmith();
-	void placeBakery();
-	void placeGuardStation();
-	void placeMarket();
-	void placeRoad();
-
+	int xloc, yloc;
+	Image* img;
 	SimState* state;
-	ClickableButton<ActionBar>* buildHouse;
-	ClickableButton<ActionBar>* buildFarm;
-	ClickableButton<ActionBar>* buildMiningCamp;
-	ClickableButton<ActionBar>* buildMill;
-	ClickableButton<ActionBar>* buildWell;
-	ClickableButton<ActionBar>* buildTavern;
-	ClickableButton<ActionBar>* buildTheatre;
-	ClickableButton<ActionBar>* buildWeaver;
-	ClickableButton<ActionBar>* buildJeweler;
-	ClickableButton<ActionBar>* buildBlacksmith;
-	ClickableButton<ActionBar>* buildBakery;
-	ClickableButton<ActionBar>* buildGuardStation;
-	ClickableButton<ActionBar>* buildMarket;
-	ClickableButton<ActionBar>* buildRoad;
 };
 
 #endif

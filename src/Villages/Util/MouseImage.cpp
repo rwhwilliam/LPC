@@ -39,6 +39,8 @@ MouseImage::MouseImage(SimState* state, string goodSrc, string badSrc, int alpha
 	MouseImage::state = state;
 
 	mode = E_GOOD;
+
+	SDL_GetMouseState(&mapX, &mapY);
 }
 
 MouseImage::~MouseImage()

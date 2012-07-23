@@ -75,7 +75,7 @@ void Image::draw(int x, int y, SDL_Surface* screen)
 	offset.x = x;
 	offset.y = y;
 
-	if(alpha % 256 != 255)
+	//if(alpha % 256 != 255)
 		SDL_SetAlpha(ImageLoader::getImage(src), SDL_SRCALPHA, (alpha % 256));
 
 	SDL_BlitSurface(ImageLoader::getImage(src), NULL, screen, &offset);
