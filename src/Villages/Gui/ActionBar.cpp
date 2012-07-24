@@ -90,6 +90,14 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	buildRoad = new ClickableButton<ActionBar>(x + 842, y + 10, 64, 64, "road-button-normal.png", "road-button-hover.png", "road-button-pressed.png", this, &ActionBar::placeRoad);
 
 	addComponent("buildRoad", buildRoad);
+
+	in = new ClickableButton<ActionBar>(x + 906, y + 10, 32, 32, "zoomin-button-normal.png", "zoomin-button-hover.png", "zoomin-button-pressed.png", this, &ActionBar::zoomIn);
+
+	addComponent("zoomIn", in);
+
+	out = new ClickableButton<ActionBar>(x + 906, y + 42, 32, 32, "zoomout-button-normal.png", "zoomout-button-hover.png", "zoomout-button-pressed.png", this, &ActionBar::zoomOut);
+
+	addComponent("zoomOut", out);
 }
 
 ActionBar::~ActionBar()
@@ -110,6 +118,8 @@ ActionBar::~ActionBar()
 	delete buildGuardStation;
 	delete buildMarket;
 	delete buildRoad;
+	delete in;
+	delete out;
 }
 
 ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
@@ -190,4 +200,14 @@ void ActionBar::placeMarket()
 void ActionBar::placeRoad()
 {
 	state->placeRoad();
+}
+
+void ActionBar::zoomIn()
+{
+	state->zoomIn();
+}
+
+void ActionBar::zoomOut()
+{
+	state->zoomOut();
 }

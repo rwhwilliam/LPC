@@ -60,6 +60,7 @@ public:
 	int getTileHeight();
 	int getXOffset();
 	int getYOffset();
+	float getZoomLevel() { return zoomLevel; }
 	map<string, Road*>* getRoads() { return &roads; }
 
 	EngineResult canBuild(int x, int y, int width, int height);
@@ -78,9 +79,13 @@ public:
 	void placeGuardStation();
 	void placeMarket();
 	void placeRoad();
+	
+	void zoomIn();
+	void zoomOut();
 
 private:
 	int tileWidth, tileHeight;
+	float zoomLevel;
 	
 	SimMode mode;
 	ScrollingMap* map;

@@ -53,6 +53,8 @@ private:
 	void placeGuardStation();
 	void placeMarket();
 	void placeRoad();
+	void zoomIn();
+	void zoomOut();
 
 	SimState* state;
 	ClickableButton<ActionBar>* buildHouse;
@@ -69,6 +71,8 @@ private:
 	ClickableButton<ActionBar>* buildGuardStation;
 	ClickableButton<ActionBar>* buildMarket;
 	ClickableButton<ActionBar>* buildRoad;
+	ClickableButton<ActionBar>* in;
+	ClickableButton<ActionBar>* out;
 };
 
 #endif

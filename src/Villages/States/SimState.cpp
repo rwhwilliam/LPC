@@ -58,6 +58,8 @@ using namespace tinyxml2;
 
 SimState::SimState(string path, int width, int height, int xloc, int yloc) : State(width, height, xloc, yloc)
 {
+	zoomLevel = 1;
+
 	mode = S_PLACECASTLE;
 	imageHover = new MouseImage(this, "castle.png", "castle.png", 128);
 
@@ -830,6 +832,16 @@ void SimState::placeRoad()
 
 		imageHover = new MouseImage(this, "road-horizontal.png", "road-horizontal.png", 128);
 	}
+}
+
+void SimState::zoomIn()
+{
+	zoomLevel = (zoomLevel / 2.0 > .125) ? zoomLevel / 2.0 : .125;
+}
+
+void SimState::zoomOut()
+{
+	zoomLevel = (zoomLevel * 2.0 < 1) ? zoomLevel * 2.0 : 1;
 }
 
 EngineResult SimState::canBuild(int x, int y, int width, int height)
