@@ -82,6 +82,7 @@ public:
 	
 	void zoomIn();
 	void zoomOut();
+	void changeZoom();
 
 private:
 	int tileWidth, tileHeight;

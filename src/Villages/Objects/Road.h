@@ -42,6 +42,8 @@ public:
 	void calculateMode();
 	bool collides(int x, int y, int width, int height);
 
+	void resize();
+
 	void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
 private:

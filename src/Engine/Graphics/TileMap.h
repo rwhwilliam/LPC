@@ -44,8 +44,10 @@ public:
 	virtual void update(float time, Uint8* keystates);
 	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
-	int getTileWidth() { return tileWidth; };
-	int getTileHeight() { return tileHeight; };
+	int getTileWidth() { return tileWidth; }
+	int getTileHeight() { return tileHeight; }
+	void setTileWidth(int i) { tileWidth = i; }
+	void setTileHeight(int i) { tileHeight = i; }
 protected:
 	int width, height;
 	int tileWidth, tileHeight;

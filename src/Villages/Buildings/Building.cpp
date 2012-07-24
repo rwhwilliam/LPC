@@ -35,10 +35,7 @@ Building::Building(SimState* state, string src, int xloc, int yloc) : xloc(xloc)
 
 	Building::state = state;
 
-	img = new Image(Config::getConfig(src), 255, 0, 255);
-
-	width = img->getWidth();
-	height = img->getHeight();
+	img = new Image(Config::getConfig(src), (Uint8)255, 0, 255, state->getZoomLevel());
 }
 
 Building::~Building()
@@ -58,6 +55,11 @@ Building& Building::operator=(const Building* rhs)
 	throw VillageException("Building Assignment Operator");
 }
 
+void Building::resize()
+{
+	img->setScale(state->getZoomLevel());
+}
+
 void Building::update(float time, Uint8* keystrokes)
 {
 
@@ -75,7 +77,7 @@ void Building::draw(int xoffset, int yoffset, SDL_Surface* screen)
 
 bool Building::collides(int x, int y, int width, int height)
 {
-	return (getMapX() + Building::width - state->getXOffset() > x && getMapX() - state->getXOffset() < x + width && getMapY() + Building::height - state->getYOffset() > y && getMapY() - state->getYOffset() < y + height);
+	return (getMapX() + getWidth() - state->getXOffset() > x && getMapX() - state->getXOffset() < x + width && getMapY() + getHeight() - state->getYOffset() > y && getMapY() - state->getYOffset() < y + height);
 }
 
 int Building::getMapX()

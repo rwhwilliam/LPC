@@ -33,8 +33,8 @@ MouseImage::MouseImage(SimState* state, string goodSrc, string badSrc, int alpha
 {
 	Logger::debug("MouseImage Constructor");
 
-	goodImg = new Image(goodSrc, alpha, 255, 0, 255);
-	badImg = new Image(badSrc, alpha, 255, 0, 255);
+	goodImg = new Image(goodSrc, alpha, (Uint8)255, 0, 255, state->getZoomLevel());
+	badImg = new Image(badSrc, alpha, (Uint8)255, 0, 255, state->getZoomLevel());
 
 	MouseImage::state = state;
 
@@ -61,6 +61,12 @@ MouseImage::MouseImage(const MouseImage& data)
 MouseImage& MouseImage::operator=(const MouseImage* rhs)
 {
 	throw VillageException("MouseImage Assignment Operator");
+}
+
+void MouseImage::resize()
+{
+	goodImg->setScale(state->getZoomLevel());
+	badImg->setScale(state->getZoomLevel());
 }
 
 void MouseImage::raiseEvent(SDL_Event* event)

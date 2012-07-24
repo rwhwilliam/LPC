@@ -17,6 +17,8 @@
 
 #include "Road.h"
 
+#include "SDL.h"
+
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
@@ -26,7 +28,7 @@ Road::Road(SimState* state, int xloc, int yloc) : xloc(xloc), yloc(yloc)
 {
 	Road::state = state;
 
-	img = new Image("road-vertical.png", 255, 0, 255);
+	img = new Image("road-vertical.png", (Uint8)255, 0, 255, state->getZoomLevel());
 
 	//calculateMode();
 }
@@ -47,6 +49,11 @@ Road::Road(const Road& data)
 Road& Road::operator=(const Road* rhs)
 {
 	throw VillageException("Road Assignment Operator");
+}
+
+void Road::resize()
+{
+	img->setScale(state->getZoomLevel());
 }
 
 void Road::calculateMode()

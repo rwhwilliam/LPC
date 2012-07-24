@@ -47,6 +47,8 @@ public:
 	int getMapX();
 	int getMapY();
 
+	void resize();
+
 	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
 private:

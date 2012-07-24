@@ -74,3 +74,8 @@ int MapTile::getMapY()
 {
 	return yloc * state->getTileHeight();
 }
+
+void MapTile::resize()
+{
+	img->setScale(state->getZoomLevel());
+}

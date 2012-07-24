@@ -43,6 +43,8 @@ public:
 	bool canBuild();
 	void createRoad();
 
+	void resize();
+
 	void raiseEvent(SDL_Event* event);
 	void draw(int xoffset, int yoffset, SDL_Surface* screen);
 

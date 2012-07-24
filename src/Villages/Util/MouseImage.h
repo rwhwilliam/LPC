@@ -51,6 +51,8 @@ public:
 	int getWidth() { return goodImg->getWidth(); }
 	int getHeight() { return goodImg->getHeight(); }
 
+	void resize();
+
 private:
 	int x, y;
 	int mapX, mapY;

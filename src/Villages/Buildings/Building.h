@@ -22,9 +22,10 @@
 
 #include "SDL.h"
 
+#include "Engine/Graphics/Image.h"
+
 using namespace std;
 
-class Image;
 class MouseImage;
 class MapTile;
 class SimState;
@@ -40,8 +41,12 @@ public:
 
 	int getMapX();
 	int getMapY();
+	int getWidth() { return img->getWidth(); }
+	int getHeight() { return img->getHeight(); }
 
 	bool collides(int x, int y, int width, int height);
+
+	void resize();
 
 	virtual void update(float time, Uint8* keystrokes);
 	virtual void raiseEvent(SDL_Event* event);
@@ -49,7 +54,7 @@ public:
 
 private:
 	Image* img;
-	int xloc, yloc, width, height;
+	int xloc, yloc;
 	SimState* state;
 };
 

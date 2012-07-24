@@ -22,18 +22,22 @@
 
 #include "SDL.h"
 
+#include "Engine/Graphics/Image.h"
 #include "Engine/Util/Config.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-ScrollingMap::ScrollingMap(int width, int height, int tileWidth, int tileHeight, int layerCount) : TileMap(width, height, tileWidth, tileHeight, layerCount)
+ScrollingMap::ScrollingMap(SimState* state, int width, int height, int tileWidth, int tileHeight, int layerCount) : TileMap(width, height, tileWidth, tileHeight, layerCount)
 {
 	Logger::debugFormat("ScrollingMap Constructor");
 
 	xoffset = 0;
 	yoffset = 0;
+
+	ScrollingMap::state = state;
 }
 
 ScrollingMap::~ScrollingMap()
@@ -109,4 +113,13 @@ void ScrollingMap::update(float time, Uint8* keystates)
 void ScrollingMap::draw(SDL_Surface* screen)
 {
 	TileMap::draw(xoffset, yoffset, screen);
+}
+
+void ScrollingMap::resize()
+{
+	map<int, Image*>::iterator it;
+	for(it = tiles.begin(); it != tiles.end(); ++it)
+	{
+		it->second->setScale(state->getZoomLevel());
+	}
 }

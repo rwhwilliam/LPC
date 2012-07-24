@@ -36,7 +36,7 @@ RoadFactory::RoadFactory(SimState* state, int startX, int startY) : startX(start
 
 	RoadFactory::state = state;
 
-	preImg = new Image("road-horizontal.png", 128, 255, 0, 255);
+	preImg = new Image("road-horizontal.png", 128, (Uint8)255, 0, 255, state->getZoomLevel());
 
 	coords.clear();
 	coords.push_back(pair<int, int>(startX, startY));
@@ -55,6 +55,11 @@ RoadFactory::RoadFactory(const RoadFactory& data)
 RoadFactory& RoadFactory::operator=(const RoadFactory* rhs)
 {
 	throw VillageException("RoadFactory Assignment Operator");
+}
+
+void RoadFactory::resize()
+{
+	preImg->setScale(state->getZoomLevel());
 }
 
 void RoadFactory::raiseEvent(SDL_Event* event)

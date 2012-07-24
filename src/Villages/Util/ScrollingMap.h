@@ -22,10 +22,12 @@
 
 #include "Engine/Graphics/TileMap.h"
 
+class SimState;
+
 class ScrollingMap : public TileMap
 {
 public:
-	ScrollingMap(int width, int height, int tileWidth, int tileHeight, int layerCount);
+	ScrollingMap(SimState* state, int width, int height, int tileWidth, int tileHeight, int layerCount);
 
 	ScrollingMap(const ScrollingMap& img);
 	ScrollingMap& operator=(const ScrollingMap* rhs);
@@ -38,8 +40,11 @@ public:
 	int getXOffset() { return xoffset; }
 	int getYOffset() { return yoffset; }
 
+	void resize();
+
 protected:
 	int xoffset, yoffset;
+	SimState* state;
 };
 
 #endif

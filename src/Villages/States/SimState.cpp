@@ -80,7 +80,7 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 	int _tilewidth = atoi(Config::getConfig("TileWidth").c_str());
 	int _tileheight = atoi(Config::getConfig("TileHeight").c_str());
 	int _layers = atoi(doc.FirstChildElement("Map")->FirstChildElement("Layers")->GetText());
-	map = new ScrollingMap(_width, _height, _tilewidth, _tileheight, _layers);
+	map = new ScrollingMap(this, _width, _height, _tilewidth, _tileheight, _layers);
 
 	for(const XMLNode* node=doc.FirstChildElement("Map")->FirstChildElement("Tiles")->FirstChildElement("Tile");
 		node; node=node->NextSibling())
@@ -836,12 +836,63 @@ void SimState::placeRoad()
 
 void SimState::zoomIn()
 {
-	zoomLevel = (zoomLevel / 2.0 > .125) ? zoomLevel / 2.0 : .125;
+	zoomLevel = (zoomLevel * 2.0 < 1) ? zoomLevel * 2.0 : 1;
+
+	changeZoom();
+
+	Logger::debugFormat("Zooming In to %f", zoomLevel);
 }
 
 void SimState::zoomOut()
 {
-	zoomLevel = (zoomLevel * 2.0 < 1) ? zoomLevel * 2.0 : 1;
+	zoomLevel = (zoomLevel / 2.0 > .125) ? zoomLevel / 2.0 : .125;
+
+	changeZoom();
+
+	Logger::debugFormat("Zooming In to %f", zoomLevel);
+}
+
+void SimState::changeZoom()
+{
+	tileWidth = static_cast<int>(atoi(Config::getConfig("TileWidth").c_str()) * zoomLevel);
+	tileHeight = static_cast<int>(atoi(Config::getConfig("TileHeight").c_str()) * zoomLevel);
+
+	map->setTileWidth(tileWidth);
+	map->setTileHeight(tileHeight);
+
+	castle->resize();
+
+	vector<Building*>::iterator bit;
+	for(bit = buildings.begin(); bit != buildings.end(); ++bit)
+	{
+		(*bit)->resize();
+	}
+
+	map->resize();
+
+	vector<CaveTile*>::iterator cit;
+	for(cit = caves.begin(); cit != caves.end(); ++cit)
+	{
+		(*cit)->resize();
+	}
+
+	vector<ForestTile*>::iterator fit;
+	for(fit = forests.begin(); fit != forests.end(); ++fit)
+	{
+		(*fit)->resize();
+	}
+
+	std::map<string, Road*>::iterator rit;
+	for(rit = roads.begin(); rit != roads.end(); ++rit)
+	{
+		rit->second->resize();
+	}
+
+	if(imageHover != NULL)
+		imageHover->resize();
+
+	if(roadCreator != NULL)
+		roadCreator->resize();
 }
 
 EngineResult SimState::canBuild(int x, int y, int width, int height)
