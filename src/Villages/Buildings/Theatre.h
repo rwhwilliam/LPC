@@ -34,6 +34,8 @@ public:
 
 	Theatre(const Theatre& data);
 	Theatre& operator=(const Theatre* rhs);
+
+	BuildingType getType() { return BT_THEATRE; }
 };
 
 #endif

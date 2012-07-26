@@ -34,6 +34,8 @@ public:
 
 	Weaver(const Weaver& data);
 	Weaver& operator=(const Weaver* rhs);
+
+	BuildingType getType() { return BT_WEAVER; }
 };
 
 #endif

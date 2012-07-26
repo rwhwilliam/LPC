@@ -34,6 +34,8 @@ public:
 
 	Jeweler(const Jeweler& data);
 	Jeweler& operator=(const Jeweler* rhs);
+
+	BuildingType getType() { return BT_JEWELER; }
 };
 
 #endif

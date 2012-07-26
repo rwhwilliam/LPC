@@ -18,8 +18,9 @@
 #include "Villager.h"
 
 #include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/Building.h"
 
-Villager::Villager(Job job, House* residence)
+Villager::Villager(Building* job, House* residence)
 {
 	Villager::job = job;
 
@@ -28,6 +29,7 @@ Villager::Villager(Job job, House* residence)
 
 Villager::~Villager()
 {
+	Villager::job = NULL;
 	Villager::residence = NULL;
 }
 

@@ -19,12 +19,14 @@
 #define HOUSE_H
 
 #include <string>
+#include <vector>
 
 #include "Building.h"
 
 using namespace std;
 
 class SimState;
+class Villager;
 
 class House : public Building
 {
@@ -34,6 +36,19 @@ public:
 
 	House(const House& data);
 	House& operator=(const House* rhs);
+
+	int getCapacity() { return capacity; }
+	int getPopulation() { return pop.size(); }
+	int getRoom() { return capacity - pop.size(); }
+
+	bool hasRoom() { return (getPopulation() < capacity); }
+	void addVillager(Villager* person);
+
+	BuildingType getType() { return BT_HOUSE; }
+
+private:
+	int capacity;
+	vector<Villager*> pop;
 };
 
 #endif

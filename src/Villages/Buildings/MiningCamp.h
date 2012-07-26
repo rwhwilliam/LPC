@@ -34,6 +34,8 @@ public:
 
 	MiningCamp(const MiningCamp& data);
 	MiningCamp& operator=(const MiningCamp* rhs);
+
+	BuildingType getType() { return BT_MININGCAMP; }
 };
 
 #endif

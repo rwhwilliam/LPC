@@ -30,6 +30,8 @@ class MouseImage;
 class MapTile;
 class SimState;
 
+enum BuildingType { BT_BAKERY, BT_BLACKSMITH, BT_CASTLE, BT_FARM, BT_GUARDSTATION, BT_HOUSE, BT_JEWELER, BT_MARKET, BT_MILL, BT_MININGCAMP, BT_TAVERN, BT_THEATRE, BT_WEAVER, BT_WELL };
+
 class Building
 {
 public:
@@ -51,6 +53,7 @@ public:
 	virtual void update(float time, Uint8* keystrokes);
 	virtual void raiseEvent(SDL_Event* event);
 	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
+	virtual BuildingType getType() = 0;
 
 private:
 	Image* img;

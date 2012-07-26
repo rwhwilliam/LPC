@@ -25,6 +25,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/Objects/Villager.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -47,4 +48,16 @@ House::House(const House& data) : Building(NULL, "", 0, 0)
 House& House::operator=(const House* rhs)
 {
 	throw VillageException("House Assignment Operator");
+}
+
+void House::addVillager(Villager* person)
+{
+	if(hasRoom())
+	{
+		pop.push_back(person);
+	}
+	else
+	{
+		Logger::error("Adding person to full house!");
+	}
 }

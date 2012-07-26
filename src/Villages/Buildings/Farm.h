@@ -34,6 +34,8 @@ public:
 
 	Farm(const Farm& data);
 	Farm& operator=(const Farm* rhs);
+
+	BuildingType getType() { return BT_FARM; }
 };
 
 #endif

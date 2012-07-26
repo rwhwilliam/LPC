@@ -34,6 +34,8 @@ public:
 
 	Tavern(const Tavern& data);
 	Tavern& operator=(const Tavern* rhs);
+
+	BuildingType getType() { return BT_TAVERN; }
 };
 
 #endif

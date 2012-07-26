@@ -21,23 +21,24 @@
 enum Job { IDLE, FARM };
 
 class House;
+class Building;
 
 class Villager
 {
 public:
-	Villager(Job job, House* residence);
+	Villager(Building* job, House* residence);
 	~Villager();
 
 	Villager(const Villager& data);
 	Villager& operator=(const Villager* rhs);
 
-	void setJob(Job job) { Villager::job = job; }
+	void setJob(Building* job) { Villager::job = job; }
 	void setResidence(House* house) { Villager::residence = house; }
-	Job getJob() { return job; }
+	Building* getJob() { return job; }
 	House* getHouse() { return residence; }
 
 private:
-	Job job;
+	Building* job;
 	House* residence;
 };
 

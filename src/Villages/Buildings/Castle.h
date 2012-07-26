@@ -34,6 +34,8 @@ public:
 
 	Castle(const Castle& data);
 	Castle& operator=(const Castle* rhs);
+
+	BuildingType getType() { return BT_CASTLE; }
 };
 
 #endif

@@ -34,6 +34,8 @@ public:
 
 	Mill(const Mill& data);
 	Mill& operator=(const Mill* rhs);
+
+	BuildingType getType() { return BT_MILL; }
 };
 
 #endif

@@ -34,6 +34,8 @@ public:
 
 	Market(const Market& data);
 	Market& operator=(const Market* rhs);
+
+	BuildingType getType() { return BT_MARKET; }
 };
 
 #endif
