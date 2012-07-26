@@ -15,38 +15,16 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef TEXTBOX_H
-#define TEXTBOX_H
-
-#include <string>
+#ifndef NUMERICTEXTBOX_H
+#define NUMERICTEXTBOX_H
 
 #include "SDL.h"
 
-#include "Component.h"
+#include "Textbox.h"
 
-using namespace std;
-
-class Image;
-class Font;
-
-class Textbox : Component
+class NumericTextbox : public Textbox
 {
-public:
-	Textbox(int x, int y, int width, int height, string backgroundSrc, string fontSrc, int fontSize);
-	~Textbox();
-
-	Textbox(const Textbox& data);
-	Textbox& operator=(const Textbox* rhs);
-
-	void draw(SDL_Surface* screen);
-	virtual void raiseEvent(SDL_Event event);
-	
-protected:
-	Image* background;
-	Font* font;
-	Uint8* prevState;
-	string contents;
-	SDL_Surface* textImage;
+	void raiseEvent(SDL_Event event);
 };
 
 #endif

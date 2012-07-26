@@ -15,38 +15,47 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef TEXTBOX_H
-#define TEXTBOX_H
+#include "NumericTextbox.h"
 
 #include <string>
 
-#include "SDL.h"
-
-#include "Component.h"
+#include "Engine/Graphics/Font.h"
+#include "Engine/Gui/Textbox.h"
 
 using namespace std;
 
-class Image;
-class Font;
-
-class Textbox : Component
+void NumericTextbox::raiseEvent(SDL_Event e)
 {
-public:
-	Textbox(int x, int y, int width, int height, string backgroundSrc, string fontSrc, int fontSize);
-	~Textbox();
+	if( e.type == SDL_KEYDOWN )
+    {
+        //Keep a copy of the current version of the string
+        std::string temp = contents;
+        
+        //If the string less than maximum size
+        if( contents.length() <= 16 )
+        {
+			if( ( e.key.keysym.unicode >= (Uint16)'0' ) && ( e.key.keysym.unicode <= (Uint16)'9' ) )
+            {
+                //Append the character
+                contents += (char)e.key.keysym.unicode;
+            }
+        }
 
-	Textbox(const Textbox& data);
-	Textbox& operator=(const Textbox* rhs);
+		//If backspace was pressed and the string isn't blank
+        if( ( e.key.keysym.sym == SDLK_BACKSPACE ) && ( contents.length() != 0 ) )
+        {
+            //Remove a character from the end
+            contents.erase( contents.length() - 1 );
+        }
 
-	void draw(SDL_Surface* screen);
-	virtual void raiseEvent(SDL_Event event);
-	
-protected:
-	Image* background;
-	Font* font;
-	Uint8* prevState;
-	string contents;
-	SDL_Surface* textImage;
-};
-
-#endif
+		//If the string was changed
+        if( contents != temp )
+        {
+            //Free the old surface
+            SDL_FreeSurface( textImage );
+        
+            //Render a new text surface
+			textImage = font->getSurface(contents);
+        }
+	}
+}
