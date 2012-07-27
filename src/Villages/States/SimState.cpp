@@ -52,6 +52,7 @@
 #include "Villages/Map/ForestTile.h"
 #include "Villages/Objects/Road.h"
 #include "Villages/Objects/RoadFactory.h"
+#include "Villages/Objects/Villager.h"
 #include "Villages/States/AssignState.h"
 #include "Villages/Util/MouseImage.h"
 #include "Villages/Util/ScrollingMap.h"
@@ -203,6 +204,16 @@ SimState::~SimState()
 	}
 
 	roads.clear();
+
+	vector<Villager*>::iterator vit;
+	for(vit = villagers.begin(); vit != villagers.end(); ++vit)
+	{
+		delete (*vit);
+
+		villagers.erase(vit);
+	}
+
+	villagers.clear();
 }
 
 SimState::SimState(const SimState& data) : State(NULL, 0, 0, 0, 0)
@@ -989,37 +1000,297 @@ int SimState::getPopRoom()
 	return ret;
 }
 
-int SimState::getFoodRoom()
+int SimState::getWorkRoom()
+{
+	return getFarmRoom() + getMillRoom() + getMineRoom() + getBlacksmithRoom();
+}
+
+int SimState::getFarmRoom()
 {
 	int ret = 0;
 
 	vector<Building*>::const_iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)
 		if((*it)->getType() == BT_FARM)
-			ret += dynamic_cast<House*>(*it)->getRoom();
+			ret += (*it)->getRoom();
+			//ret += dynamic_cast<House*>(*it)->getRoom();
 		
 	return ret;
 }
 
-int SimState::getWoodRoom()
+int SimState::getMillRoom()
 {
 	int ret = 0;
 
-	/*vector<Building*>::const_iterator it;
+	vector<Building*>::const_iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)
 		if((*it)->getType() == BT_MILL)
-			ret += dynamic_cast<Mill*>(*it)->getRoom();*/
+			ret += (*it)->getRoom();
 		
 	return ret;
+}
+
+int SimState::getMineRoom()
+{
+	int ret = 0;
+
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+		if((*it)->getType() == BT_MININGCAMP)
+			ret += (*it)->getRoom();
+		
+	return ret;
+}
+
+int SimState::getBlacksmithRoom()
+{
+	int ret = 0;
+
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+		if((*it)->getType() == BT_BLACKSMITH)
+			ret += (*it)->getRoom();
+		
+	return ret;
+}
+
+int SimState::getSpareWater()
+{
+	int ret = 0;
+
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+		if((*it)->getType() == BT_WELL)
+			ret++;
+		
+	return ret * 15;
+}
+
+void SimState::findHouse(Villager* person)
+{
+	House* temp = NULL;
+	int val = 0;
+	
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+	{
+		if((*it)->getType() == BT_HOUSE)
+		{
+			if((*it)->getRating() > val)
+			{
+				val = (*it)->getRating();
+				temp = dynamic_cast<House*>(*it);
+			}
+		}
+	}
+
+	person->setResidence(temp);
+}
+
+void SimState::findFarm(Villager* person)
+{
+	Farm* temp = NULL;
+	int val = 0;
+	
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+	{
+		if((*it)->getType() == BT_FARM)
+		{
+			if((*it)->getRating() > val)
+			{
+				val = (*it)->getRating();
+				temp = dynamic_cast<Farm*>(*it);
+			}
+		}
+	}
+
+	person->setJob(temp);
+}
+
+void SimState::findMill(Villager* person)
+{
+	Mill* temp = NULL;
+	int val = 0;
+	
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+	{
+		if((*it)->getType() == BT_MILL)
+		{
+			if((*it)->getRating() > val)
+			{
+				val = (*it)->getRating();
+				temp = dynamic_cast<Mill*>(*it);
+			}
+		}
+	}
+
+	person->setJob(temp);
+}
+
+void SimState::findMine(Villager* person)
+{
+	MiningCamp* temp = NULL;
+	int val = 0;
+	
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+	{
+		if((*it)->getType() == BT_MININGCAMP)
+		{
+			if((*it)->getRating() > val)
+			{
+				val = (*it)->getRating();
+				temp = dynamic_cast<MiningCamp*>(*it);
+			}
+		}
+	}
+
+	person->setJob(temp);
+}
+
+void SimState::findBlacksmith(Villager* person)
+{
+	Blacksmith* temp = NULL;
+	int val = 0;
+	
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+	{
+		if((*it)->getType() == BT_BLACKSMITH)
+		{
+			if((*it)->getRating() > val)
+			{
+				val = (*it)->getRating();
+				temp = dynamic_cast<Blacksmith*>(*it);
+			}
+		}
+	}
+
+	person->setJob(temp);
+}
+
+int SimState::getNewPopCount()
+{
+	int newPop = rand() % 3;
+
+	if(getPopRoom() <= 0)
+		return 0;
+
+	if(getWorkRoom() <= 0)
+		return 0;
+
+	if(castle->getFood() == 0 && getSpareWater() <= 0)
+		return 0;
+
+	if(castle->getFood() == 0 || getSpareWater() <= 0)
+		newPop -= 2;
+
+	if(castle->getTaxRate() >= 25)
+		return 0;
+
+	if(castle->getTaxRate() >= 15 && castle->getTaxRate() < 25)
+		newPop -= 1;
+
+	if(castle->getTaxRate() == 0)
+		newPop += 2;
+
+	if(castle->getTaxRate() > 0 && castle->getTaxRate() <= 5)
+		newPop += 1;
+
+	return (newPop >= 0) ? newPop : 0;
+}
+
+void SimState::letPeopleLeave()
+{
+	vector<Villager*> leaving;
+
+	vector<Villager*>::const_iterator it;
+	for(it = villagers.begin(); it != villagers.end(); ++it)
+		if((*it)->wantsToLeave())
+			leaves.push_back(*it);
+
+	for(it = leaving.begin(); it != leaving.end(); ++it)
+	{
+		
+	}
 }
 
 void SimState::startEndTurn()
 {
 	Logger::debugFormat("Ending turn %i.", turn);
 
-	int newPop = rand() % 5;
+	letPeopleLeave();
 
-	manager->push(new AssignState(manager, this, 5, 1024, 768, 0, 0));
+	int newPop = getNewPopCount();
 
+	if(newPop > 0)
+	{
+		Logger::debugFormat("%i Villages Joined", newPop);
+
+		manager->push(new AssignState(manager, this, newPop, 1024, 768, 0, 0));
+	}
+	else
+	{
+		//skip the assigning of people
+		finishEndTurn();
+	}
+}
+
+void SimState::assignEndTurn(int pop, int farm, int mill, int mine, int blacksmith)
+{
+	if(pop >= farm + mill + mine + blacksmith)
+	{
+		if(farm <= getFarmRoom())
+		{
+			for(int i = 0; i < farm; ++i)
+			{
+				Villager* v = new Villager(NULL, NULL);
+				findHouse(v);
+				findFarm(v);
+				villagers.push_back(v);
+			}
+		}
+
+		if(mill <= getMillRoom())
+		{
+			for(int i = 0; i < mill; ++i)
+			{
+				Villager* v = new Villager(NULL, NULL);
+				findHouse(v);
+				findMill(v);
+				villagers.push_back(v);
+			}
+		}
+
+		if(mine <= getMineRoom())
+		{
+			for(int i = 0; i < mine; ++i)
+			{
+				Villager* v = new Villager(NULL, NULL);
+				findHouse(v);
+				findMine(v);
+				villagers.push_back(v);
+			}
+		}
+
+		if(blacksmith <= getBlacksmithRoom())
+		{
+			for(int i = 0; i < blacksmith; ++i)
+			{
+				Villager* v = new Villager(NULL, NULL);
+				findHouse(v);
+				findBlacksmith(v);
+				villagers.push_back(v);
+			}
+		}
+	}
+
+	finishEndTurn();
+}
+
+void SimState::finishEndTurn()
+{
 	turn++;
 }

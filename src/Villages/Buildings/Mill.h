@@ -36,6 +36,7 @@ public:
 	Mill& operator=(const Mill* rhs);
 
 	BuildingType getType() { return BT_MILL; }
+	int getRating() { return 1; }
 };
 
 #endif

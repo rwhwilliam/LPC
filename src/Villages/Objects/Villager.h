@@ -37,6 +37,8 @@ public:
 	Building* getJob() { return job; }
 	House* getHouse() { return residence; }
 
+	bool wantsToLeave();
+
 private:
 	Building* job;
 	House* residence;

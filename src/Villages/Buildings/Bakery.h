@@ -36,6 +36,7 @@ public:
 	Bakery& operator=(const Bakery* rhs);
 
 	BuildingType getType() { return BT_BAKERY; }
+	int getRating() { return 1; }
 };
 
 #endif

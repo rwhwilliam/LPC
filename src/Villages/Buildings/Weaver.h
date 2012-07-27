@@ -36,6 +36,7 @@ public:
 	Weaver& operator=(const Weaver* rhs);
 
 	BuildingType getType() { return BT_WEAVER; }
+	int getRating() { return 1; }
 };
 
 #endif

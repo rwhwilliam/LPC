@@ -36,6 +36,7 @@ public:
 	Market& operator=(const Market* rhs);
 
 	BuildingType getType() { return BT_MARKET; }
+	int getRating() { return 1; }
 };
 
 #endif

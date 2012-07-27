@@ -37,18 +37,8 @@ public:
 	House(const House& data);
 	House& operator=(const House* rhs);
 
-	int getCapacity() { return capacity; }
-	int getPopulation() { return pop.size(); }
-	int getRoom() { return capacity - pop.size(); }
-
-	bool hasRoom() { return (getPopulation() < capacity); }
-	void addVillager(Villager* person);
-
 	BuildingType getType() { return BT_HOUSE; }
-
-private:
-	int capacity;
-	vector<Villager*> pop;
+	int getRating() { return 1; }
 };
 
 #endif

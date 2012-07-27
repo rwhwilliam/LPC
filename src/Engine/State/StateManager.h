@@ -44,11 +44,15 @@ public:
 	void update(float time, Uint8* keystates);
 
 private:
+	void addStates();
+	void removeStates();
+
 	//tho I'm going for the ability of a stack..use a vector for I can 'look' behind
 	vector<State*> states;
 
 	//states added that will be added the next loop to preserve the while 'iterators'
 	vector<State*> addedStates;
+	int removedStates;
 };
 
 #endif

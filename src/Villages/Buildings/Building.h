@@ -19,6 +19,7 @@
 #define BUILDING_H
 
 #include <string>
+#include <vector>
 
 #include "SDL.h"
 
@@ -29,6 +30,7 @@ using namespace std;
 class MouseImage;
 class MapTile;
 class SimState;
+class Villager;
 
 enum BuildingType { BT_BAKERY, BT_BLACKSMITH, BT_CASTLE, BT_FARM, BT_GUARDSTATION, BT_HOUSE, BT_JEWELER, BT_MARKET, BT_MILL, BT_MININGCAMP, BT_TAVERN, BT_THEATRE, BT_WEAVER, BT_WELL };
 
@@ -54,11 +56,22 @@ public:
 	virtual void raiseEvent(SDL_Event* event);
 	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
 	virtual BuildingType getType() = 0;
+	virtual int getRating() = 0;
+
+	int getCapacity() { return capacity; }
+	int getWorkerCount() { return workers.size(); }
+	int getRoom() { return capacity - workers.size(); }
+
+	bool hasRoom() { return (getWorkerCount() < capacity); }
+	void addWorker(Villager* person);
 
 private:
 	Image* img;
 	int xloc, yloc;
 	SimState* state;
+
+	int capacity;
+	vector<Villager*> workers;
 };
 
 #endif

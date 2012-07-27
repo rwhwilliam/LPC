@@ -36,6 +36,7 @@ public:
 	GuardStation& operator=(const GuardStation* rhs);
 
 	BuildingType getType() { return BT_GUARDSTATION; }
+	int getRating() { return 1; }
 };
 
 #endif

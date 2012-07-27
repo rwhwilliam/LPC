@@ -27,6 +27,7 @@ StateManager::StateManager()
 {
 	states.clear();
 	addedStates.clear();
+	removedStates = 0;
 }
 
 StateManager::~StateManager()
@@ -51,14 +52,12 @@ void StateManager::push(State* state)
 
 State* StateManager::pop()
 {
-	State* popped = states.back();
+	removedStates++;
 
-	states.pop_back();
-
-	return popped;
+	return NULL;
 }
 
-void StateManager::update(float time, Uint8* keystates)
+void StateManager::addStates()
 {
 	//add new states
 	vector<State*>::iterator it;
@@ -68,6 +67,20 @@ void StateManager::update(float time, Uint8* keystates)
 	}
 
 	addedStates.clear();
+}
+
+void StateManager::removeStates()
+{
+	for(int i = 0; i < removedStates; ++i)
+		states.pop_back();
+
+	removedStates = 0;
+}
+
+void StateManager::update(float time, Uint8* keystates)
+{
+	addStates();
+	removeStates();
 
 	if(states.size() == 0)
 		return;
@@ -88,6 +101,9 @@ void StateManager::update(float time, Uint8* keystates)
 
 void StateManager::raiseEvent(SDL_Event* event)
 {
+	addStates();
+	removeStates();
+
 	if(states.size() == 0)
 		return;
 
@@ -107,6 +123,9 @@ void StateManager::raiseEvent(SDL_Event* event)
 
 void StateManager::draw(SDL_Surface* screen)
 {
+	addStates();
+	removeStates();
+
 	if(states.size() == 0)
 		return;
 

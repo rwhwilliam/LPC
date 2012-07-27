@@ -43,6 +43,7 @@ class Building;
 class RoadFactory;
 class Road;
 class StateManager;
+class Villager;
 
 class SimState : public State
 {
@@ -87,10 +88,25 @@ public:
 	void changeZoom();
 
 	void startEndTurn();
+	void assignEndTurn(int pop, int farm, int mill, int mine, int blacksmith);
+	void finishEndTurn();
 
 	int getPopRoom();
-	int getFoodRoom();
-	int getWoodRoom();
+	int getWorkRoom();
+	int getFarmRoom();
+	int getMillRoom();
+	int getMineRoom();
+	int getBlacksmithRoom();
+	int getSpareWater();
+
+	void findHouse(Villager* person);
+	void findFarm(Villager* person);
+	void findMill(Villager* person);
+	void findMine(Villager* person);
+	void findBlacksmith(Villager* person);
+
+	int getNewPopCount();
+	void letPeopleLeave();
 
 private:
 	int tileWidth, tileHeight;
@@ -110,6 +126,8 @@ private:
 	RoadFactory* roadCreator;
 
 	std::map<string, Road*> roads;
+
+	vector<Villager*> villagers;
 
 	ActionBar* actionBar;
 	ClickableButton<SimState>* endTurnBtn;

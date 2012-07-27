@@ -42,3 +42,8 @@ Villager& Villager::operator=(const Villager* rhs)
 {
 	throw VillageException("Villager Assignment Operator");
 }
+
+bool Villager::wantsToLeave()
+{
+	return false;
+}

@@ -50,15 +50,3 @@ Farm& Farm::operator=(const Farm* rhs)
 {
 	throw VillageException("Farm Assignment Operator");
 }
-
-void Farm::addWorker(Villager* person)
-{
-	if(hasRoom())
-	{
-		workers.push_back(person);
-	}
-	else
-	{
-		Logger::error("Adding worker to full farm!");
-	}
-}

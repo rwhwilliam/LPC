@@ -36,6 +36,7 @@ public:
 	Blacksmith& operator=(const Blacksmith* rhs);
 
 	BuildingType getType() { return BT_BLACKSMITH; }
+	int getRating() { return 1; }
 };
 
 #endif

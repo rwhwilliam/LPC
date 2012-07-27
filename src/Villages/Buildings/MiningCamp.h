@@ -36,6 +36,7 @@ public:
 	MiningCamp& operator=(const MiningCamp* rhs);
 
 	BuildingType getType() { return BT_MININGCAMP; }
+	int getRating() { return 1; }
 };
 
 #endif

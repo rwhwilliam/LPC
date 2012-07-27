@@ -26,6 +26,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Map/MapTile.h"
+#include "Villages/Objects/Villager.h"
 
 using namespace std;
 
@@ -36,6 +37,8 @@ Building::Building(SimState* state, string src, int xloc, int yloc) : xloc(xloc)
 	Building::state = state;
 
 	img = new Image(Config::getConfig(src), (Uint8)255, 0, 255, state->getZoomLevel());
+
+	capacity = 0;
 }
 
 Building::~Building()
@@ -88,4 +91,16 @@ int Building::getMapX()
 int Building::getMapY()
 {
 	return yloc * state->getTileHeight();
+}
+
+void Building::addWorker(Villager* person)
+{
+	if(hasRoom())
+	{
+		workers.push_back(person);
+	}
+	else
+	{
+		Logger::error("Adding worker to full building!");
+	}
 }

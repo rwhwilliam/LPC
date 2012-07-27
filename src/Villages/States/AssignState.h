@@ -37,6 +37,9 @@ public:
 	void draw();
 
 private:
+	void assign();
+	int getTotal();
+
 	int pop;
 	UI* ui;
 	

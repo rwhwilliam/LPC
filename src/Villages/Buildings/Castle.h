@@ -36,6 +36,26 @@ public:
 	Castle& operator=(const Castle* rhs);
 
 	BuildingType getType() { return BT_CASTLE; }
+	int getRating() { return 1; }
+
+	int getTaxRate() { return tax; }
+	int getGold() { return gold; }
+	int getFood() { return food; }
+	int getWood() { return wood; }
+	int getOre() { return ore; }
+	int getWeapons() { return weapons; }
+
+	void setTaxRate(int val);
+
+	int takeGold(int val);
+	int takeFood(int val);
+	int takeWood(int val);
+	int takeOre(int val);
+	int takeWeapons(int val);
+
+private:
+	int gold, food, wood, ore, weapons;
+	int tax;
 };
 
 #endif

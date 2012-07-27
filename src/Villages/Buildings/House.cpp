@@ -50,15 +50,3 @@ House& House::operator=(const House* rhs)
 {
 	throw VillageException("House Assignment Operator");
 }
-
-void House::addVillager(Villager* person)
-{
-	if(hasRoom())
-	{
-		pop.push_back(person);
-	}
-	else
-	{
-		Logger::error("Adding person to full house!");
-	}
-}

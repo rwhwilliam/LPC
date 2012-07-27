@@ -36,6 +36,7 @@ public:
 	Theatre& operator=(const Theatre* rhs);
 
 	BuildingType getType() { return BT_THEATRE; }
+	int getRating() { return 1; }
 };
 
 #endif

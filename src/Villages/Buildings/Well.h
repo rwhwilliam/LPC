@@ -36,6 +36,7 @@ public:
 	Well& operator=(const Well* rhs);
 
 	BuildingType getType() { return BT_WELL; }
+	int getRating() { return 1; }
 };
 
 #endif

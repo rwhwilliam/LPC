@@ -36,6 +36,7 @@ public:
 	Jeweler& operator=(const Jeweler* rhs);
 
 	BuildingType getType() { return BT_JEWELER; }
+	int getRating() { return 1; }
 };
 
 #endif
