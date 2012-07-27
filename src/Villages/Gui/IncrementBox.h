@@ -15,40 +15,41 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef STATEMANAGER_H
-#define STATEMANAGER_H
+#ifndef INCREMENTBOX_H
+#define INCREMENTBOX_H
 
-#include <vector>
+#include "Engine/Gui/ClickableButton.h"
 
 #include "SDL.h"
-#include "SDL_image.h"
 
-using namespace std;
+#include "Engine/Gui/Component.h"
 
-class State;
+class Textbox;
 
-class StateManager
+class IncrementBox : public Component
 {
 public:
-	StateManager();
-	~StateManager();
+	IncrementBox(int x, int y, int width, int height, int min, int max);
+	~IncrementBox();
 
-	StateManager(const StateManager& data);
-	StateManager& operator=(const StateManager* rhs);
+	IncrementBox(const IncrementBox& data);
+	IncrementBox& operator=(const IncrementBox* rhs);
 
-	void push(State* state);
-	State* pop();
+	void increment();
+	void decrement();
 
-	void draw(SDL_Surface* screen);
+	int getValue() { return current; }
+
 	void raiseEvent(SDL_Event* event);
-	void update(float time, Uint8* keystates);
+	void draw(SDL_Surface* screen);
 
 private:
-	//tho I'm going for the ability of a stack..use a vector for I can 'look' behind
-	vector<State*> states;
+	ClickableButton<IncrementBox>* up;
+	ClickableButton<IncrementBox>* down;
+	Textbox* box;
 
-	//states added that will be added the next loop to preserve the while 'iterators'
-	vector<State*> addedStates;
+	int min, max;
+	int current;
 };
 
 #endif

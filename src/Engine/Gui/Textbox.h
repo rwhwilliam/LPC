@@ -39,7 +39,9 @@ public:
 	Textbox& operator=(const Textbox* rhs);
 
 	void draw(SDL_Surface* screen);
-	virtual void raiseEvent(SDL_Event event);
+	virtual void raiseEvent(SDL_Event* event);
+
+	void setContent(string c);
 	
 protected:
 	Image* background;

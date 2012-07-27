@@ -24,6 +24,7 @@
 
 #include "SDL.h"
 
+#include "Engine/Gui/ClickableButton.h"
 #include "Engine/State/State.h"
 #include "Engine/Util/Enums.h"
 #include "Villages/Util/MouseImage.h"
@@ -41,11 +42,12 @@ class ForestTile;
 class Building;
 class RoadFactory;
 class Road;
+class StateManager;
 
 class SimState : public State
 {
 public:
-	SimState(string path, int width, int height, int xloc, int yloc);
+	SimState(StateManager* manager, string path, int width, int height, int xloc, int yloc);
 	~SimState();
 
 	SimState(const SimState& data);
@@ -84,15 +86,21 @@ public:
 	void zoomOut();
 	void changeZoom();
 
+	void startEndTurn();
+
+	int getPopRoom();
+	int getFoodRoom();
+	int getWoodRoom();
+
 private:
 	int tileWidth, tileHeight;
+	int turn;
 	float zoomLevel;
 	
 	SimMode mode;
 	ScrollingMap* map;
 	MouseImage* imageHover;
 	Castle* castle;
-	ActionBar* actionBar;
 
 	vector<Building*> buildings;
 
@@ -102,6 +110,9 @@ private:
 	RoadFactory* roadCreator;
 
 	std::map<string, Road*> roads;
+
+	ActionBar* actionBar;
+	ClickableButton<SimState>* endTurnBtn;
 };
 
 #endif

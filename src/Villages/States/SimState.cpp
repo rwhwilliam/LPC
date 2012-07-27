@@ -21,10 +21,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <stdlib.h>
 
 #include "tinyxml2.h"
 
 #include "Engine/Graphics/Image.h"
+#include "Engine/State/StateManager.h"
 #include "Engine/Util/Config.h"
 #include "Engine/Util/Enums.h"
 #include "Engine/Util/Logger.h"
@@ -50,15 +52,17 @@
 #include "Villages/Map/ForestTile.h"
 #include "Villages/Objects/Road.h"
 #include "Villages/Objects/RoadFactory.h"
+#include "Villages/States/AssignState.h"
 #include "Villages/Util/MouseImage.h"
 #include "Villages/Util/ScrollingMap.h"
 
 using namespace std;
 using namespace tinyxml2;
 
-SimState::SimState(string path, int width, int height, int xloc, int yloc) : State(width, height, xloc, yloc)
+SimState::SimState(StateManager* manager, string path, int width, int height, int xloc, int yloc) : State(manager, width, height, xloc, yloc)
 {
 	zoomLevel = 1;
+	turn = 1;
 
 	mode = S_PLACECASTLE;
 	imageHover = new MouseImage(this, "castle.png", "castle.png", 128);
@@ -66,6 +70,7 @@ SimState::SimState(string path, int width, int height, int xloc, int yloc) : Sta
 	castle = NULL;
 
 	actionBar = new ActionBar(this, 40, 0, 400, 100, "");
+	endTurnBtn = new ClickableButton<SimState>(850, 450, 128, 64, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &SimState::startEndTurn);
 
 	roadCreator = NULL;
 
@@ -155,6 +160,9 @@ SimState::~SimState()
 	if(actionBar != NULL)
 		delete actionBar;
 
+	if(endTurnBtn != NULL)
+		delete endTurnBtn;
+
 	if(roadCreator != NULL)
 		delete roadCreator;
 
@@ -197,7 +205,7 @@ SimState::~SimState()
 	roads.clear();
 }
 
-SimState::SimState(const SimState& data) : State(0, 0, 0, 0)
+SimState::SimState(const SimState& data) : State(NULL, 0, 0, 0, 0)
 {
 	throw VillageException("SimState Copy Constructor");
 }
@@ -266,6 +274,9 @@ void SimState::raiseEvent(SDL_Event* event)
 
 	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->raiseEvent(event);
+
+	if(endTurnBtn != NULL && mode == S_NORMAL)
+		endTurnBtn->raiseEvent(event);
 
 	if(imageHover != NULL)
 		imageHover->raiseEvent(event);
@@ -650,6 +661,9 @@ void SimState::draw()
 
 	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->draw(frame);
+
+	if(endTurnBtn != NULL && mode == S_NORMAL)
+		endTurnBtn->draw(frame);
 }
 
 void SimState::placeHouse()
@@ -961,4 +975,51 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	}
 
 	return E_GOOD;
+}
+
+int SimState::getPopRoom()
+{
+	int ret = 0;
+
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+		if((*it)->getType() == BT_HOUSE)
+			ret += dynamic_cast<House*>(*it)->getRoom();
+		
+	return ret;
+}
+
+int SimState::getFoodRoom()
+{
+	int ret = 0;
+
+	vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+		if((*it)->getType() == BT_FARM)
+			ret += dynamic_cast<House*>(*it)->getRoom();
+		
+	return ret;
+}
+
+int SimState::getWoodRoom()
+{
+	int ret = 0;
+
+	/*vector<Building*>::const_iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+		if((*it)->getType() == BT_MILL)
+			ret += dynamic_cast<Mill*>(*it)->getRoom();*/
+		
+	return ret;
+}
+
+void SimState::startEndTurn()
+{
+	Logger::debugFormat("Ending turn %i.", turn);
+
+	int newPop = rand() % 5;
+
+	manager->push(new AssignState(manager, this, 5, 1024, 768, 0, 0));
+
+	turn++;
 }

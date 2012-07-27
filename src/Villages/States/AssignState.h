@@ -15,40 +15,33 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef STATEMANAGER_H
-#define STATEMANAGER_H
+#ifndef ASSIGNSTATE_H
+#define ASSIGNSTATE_H
 
-#include <vector>
+#include "Engine/State/State.h"
 
-#include "SDL.h"
-#include "SDL_image.h"
+class SimState;
+class UI;
 
-using namespace std;
-
-class State;
-
-class StateManager
+class AssignState : public State
 {
 public:
-	StateManager();
-	~StateManager();
+	AssignState(StateManager* manager, SimState* simstate, int pop, int width, int height, int xloc, int yloc);
+	~AssignState();
 
-	StateManager(const StateManager& data);
-	StateManager& operator=(const StateManager* rhs);
+	AssignState(const AssignState& data);
+	AssignState* operator=(const AssignState* rhs);
 
-	void push(State* state);
-	State* pop();
-
-	void draw(SDL_Surface* screen);
+	void update(float time, Uint8* keystrokes);
 	void raiseEvent(SDL_Event* event);
-	void update(float time, Uint8* keystates);
+	void draw();
 
 private:
-	//tho I'm going for the ability of a stack..use a vector for I can 'look' behind
-	vector<State*> states;
+	int pop;
+	UI* ui;
+	
 
-	//states added that will be added the next loop to preserve the while 'iterators'
-	vector<State*> addedStates;
+	SimState* simstate;
 };
 
 #endif

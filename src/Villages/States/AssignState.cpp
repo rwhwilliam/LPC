@@ -15,40 +15,60 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef STATEMANAGER_H
-#define STATEMANAGER_H
+#include "AssignState.h"
 
-#include <vector>
+#include "Engine/Gui/Label.h"
+#include "Engine/Gui/UI.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
+#include "Engine/Util/VillageException.h"
+#include "Villages/Gui/IncrementBox.h"
+#include "Villages/States/SimState.h"
 
-#include "SDL.h"
-#include "SDL_image.h"
-
-using namespace std;
-
-class State;
-
-class StateManager
+AssignState::AssignState(StateManager* manager, SimState* simstate, int pop, int width, int height, int xloc, int yloc) : State(manager, width, height, xloc, yloc), pop(pop)
 {
-public:
-	StateManager();
-	~StateManager();
+	Logger::debug("AssignState Constructor");
 
-	StateManager(const StateManager& data);
-	StateManager& operator=(const StateManager* rhs);
+	AssignState::simstate = simstate;
 
-	void push(State* state);
-	State* pop();
+	ui = new UI(xloc, yloc, width, height, "assign-ui.png", 255, 0, 255);
 
-	void draw(SDL_Surface* screen);
-	void raiseEvent(SDL_Event* event);
-	void update(float time, Uint8* keystates);
+	ui->addComponent("headerLbl", new Label(240, 220, "lazy.ttf", "People Moved to your Village!", 32, 0, 0, 0));
 
-private:
-	//tho I'm going for the ability of a stack..use a vector for I can 'look' behind
-	vector<State*> states;
+	ui->addComponent("lblFarm", new Label(50, 285, "lazy.ttf", "Farmers (" + toString(simstate->getFoodRoom()) + ")", 22, 0, 0, 0));
+	ui->addComponent("txtFarm", new IncrementBox(180, 280, 128, 32, 0, 5));
 
-	//states added that will be added the next loop to preserve the while 'iterators'
-	vector<State*> addedStates;
-};
+	AssignState::showBehind = true;
+}
 
-#endif
+AssignState::~AssignState()
+{
+	delete ui;
+
+	Logger::debug("AssignState Destructor");
+}
+
+AssignState::AssignState(const AssignState& data) : State(NULL, 0, 0, 0, 0)
+{
+	throw VillageException("AssignState Copy Constructor");
+}
+
+AssignState* AssignState::operator=(const AssignState* rhs)
+{
+	throw VillageException("AssignState Assignment Operator");
+}
+
+void AssignState::update(float time, Uint8* keystrokes)
+{
+	
+}
+
+void AssignState::raiseEvent(SDL_Event* event)
+{
+	ui->raiseEvent(event);
+}
+
+void AssignState::draw()
+{
+	ui->draw(frame);
+}

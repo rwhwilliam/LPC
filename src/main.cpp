@@ -43,7 +43,7 @@ int main(int argc, char* args[])
 
 		StateManager stateManager;
 
-		SimState* s = new SimState("data/maps/map1.xml", atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
+		SimState* s = new SimState(&stateManager, "data/maps/map1.xml", atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
 
 		stateManager.push(s);
 

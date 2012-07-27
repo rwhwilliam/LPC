@@ -18,6 +18,7 @@
 #include "House.h"
 
 #include <string>
+#include <vector>
 
 #include "SDL.h"
 

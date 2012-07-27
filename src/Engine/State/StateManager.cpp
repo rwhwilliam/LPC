@@ -26,6 +26,7 @@
 StateManager::StateManager()
 {
 	states.clear();
+	addedStates.clear();
 }
 
 StateManager::~StateManager()
@@ -45,7 +46,7 @@ StateManager& StateManager::operator=(const StateManager* rhs)
 
 void StateManager::push(State* state)
 {
-	states.push_back(state);
+	addedStates.push_back(state);
 }
 
 State* StateManager::pop()
@@ -59,7 +60,19 @@ State* StateManager::pop()
 
 void StateManager::update(float time, Uint8* keystates)
 {
-	vector<State*>::const_iterator ittr = states.end();
+	//add new states
+	vector<State*>::iterator it;
+	for(it = addedStates.begin(); it != addedStates.end(); ++it)
+	{
+		states.push_back(*it);
+	}
+
+	addedStates.clear();
+
+	if(states.size() == 0)
+		return;
+
+	vector<State*>::iterator ittr = states.end();
 
 	do
 	{
@@ -75,7 +88,10 @@ void StateManager::update(float time, Uint8* keystates)
 
 void StateManager::raiseEvent(SDL_Event* event)
 {
-	vector<State*>::const_iterator ittr = states.end();
+	if(states.size() == 0)
+		return;
+
+	vector<State*>::iterator ittr = states.end();
 
 	do
 	{
@@ -91,18 +107,26 @@ void StateManager::raiseEvent(SDL_Event* event)
 
 void StateManager::draw(SDL_Surface* screen)
 {
-	vector<State*>::const_iterator ittr = states.end();
+	if(states.size() == 0)
+		return;
+
+	vector<State*>::iterator ittr = states.end();
 
 	do
 	{
 		--ittr;
 
-		(*ittr)->draw();
-		(*ittr)->flip(screen);
+		//(*ittr)->draw();
+		//(*ittr)->flip(screen);
 
 		if(!(*ittr)->getShowBehind())
 			break;
 	}
 	while(ittr != states.begin());
-	
+
+	for(; ittr != states.end(); ++ittr)
+	{
+		(*ittr)->draw();
+		(*ittr)->flip(screen);
+	}
 }

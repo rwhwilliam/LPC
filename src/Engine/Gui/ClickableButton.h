@@ -29,7 +29,7 @@ public:
 	ClickableButton(int x, int y, int width, int height, string normalSrc, string hoverSrc, string downSrc, T *who, void (T::*func)(void)) : callee(who), callback(func), Button(x, y, width, height, normalSrc, hoverSrc, downSrc) { }
 	ClickableButton(int x, int y, int width, int height, string normalSrc, string hoverSrc, string downSrc, Uint8 r, Uint8 g, Uint8 b, T *who, void (T::*func)(void)) : callee(who), callback(func), Button(x, y, width, height, normalSrc, hoverSrc, downSrc, r, g, b) { }
 private:
-	void click() { (callee->*callback)(); Logger::debug("Button Clicked"); }
+	void click() { Logger::debug("Button Clicked"); (callee->*callback)(); }
 
 	T * callee;
 	void (T::*callback)(void);

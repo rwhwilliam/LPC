@@ -20,14 +20,16 @@
 #include "SDL.h"
 #include "SDL_image.h"
 
+#include "Engine/State/StateManager.h"
 #include "Engine/Util/VillageException.h"
 
-State::State(int width, int height, int xloc, int yloc) : width(width), height(height), xloc(xloc), yloc(yloc)
+State::State(StateManager* manager, int width, int height, int xloc, int yloc) : width(width), height(height), xloc(xloc), yloc(yloc)
 { 
 	showBehind = false;
 	executeBehind = false;
 
 	frame = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, 0, 0, 0, 0);
+	State::manager = manager;
 }
 
 State::~State()

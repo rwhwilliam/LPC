@@ -29,7 +29,7 @@ FILE(GLOB VillagesUtil src/Villages/Util/*.h src/Villages/Util/*.cpp)
 FILE(GLOB Config data/config/config.xml)
 FILE(GLOB Images data/images/*.png)
 FILE(GLOB Maps data/maps/*.xml)
-FILE(GLOB Fonts data/fonts/*.tff)
+FILE(GLOB Fonts data/fonts/*.ttf)
 FILE(GLOB Music data/music/*.ogg)
 
 set (

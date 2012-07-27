@@ -43,7 +43,10 @@ UI::UI(int x, int y, int width, int height, string backgroundSrc, Uint8 r, Uint8
 {
 	Logger::debug("UI Constructor");
 
-	background = new Image(backgroundSrc, r, g, b);
+	if(backgroundSrc != "")
+		background = new Image(backgroundSrc, r, g, b);
+	else
+		background = NULL;
 }
 
 UI::~UI()
@@ -85,6 +88,9 @@ void UI::draw(SDL_Surface* screen)
 {
 	if(active)
 	{
+		if(background != NULL)
+			background->draw(x, y, screen);
+
 		map<string, Component*>::iterator it;
 
 		for(it = subcomponents.begin(); it != subcomponents.end(); ++it)

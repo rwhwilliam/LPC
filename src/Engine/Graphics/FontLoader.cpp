@@ -52,7 +52,8 @@ string FontLoader::loadFont(string path, int size)
 	{
 		Logger::debugFormat("Loading Font %s at Size %i", path.c_str(), size);
 
-		string id = Config::getConfig("FontPath") + path + toString(size);
+		path = Config::getConfig("FontPath") + path;
+		string id = path +  toString(size);
 
 		map<string, TTF_Font*>::iterator it;
 		it = fonts.find(id);

@@ -24,9 +24,9 @@
 
 using namespace std;
 
-void NumericTextbox::raiseEvent(SDL_Event e)
+void NumericTextbox::raiseEvent(SDL_Event* e)
 {
-	if( e.type == SDL_KEYDOWN )
+	if( e->type == SDL_KEYDOWN )
     {
         //Keep a copy of the current version of the string
         std::string temp = contents;
@@ -34,15 +34,15 @@ void NumericTextbox::raiseEvent(SDL_Event e)
         //If the string less than maximum size
         if( contents.length() <= 16 )
         {
-			if( ( e.key.keysym.unicode >= (Uint16)'0' ) && ( e.key.keysym.unicode <= (Uint16)'9' ) )
+			if( ( e->key.keysym.unicode >= (Uint16)'0' ) && ( e->key.keysym.unicode <= (Uint16)'9' ) )
             {
                 //Append the character
-                contents += (char)e.key.keysym.unicode;
+                contents += (char)e->key.keysym.unicode;
             }
         }
 
 		//If backspace was pressed and the string isn't blank
-        if( ( e.key.keysym.sym == SDLK_BACKSPACE ) && ( contents.length() != 0 ) )
+        if( ( e->key.keysym.sym == SDLK_BACKSPACE ) && ( contents.length() != 0 ) )
         {
             //Remove a character from the end
             contents.erase( contents.length() - 1 );

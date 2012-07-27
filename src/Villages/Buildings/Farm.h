@@ -19,12 +19,14 @@
 #define FARM_H
 
 #include <string>
+#include <vector>
 
 #include "Building.h"
 
 using namespace std;
 
 class SimState;
+class Villager;
 
 class Farm : public Building
 {
@@ -35,7 +37,18 @@ public:
 	Farm(const Farm& data);
 	Farm& operator=(const Farm* rhs);
 
+	int getCapacity() { return capacity; }
+	int getWorkerCount() { return workers.size(); }
+	int getRoom() { return capacity - workers.size(); }
+
+	bool hasRoom() { return (getWorkerCount() < capacity); }
+	void addWorker(Villager* person);
+
 	BuildingType getType() { return BT_FARM; }
+
+private:
+	int capacity;
+	vector<Villager*> workers;
 };
 
 #endif

@@ -24,7 +24,8 @@
 
 class NumericTextbox : public Textbox
 {
-	void raiseEvent(SDL_Event event);
+public:
+	void raiseEvent(SDL_Event* event);
 };
 
 #endif

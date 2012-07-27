@@ -21,6 +21,8 @@
 #include "SDL.h"
 #include "SDL_image.h"
 
+class StateManager;
+
 class State
 {
 public:
@@ -34,8 +36,9 @@ public:
 	bool getShowBehind() { return showBehind; }
 	bool getRaiseBehind() { return raiseBehind; }
 	bool getExecuteBehind() { return executeBehind; }
+
 protected:
-	State(int width, int height, int xloc, int yloc);
+	State(StateManager* manager, int width, int height, int xloc, int yloc);
 	~State();
 
 	State(const State& data);
@@ -58,6 +61,9 @@ protected:
 
 	//actual surface that is drawn
 	SDL_Surface* frame;
+
+	//state manager
+	StateManager* manager;
 };
 
 #endif
