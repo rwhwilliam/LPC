@@ -34,6 +34,12 @@ Castle::Castle(SimState* state, int xloc, int yloc) : Building(state, "CastleIma
 	Logger::debug("Castle Constructor");
 
 	tax = 5;
+
+	food = 50;
+	gold = 500;
+	wood = 20;
+	ore = 10;
+	weapons = 0;
 }
 
 Castle::~Castle()

@@ -37,6 +37,7 @@ public:
 
 	BuildingType getType() { return BT_CASTLE; }
 	int getRating() { return 1; }
+	void generate() { }
 
 	int getTaxRate() { return tax; }
 	int getGold() { return gold; }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 
 #include "SDL.h"
 
@@ -22,6 +23,8 @@ int main(int argc, char* args[])
 {
 	try
 	{
+		srand(time(NULL));
+
 		if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
 			return 0;
 

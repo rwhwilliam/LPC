@@ -18,15 +18,20 @@
 #include "Building.h"
 
 #include <string>
+#include <list>
+#include <map>
 
 #include "SDL.h"
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Config.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Map/MapTile.h"
+#include "Villages/Objects/Road.h"
 #include "Villages/Objects/Villager.h"
+#include "Villages/Util/Util.h"
 
 using namespace std;
 
@@ -97,10 +102,87 @@ void Building::addWorker(Villager* person)
 {
 	if(hasRoom())
 	{
+		Logger::debug("Worker Added");
+
 		workers.push_back(person);
 	}
 	else
 	{
 		Logger::error("Adding worker to full building!");
+	}
+}
+
+void Building::removeWorker(Villager* person)
+{
+	Logger::debug("Worker Removed");
+
+	workers.remove(person);
+}
+
+void Building::getSurroundingRoads(list<Road*>& temp)
+{
+	int w = getWidth() / state->getTileWidth();
+	int h = getHeight() / state->getTileHeight();
+
+	//top
+	for(int i = xloc - 1; i <= xloc + w + 1; ++i)
+	{
+		map<string, Road*>::iterator rit = state->getRoads()->find(toString(i) + "_" + toString(yloc - 1));
+		if(rit != state->getRoads()->end())
+			temp.push_back((*state->getRoads())[toString(i) + "_" + toString(yloc - 1)]);
+	}
+
+	//bottom
+	for(int i = xloc - 1; i <= xloc + w + 1; ++i)
+	{
+		map<string, Road*>::iterator rit = state->getRoads()->find(toString(i) + "_" + toString(yloc + h));
+		if(rit != state->getRoads()->end())
+			temp.push_back((*state->getRoads())[toString(i) + "_" + toString(yloc + h)]);
+	}
+
+	//left
+	for(int i = yloc - 1; i <= yloc + h + 1; ++i)
+	{
+		map<string, Road*>::iterator rit = state->getRoads()->find(toString(xloc - 1) + "_" + toString(i));
+		if(rit != state->getRoads()->end())
+			temp.push_back((*state->getRoads())[toString(xloc - 1) + "_" + toString(i)]);
+	}
+
+	//right
+	for(int i = yloc - 1; i <= yloc + h + 1; ++i)
+	{
+		map<string, Road*>::iterator rit = state->getRoads()->find(toString(xloc + w) + "_" + toString(i));
+		if(rit != state->getRoads()->end())
+			temp.push_back((*state->getRoads())[toString(xloc + w) + "_" + toString(i)]);
+	}
+}
+
+bool Building::inNetwork(list<Road*>& network)
+{
+	list<Road*> temp;
+
+	getSurroundingRoads(temp);
+
+	list<Road*>::iterator it;
+	list<Road*>::iterator it2;
+	for(it = temp.begin(); it != temp.end(); ++it)
+		for(it2 = network.begin(); it2 != network.end(); ++it2)
+			if(find(*it, *it2))
+				return true;
+
+	return false;
+}
+
+void Building::generate(list<Road*>& network)
+{
+	if(inNetwork(network))
+	{
+		Logger::debug("IN NETWORK!");
+
+		generate();
+	}
+	else
+	{
+		Logger::debug("NOT IN NETWORK!");
 	}
 }

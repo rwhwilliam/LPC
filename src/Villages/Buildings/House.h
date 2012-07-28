@@ -39,6 +39,7 @@ public:
 
 	BuildingType getType() { return BT_HOUSE; }
 	int getRating() { return 1; }
+	void generate() { }
 };
 
 #endif

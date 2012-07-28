@@ -18,7 +18,11 @@
 #ifndef ROAD_H
 #define ROAD_H
 
+#include <list>
+
 #include "Engine/Graphics/Image.h"
+
+using namespace std;
 
 class SimState;
 
@@ -38,6 +42,7 @@ public:
 	int getWidth() { return img->getWidth(); }
 	int getHeight() { return img->getHeight(); }
 	Road* getRoad(int x, int y);
+	void getSurroundingRoads(list<Road*>& temp);
 
 	void calculateMode();
 	bool collides(int x, int y, int width, int height);

@@ -37,6 +37,7 @@ public:
 
 	BuildingType getType() { return BT_JEWELER; }
 	int getRating() { return 1; }
+	void generate() { }
 };
 
 #endif

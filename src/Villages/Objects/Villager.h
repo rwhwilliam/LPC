@@ -22,24 +22,26 @@ enum Job { IDLE, FARM };
 
 class House;
 class Building;
+class SimState;
 
 class Villager
 {
 public:
-	Villager(Building* job, House* residence);
+	Villager(SimState* simstate, Building* job, House* residence);
 	~Villager();
 
 	Villager(const Villager& data);
 	Villager& operator=(const Villager* rhs);
 
-	void setJob(Building* job) { Villager::job = job; }
-	void setResidence(House* house) { Villager::residence = house; }
+	void setJob(Building* job);
+	void setResidence(House* house);
 	Building* getJob() { return job; }
 	House* getHouse() { return residence; }
 
 	bool wantsToLeave();
 
 private:
+	SimState* simstate;
 	Building* job;
 	House* residence;
 };

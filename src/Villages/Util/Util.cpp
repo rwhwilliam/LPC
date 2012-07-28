@@ -15,29 +15,11 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef MININGCAMP_H
-#define MININGCAMP_H
+#include "Util.h"
 
-#include <string>
+#include "Villages/Objects/Road.h"
 
-#include "Building.h"
-
-using namespace std;
-
-class SimState;
-
-class MiningCamp : public Building
+bool find(Road* left, Road* right)
 {
-public:
-	MiningCamp(SimState* state, int xloc, int yloc);
-	~MiningCamp();
-
-	MiningCamp(const MiningCamp& data);
-	MiningCamp& operator=(const MiningCamp* rhs);
-
-	BuildingType getType() { return BT_MININGCAMP; }
-	int getRating() { return 1; }
-	void generate() { }
-};
-
-#endif
+	return (left->getX() == right->getX() && left->getY() == right->getY());
+}

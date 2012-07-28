@@ -17,6 +17,8 @@
 
 #include "AssignState.h"
 
+#include <math.h>
+
 #include "Engine/Gui/Label.h"
 #include "Engine/Gui/UI.h"
 #include "Engine/State/StateManager.h"
@@ -38,16 +40,16 @@ AssignState::AssignState(StateManager* manager, SimState* simstate, int pop, int
 	ui->addComponent("infoLbl", new Label(280, 265, "lazy.ttf", "Please Assign all " + toString(pop) + " of them to a Job", 22, 0, 0, 0));
 
 	ui->addComponent("lblFarm", new Label(40, 315, "lazy.ttf", "Farm (" + toString(simstate->getFarmRoom()) + " Spots)", 22, 0, 0, 0));
-	ui->addComponent("txtFarm", new IncrementBox(280, 310, 128, 32, 0, simstate->getFarmRoom()));
+	ui->addComponent("txtFarm", new IncrementBox(280, 310, 128, 32, 0, min(pop, simstate->getFarmRoom())));
 
 	ui->addComponent("lblMill", new Label(40, 380, "lazy.ttf", "Mill (" + toString(simstate->getMillRoom()) + " Spots)", 22, 0, 0, 0));
-	ui->addComponent("txtMill", new IncrementBox(280, 375, 128, 32, 0, simstate->getMillRoom()));
+	ui->addComponent("txtMill", new IncrementBox(280, 375, 128, 32, 0, min(pop, simstate->getMillRoom())));
 
 	ui->addComponent("lblMine", new Label(500, 315, "lazy.ttf", "Mine (" + toString(simstate->getMineRoom()) + " Spots)", 22, 0, 0, 0));
-	ui->addComponent("txtMine", new IncrementBox(740, 310, 128, 32, 0, simstate->getMineRoom()));
+	ui->addComponent("txtMine", new IncrementBox(740, 310, 128, 32, 0, min(pop, simstate->getMineRoom())));
 
 	ui->addComponent("lblBlacksmith", new Label(500, 380, "lazy.ttf", "Blacksmith (" + toString(simstate->getBlacksmithRoom()) + " Spots)", 22, 0, 0, 0));
-	ui->addComponent("txtBlacksmith", new IncrementBox(740, 375, 128, 32, 0, simstate->getBlacksmithRoom()));
+	ui->addComponent("txtBlacksmith", new IncrementBox(740, 375, 128, 32, 0, min(pop, simstate->getBlacksmithRoom())));
 	
 	ui->addComponent("btnAssign", new ClickableButton<AssignState>(400, 450, 64, 32, "assign-normal.png", "assign-hover.png", "assign-pressed.png", this, &AssignState::assign));
 	

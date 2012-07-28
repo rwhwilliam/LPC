@@ -56,6 +56,7 @@
 #include "Villages/States/AssignState.h"
 #include "Villages/Util/MouseImage.h"
 #include "Villages/Util/ScrollingMap.h"
+#include "Villages/Util/Util.h"
 
 using namespace std;
 using namespace tinyxml2;
@@ -205,7 +206,7 @@ SimState::~SimState()
 
 	roads.clear();
 
-	vector<Villager*>::iterator vit;
+	list<Villager*>::iterator vit;
 	for(vit = villagers.begin(); vit != villagers.end(); ++vit)
 	{
 		delete (*vit);
@@ -1063,7 +1064,7 @@ int SimState::getSpareWater()
 		if((*it)->getType() == BT_WELL)
 			ret++;
 		
-	return ret * 15;
+	return ret * 15 - villagers.size();
 }
 
 void SimState::findHouse(Villager* person)
@@ -1202,28 +1203,95 @@ int SimState::getNewPopCount()
 	return (newPop >= 0) ? newPop : 0;
 }
 
-void SimState::letPeopleLeave()
+void SimState::getRoadNetwork(list<Road*>& network)
 {
-	vector<Villager*> leaving;
+	list<Road*> newRoads;
 
-	vector<Villager*>::const_iterator it;
+	//get roads surrounding the castle
+	castle->getSurroundingRoads(newRoads);
+
+	list<Road*>::iterator it;
+	for(it = newRoads.begin(); it != newRoads.end(); ++it)
+	{
+		network.push_back(*it);
+	}
+
+
+	//generate the network
+	//ie, get all roads connected to these roads till we run out of new connected roads :P
+	while(true)
+	{
+		if(newRoads.empty())
+			break;
+
+		list<Road*> temp;
+
+		list<Road*>::iterator it;
+		for(it = newRoads.begin(); it != newRoads.end(); ++it)
+			(*it)->getSurroundingRoads(temp);
+
+		newRoads.clear();
+
+		for(it = temp.begin(); it != temp.end(); ++it)
+		{
+			bool found = false;
+			list<Road*>::iterator it2;
+			for(it2 = network.begin(); it2 != network.end(); ++it2)
+			{
+				if(find(*it, *it2))
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if(!found)
+			{
+				network.push_back(*it);
+				newRoads.push_back(*it);
+			}
+		}
+	}
+}
+
+int SimState::letPeopleLeave()
+{
+	list<Villager*> leaving;
+
+	list<Villager*>::const_iterator it;
 	for(it = villagers.begin(); it != villagers.end(); ++it)
 		if((*it)->wantsToLeave())
-			leaves.push_back(*it);
+			leaving.push_back(*it);
 
 	for(it = leaving.begin(); it != leaving.end(); ++it)
 	{
-		
+		villagers.remove(*it);
+		delete (*it);
 	}
+
+	return leaving.size();
 }
 
 void SimState::startEndTurn()
 {
 	Logger::debugFormat("Ending turn %i.", turn);
 
-	letPeopleLeave();
+	list<Road*> network;
+	getRoadNetwork(network);
+
+	vector<Building*>::iterator it;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+	{
+		(*it)->generate(network);
+	}
+
+	int left = letPeopleLeave();
+
+	Logger::debugFormat("%i People Left", left);
 
 	int newPop = getNewPopCount();
+
+	Logger::debugFormat("%i People Joined", newPop);
 
 	if(newPop > 0)
 	{
@@ -1246,7 +1314,7 @@ void SimState::assignEndTurn(int pop, int farm, int mill, int mine, int blacksmi
 		{
 			for(int i = 0; i < farm; ++i)
 			{
-				Villager* v = new Villager(NULL, NULL);
+				Villager* v = new Villager(this, NULL, NULL);
 				findHouse(v);
 				findFarm(v);
 				villagers.push_back(v);
@@ -1257,7 +1325,7 @@ void SimState::assignEndTurn(int pop, int farm, int mill, int mine, int blacksmi
 		{
 			for(int i = 0; i < mill; ++i)
 			{
-				Villager* v = new Villager(NULL, NULL);
+				Villager* v = new Villager(this, NULL, NULL);
 				findHouse(v);
 				findMill(v);
 				villagers.push_back(v);
@@ -1268,7 +1336,7 @@ void SimState::assignEndTurn(int pop, int farm, int mill, int mine, int blacksmi
 		{
 			for(int i = 0; i < mine; ++i)
 			{
-				Villager* v = new Villager(NULL, NULL);
+				Villager* v = new Villager(this, NULL, NULL);
 				findHouse(v);
 				findMine(v);
 				villagers.push_back(v);
@@ -1279,7 +1347,7 @@ void SimState::assignEndTurn(int pop, int farm, int mill, int mine, int blacksmi
 		{
 			for(int i = 0; i < blacksmith; ++i)
 			{
-				Villager* v = new Villager(NULL, NULL);
+				Villager* v = new Villager(this, NULL, NULL);
 				findHouse(v);
 				findBlacksmith(v);
 				villagers.push_back(v);

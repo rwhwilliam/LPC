@@ -34,6 +34,8 @@ using namespace std;
 Farm::Farm(SimState* state, int xloc, int yloc) : Building(state, "FarmImage", xloc, yloc)
 {
 	Logger::debug("Farm Constructor");
+
+	capacity = 20;
 }
 
 Farm::~Farm()

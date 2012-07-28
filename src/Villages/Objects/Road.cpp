@@ -120,6 +120,26 @@ Road* Road::getRoad(int x, int y)
 	return NULL;
 }
 
+void Road::getSurroundingRoads(list<Road*>& temp)
+{
+	Road* n = getRoad(xloc, yloc - 1);
+	Road* s = getRoad(xloc, yloc + 1);
+	Road* e = getRoad(xloc + 1, yloc);
+	Road* w = getRoad(xloc - 1, yloc);
+
+	if(n != NULL)
+		temp.push_back(n);
+
+	if(s != NULL)
+		temp.push_back(s);
+
+	if(e != NULL)
+		temp.push_back(e);
+
+	if(w != NULL)
+		temp.push_back(w);
+}
+
 void Road::draw(int xoffset, int yoffset, SDL_Surface* screen)
 {
 	img->draw(getMapX() - xoffset, getMapY() - yoffset, screen);

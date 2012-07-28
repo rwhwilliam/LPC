@@ -17,18 +17,31 @@
 
 #include "Villager.h"
 
+#include <math.h>
+#include <stdlib.h>
+
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/Buildings/Castle.h"
+#include "Villages/Buildings/House.h"
+#include "Villages/States/SimState.h"
 
-Villager::Villager(Building* job, House* residence)
+using namespace std;
+
+Villager::Villager(SimState* simstate, Building* job, House* residence)
 {
 	Villager::job = job;
 
 	Villager::residence = residence;
+
+	Villager::simstate = simstate;
 }
 
 Villager::~Villager()
 {
+	job->removeWorker(this);
+	residence->removeWorker(this);
+
 	Villager::job = NULL;
 	Villager::residence = NULL;
 }
@@ -43,7 +56,40 @@ Villager& Villager::operator=(const Villager* rhs)
 	throw VillageException("Villager Assignment Operator");
 }
 
+void Villager::setJob(Building* job)
+{
+	job->addWorker(this);
+	Villager::job = job;
+}
+
+void Villager::setResidence(House* residence)
+{
+	residence->addWorker(this);
+	Villager::residence = residence;
+}
+
 bool Villager::wantsToLeave()
 {
+	int random = rand() % 900 + 1;
+
+	if(random <= pow(simstate->getCastle()->getTaxRate(), 2.0))
+		return true;
+
+	if(simstate->getCastle()->getFood() <= 0)
+	{
+		random = rand() % 100 + 1;
+		
+		if(random <= 1)
+			return true;
+	}
+
+	if(simstate->getSpareWater() <= 0)
+	{
+		random = rand() % 100 + 1;
+		
+		if(random <= 1)
+			return true;
+	}
+
 	return false;
 }

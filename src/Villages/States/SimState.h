@@ -21,6 +21,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <list>
 
 #include "SDL.h"
 
@@ -106,7 +107,10 @@ public:
 	void findBlacksmith(Villager* person);
 
 	int getNewPopCount();
-	void letPeopleLeave();
+	int letPeopleLeave();
+
+	Castle* getCastle() { return castle; }
+	void getRoadNetwork(list<Road*>& network);
 
 private:
 	int tileWidth, tileHeight;
@@ -127,7 +131,7 @@ private:
 
 	std::map<string, Road*> roads;
 
-	vector<Villager*> villagers;
+	list<Villager*> villagers;
 
 	ActionBar* actionBar;
 	ClickableButton<SimState>* endTurnBtn;

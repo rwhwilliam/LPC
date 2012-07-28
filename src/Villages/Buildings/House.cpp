@@ -34,6 +34,8 @@ using namespace std;
 House::House(SimState* state, int xloc, int yloc) : Building(state, "HouseImage", xloc, yloc)
 {
 	Logger::debug("House Constructor");
+
+	capacity = 10; 
 }
 
 House::~House()
