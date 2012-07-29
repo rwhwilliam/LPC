@@ -38,7 +38,7 @@ public:
 	House& operator=(const House* rhs);
 
 	BuildingType getType() { return BT_HOUSE; }
-	int getRating() { return 1; }
+	int getRating();
 	void generate() { }
 };
 

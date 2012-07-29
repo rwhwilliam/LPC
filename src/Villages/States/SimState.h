@@ -67,6 +67,7 @@ public:
 	int getYOffset();
 	float getZoomLevel() { return zoomLevel; }
 	map<string, Road*>* getRoads() { return &roads; }
+	vector<Building*>* getBuildings() { return &buildings; }
 
 	EngineResult canBuild(int x, int y, int width, int height);
 

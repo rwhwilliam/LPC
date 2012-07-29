@@ -104,22 +104,22 @@ ActionBar::~ActionBar()
 {
 	Logger::debug("ActionBar Destructor");
 
-	delete buildHouse;
-	delete buildFarm;
-	delete buildMiningCamp;
-	delete buildMill;
-	delete buildWell;
-	delete buildTavern;
-	delete buildTheatre;
-	delete buildWeaver;
-	delete buildJeweler;
-	delete buildBlacksmith;
-	delete buildBakery;
-	delete buildGuardStation;
-	delete buildMarket;
-	delete buildRoad;
-	delete in;
-	delete out;
+	//delete buildHouse;
+	//delete buildFarm;
+	//delete buildMiningCamp;
+	//delete buildMill;
+	//delete buildWell;
+	//delete buildTavern;
+	//delete buildTheatre;
+	//delete buildWeaver;
+	//delete buildJeweler;
+	//delete buildBlacksmith;
+	//delete buildBakery;
+	//delete buildGuardStation;
+	//delete buildMarket;
+	//delete buildRoad;
+	//delete in;
+	//delete out;
 }
 
 ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")

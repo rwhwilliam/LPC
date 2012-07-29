@@ -178,7 +178,7 @@ SimState::~SimState()
 	{
 		delete (*bit);
 
-		buildings.erase(bit);
+		//buildings.erase(bit);
 	}
 
 	vector<CaveTile*>::iterator cit;
@@ -186,7 +186,7 @@ SimState::~SimState()
 	{
 		delete (*cit);
 
-		caves.erase(cit);
+		//caves.erase(cit);
 	}
 
 	caves.clear();
@@ -196,7 +196,7 @@ SimState::~SimState()
 	{
 		delete (*foit);
 
-		forests.erase(foit);
+		//forests.erase(foit);
 	}
 
 	forests.clear();
@@ -206,7 +206,7 @@ SimState::~SimState()
 	{
 		delete rit->second;
 
-		roads.erase(rit);
+		//roads.erase(rit);
 	}
 
 	roads.clear();
@@ -216,7 +216,7 @@ SimState::~SimState()
 	{
 		delete (*vit);
 
-		villagers.erase(vit);
+		//villagers.erase(vit);
 	}
 
 	villagers.clear();
@@ -1292,9 +1292,18 @@ void SimState::startEndTurn()
 
 	vector<Building*>::iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)
-	{
 		(*it)->generate(network);
-	}
+
+	Logger::debug("Updating Guard Station Coverage");
+
+	list<GuardStation*> guards;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+		if((*it)->getType() == BT_GUARDSTATION)
+			guards.push_back(dynamic_cast<GuardStation*>(*it));
+
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+		if((*it)->getType() != BT_GUARDSTATION)
+			(*it)->updateCoverage(guards);
 
 	int left = letPeopleLeave();
 

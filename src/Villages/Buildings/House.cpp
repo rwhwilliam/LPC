@@ -19,6 +19,7 @@
 
 #include <string>
 #include <vector>
+#include <math.h>
 
 #include "SDL.h"
 
@@ -26,6 +27,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/Buildings/Castle.h"
 #include "Villages/Objects/Villager.h"
 #include "Villages/States/SimState.h"
 
@@ -51,4 +53,33 @@ House::House(const House& data) : Building(NULL, "", 0, 0)
 House& House::operator=(const House* rhs)
 {
 	throw VillageException("House Assignment Operator");
+}
+
+int House::getRating()
+{
+	int rating = 0;
+
+	int minAvg = 0, count = 0;
+	vector<Building*>::const_iterator it;
+	for(it = state->getBuildings()->begin(); it != state->getBuildings()->end(); ++it)
+	{
+		if((*it)->getType() == BT_MININGCAMP)
+		{
+			minAvg += (int)sqrt(pow(xloc - (*it)->getX(), 2.0) + pow(yloc - (*it)->getY(), 2.0));
+			count++;
+		}
+	}
+
+	rating += minAvg / count;
+
+	rating += 150 - (int)sqrt(pow(xloc - state->getCastle()->getX(), 2.0) + pow(yloc - state->getCastle()->getY(), 2.0));
+
+	rating += coverage / 2;
+
+	Logger::debugFormat("House rating of %i", rating);
+
+	if(roadConnected)
+		return rating;
+	else
+		return 1;
 }

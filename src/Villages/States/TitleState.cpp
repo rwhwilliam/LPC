@@ -17,24 +17,52 @@
 
 #include "TitleState.h"
 
+#include <string>
+
 #include "SDL.h"
+#include "SDL_mixer.h"
 
 #include "Engine/Graphics/Image.h"
+#include "Engine/Gui/ClickableButton.h"
+#include "Engine/Sound/SoundLoader.h"
 #include "Engine/State/State.h"
 #include "Engine/State/StateManager.h"
+#include "Engine/Util/Config.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/States/SimState.h"
+
+using namespace std;
 
 TitleState::TitleState(StateManager* manager, int width, int height, int xloc, int yloc) : State(manager, width, height, xloc, yloc)
 {
 	Logger::debug("TitleState Constructor");
 
 	bg = new Image("title.png");
+
+	newgame = new ClickableButton<TitleState>(362, 300, 300, 50, "newgame-button-normal.png", "newgame-button-hover.png", "newgame-button-hover.png", this, &TitleState::startNewGame);
+	credits = new ClickableButton<TitleState>(362, 380, 300, 50, "credits-button-normal.png", "credits-button-hover.png", "credits-button-hover.png", this, &TitleState::startCredits);
+
+	//music = SoundLoader::loadMusic("title.mp3");
+
+	//Mix_HaltMusic();
+
+    //if(Mix_PlayingMusic() == 0 )
+    //{
+        //Play the music
+        //Mix_PlayMusic( SoundLoader::getMusic(music), -1 );
+	//}
 }
 
 TitleState::~TitleState()
 {
 	delete bg;
+
+	delete newgame;
+	delete credits;
+
+	//Mix_HaltMusic();
+	//Mix_FreeMusic(SoundLoader::getMusic(music));
 
 	Logger::debug("TitleState Destructor");
 }
@@ -49,6 +77,20 @@ TitleState* TitleState::operator=(const TitleState* rhs)
 	throw VillageException("TitleState Assignment Operator");
 }
 
+void TitleState::startNewGame()
+{
+	//Mix_HaltMusic();
+
+	SimState* s = new SimState(manager, "data/maps/map1.xml", atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
+
+	manager->push(s);
+}
+
+void TitleState::startCredits()
+{
+
+}
+
 void TitleState::update(float time, Uint8* keystrokes)
 {
 
@@ -56,10 +98,14 @@ void TitleState::update(float time, Uint8* keystrokes)
 
 void TitleState::raiseEvent(SDL_Event* event)
 {
-	
+	newgame->raiseEvent(event);
+	credits->raiseEvent(event);
 }
 
 void TitleState::draw()
 {
 	bg->draw(0, 0, frame);
+
+	newgame->draw(frame);
+	credits->draw(frame);
 }

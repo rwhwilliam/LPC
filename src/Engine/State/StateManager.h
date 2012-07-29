@@ -43,9 +43,12 @@ public:
 	void raiseEvent(SDL_Event* event);
 	void update(float time, Uint8* keystates);
 
-private:
 	void addStates();
 	void removeStates();
+
+	int getStateCount() { return states.size(); }
+
+private:
 
 	//tho I'm going for the ability of a stack..use a vector for I can 'look' behind
 	vector<State*> states;

@@ -56,7 +56,10 @@ UI::~UI()
 	map<string, Component*>::iterator it;
 
 	for(it = subcomponents.begin(); it != subcomponents.end(); ++it)
-		delete it->second;
+	{
+		Component* c = it->second;
+		delete c;
+	}
 
 	subcomponents.clear();
 

@@ -128,15 +128,15 @@ Mix_Music* SoundLoader::getMusic(string id)
 
 void SoundLoader::cleanup()
 {
-	map<string, Mix_Chunk*>::iterator it;
+	//map<string, Mix_Chunk*>::iterator it;
 
-	for(it = soundeffects.begin(); it != soundeffects.end(); ++it)
-		Mix_FreeChunk(it->second);
+	//for(it = soundeffects.begin(); it != soundeffects.end(); ++it)
+	//	Mix_FreeChunk(it->second);
 
-	map<string, Mix_Music*>::iterator it2;
-
-	for(it2 = music.begin(); it2 != music.end(); ++it)
-		Mix_FreeMusic(it2->second);
+	//map<string, Mix_Music*>::iterator it2;
+	//
+	//for(it2 = music.begin(); it2 != music.end(); ++it)
+	//	Mix_FreeMusic(it2->second);
 
 	soundeffects.clear();
 

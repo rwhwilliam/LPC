@@ -18,7 +18,12 @@
 #ifndef TITLESTATE_H
 #define TITLESTATE_H
 
+#include <string>
+
+#include "Engine/Gui/ClickableButton.h"
 #include "Engine/State/State.h"
+
+using namespace std;
 
 class Image;
 
@@ -36,7 +41,13 @@ public:
 	void draw();
 
 private:
+	void startNewGame();
+	void startCredits();
+
 	Image* bg;
+	string music;
+	ClickableButton<TitleState>* newgame;
+	ClickableButton<TitleState>* credits;
 };
 
 #endif

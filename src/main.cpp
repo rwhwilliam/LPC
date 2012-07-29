@@ -47,10 +47,6 @@ int main(int argc, char* args[])
 
 		StateManager stateManager;
 
-		SimState* s = new SimState(&stateManager, "data/maps/map1.xml", atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
-
-		stateManager.push(s);
-
 		TitleState* title = new TitleState(&stateManager, atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
 
 		stateManager.push(title);
@@ -87,6 +83,25 @@ int main(int argc, char* args[])
 			
 			Logger::debugFormat("ms %i", t.get_ticks());
 			t.stop();
+		}
+
+		while(stateManager.getStateCount() > 0)
+		{
+			State* s = stateManager.pop();
+			stateManager.removeStates();
+
+			if(dynamic_cast<SimState*>(s) != NULL)
+			{
+				delete dynamic_cast<SimState*>(s);
+				continue;
+			}
+
+			if(dynamic_cast<TitleState*>(s) != NULL)
+			{
+				delete dynamic_cast<TitleState*>(s);
+				continue;
+			}
+			
 		}
 
 		SoundLoader::cleanup();

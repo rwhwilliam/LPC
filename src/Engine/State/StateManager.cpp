@@ -54,7 +54,7 @@ State* StateManager::pop()
 {
 	removedStates++;
 
-	return NULL;
+	return states.back();
 }
 
 void StateManager::addStates()
@@ -72,7 +72,9 @@ void StateManager::addStates()
 void StateManager::removeStates()
 {
 	for(int i = 0; i < removedStates; ++i)
+	{
 		states.pop_back();
+	}
 
 	removedStates = 0;
 }

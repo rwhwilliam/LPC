@@ -32,6 +32,7 @@ class MapTile;
 class SimState;
 class Villager;
 class Road;
+class GuardStation;
 
 enum BuildingType { BT_BAKERY, BT_BLACKSMITH, BT_CASTLE, BT_FARM, BT_GUARDSTATION, BT_HOUSE, BT_JEWELER, BT_MARKET, BT_MILL, BT_MININGCAMP, BT_TAVERN, BT_THEATRE, BT_WEAVER, BT_WELL };
 
@@ -44,6 +45,8 @@ public:
 	Building(const Building& data);
 	Building& operator=(const Building* rhs);
 
+	int getX() { return xloc; }
+	int getY() { return yloc; }
 	int getMapX();
 	int getMapY();
 	int getWidth() { return img->getWidth(); }
@@ -62,6 +65,7 @@ public:
 	int getCapacity() { return capacity; }
 	int getWorkerCount() { return workers.size(); }
 	int getRoom() { return capacity - workers.size(); }
+	int getCoverate() { return coverage; }
 
 	bool hasRoom() { return (getWorkerCount() < capacity); }
 	void addWorker(Villager* person);
@@ -69,6 +73,7 @@ public:
 
 	void getSurroundingRoads(list<Road*>& temp);
 	bool inNetwork(list<Road*>& network);
+	void updateCoverage(list<GuardStation*>& guards);
 	void generate(list<Road*>& network);
 
 protected:
@@ -80,6 +85,8 @@ protected:
 
 	int capacity;
 	list<Villager*> workers;
+	int coverage;
+	bool roadConnected;
 };
 
 #endif

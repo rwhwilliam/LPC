@@ -28,6 +28,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/GuardStation.h"
 #include "Villages/Map/MapTile.h"
 #include "Villages/Objects/Road.h"
 #include "Villages/Objects/Villager.h"
@@ -44,6 +45,7 @@ Building::Building(SimState* state, string src, int xloc, int yloc) : xloc(xloc)
 	img = new Image(Config::getConfig(src), (Uint8)255, 0, 255, state->getZoomLevel());
 
 	capacity = 0;
+	roadConnected = false;
 }
 
 Building::~Building()
@@ -177,10 +179,22 @@ void Building::generate(list<Road*>& network)
 {
 	if(inNetwork(network))
 	{
+		roadConnected = true;
 		generate();
 	}
 	else
 	{
+		roadConnected = false;
 		Logger::debugFormat("Building at (%i, %i) can not produce because it is not attached to the castle via a road!", xloc, yloc);
 	}
+}
+
+void Building::updateCoverage(list<GuardStation*>& guards)
+{
+	coverage = 0;
+
+	list<GuardStation*>::const_iterator it;
+
+	for(it = guards.begin(); it != guards.end(); ++it)
+		coverage += (*it)->inCoverage(this);
 }

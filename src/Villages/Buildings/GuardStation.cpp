@@ -36,7 +36,7 @@ GuardStation::GuardStation(SimState* state, int xloc, int yloc) : Building(state
 	Logger::debug("GuardStation Constructor");
 
 	coverageDiameter = 8;
-	value = 100;
+	value = 0;
 }
 
 GuardStation::~GuardStation()

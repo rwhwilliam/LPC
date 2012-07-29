@@ -31,8 +31,8 @@ public:
 	static bool init();
 	static string loadSoundEffect(string path);
 	static string loadMusic(string path);
-	Mix_Chunk* getSoundEffect(string id);
-	Mix_Music* getMusic(string id);
+	static Mix_Chunk* getSoundEffect(string id);
+	static Mix_Music* getMusic(string id);
 	static void cleanup();
 
 private:
