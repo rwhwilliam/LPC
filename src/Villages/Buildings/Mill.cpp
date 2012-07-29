@@ -25,6 +25,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/Buildings/Castle.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -47,4 +48,13 @@ Mill::Mill(const Mill& data) : Building(NULL, "", 0, 0)
 Mill& Mill::operator=(const Mill* rhs)
 {
 	throw VillageException("Mill Assignment Operator");
+}
+
+void Mill::generate()
+{
+	int wood = workers.size() * 4;
+
+	state->getCastle()->addWood(wood);
+
+	Logger::debugFormat("Cut %i Wood", wood);
 }

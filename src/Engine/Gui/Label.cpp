@@ -34,6 +34,8 @@ Label::Label(int x, int y, string fontSrc, string content, int size) : Component
 	font = new Font(fontSrc, size, 255, 255, 255);
 
 	textImage = font->getSurface(content);
+
+	Label::content = content;
 }
 
 Label::Label(int x, int y, string fontSrc, string content, int size, Uint8 r, Uint8 g, Uint8 b) : Component(x, y, 0, 0)
@@ -43,6 +45,8 @@ Label::Label(int x, int y, string fontSrc, string content, int size, Uint8 r, Ui
 	font = new Font(fontSrc, size, r, g, b);
 
 	textImage = font->getSurface(content);
+
+	Label::content = content;
 }
 
 Label::~Label()
@@ -62,6 +66,19 @@ Label::Label(const Label& data)
 Label& Label::operator=(const Label* rhs)
 {
 	throw VillageException("Label Assignment Operator");
+}
+
+void Label::setText(string txt)
+{
+	if(txt != content)
+	{
+		if(textImage != NULL)
+			SDL_FreeSurface( textImage );
+
+		textImage = font->getSurface(txt);
+
+		content = txt;
+	}
 }
 
 void Label::raiseEvent(SDL_Event* event)

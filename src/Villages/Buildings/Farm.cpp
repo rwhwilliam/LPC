@@ -26,6 +26,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/Buildings/Castle.h"
 #include "Villages/Objects/Villager.h"
 #include "Villages/States/SimState.h"
 
@@ -51,4 +52,13 @@ Farm::Farm(const Farm& data) : Building(NULL, "", 0, 0)
 Farm& Farm::operator=(const Farm* rhs)
 {
 	throw VillageException("Farm Assignment Operator");
+}
+
+void Farm::generate()
+{
+	int food = workers.size() * 5;
+
+	state->getCastle()->addFood(food);
+
+	Logger::debugFormat("Farmed %i Food", food);
 }

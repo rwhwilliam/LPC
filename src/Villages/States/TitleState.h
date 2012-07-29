@@ -15,38 +15,28 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef LABEL_H
-#define LABEL_H
+#ifndef TITLESTATE_H
+#define TITLESTATE_H
 
-#include <string>
+#include "Engine/State/State.h"
 
-#include "SDL.h"
+class Image;
 
-#include "Component.h"
-
-using namespace std;
-
-class Font;
-
-class Label : public Component
+class TitleState : public State
 {
 public:
-	Label(int x, int y, string fontSrc, string content, int size);
-	Label(int x, int y, string fontSrc, string content, int size, Uint8 r, Uint8 g, Uint8 b);
-	~Label();
+	TitleState(StateManager* manager, int width, int height, int xloc, int yloc);
+	~TitleState();
 
-	Label(const Label& data);
-	Label& operator=(const Label* rhs);
+	TitleState(const TitleState& data);
+	TitleState* operator=(const TitleState* rhs);
 
-	void setText(string txt);
-
+	void update(float time, Uint8* keystrokes);
 	void raiseEvent(SDL_Event* event);
-	void draw(SDL_Surface* screen);
+	void draw();
 
 private:
-	Font* font;
-	SDL_Surface* textImage;
-	string content;
+	Image* bg;
 };
 
 #endif

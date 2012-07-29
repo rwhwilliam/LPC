@@ -18,6 +18,7 @@
 #include "Blacksmith.h"
 
 #include <string>
+#include <math.h>
 
 #include "SDL.h"
 
@@ -25,6 +26,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/Buildings/Castle.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -47,4 +49,17 @@ Blacksmith::Blacksmith(const Blacksmith& data) : Building(NULL, "", 0, 0)
 Blacksmith& Blacksmith::operator=(const Blacksmith* rhs)
 {
 	throw VillageException("Blacksmith Assignment Operator");
+}
+
+void Blacksmith::generate()
+{
+	int ore = state->getCastle()->getOre();
+	ore /= 5;
+
+	ore = min(ore, (int)workers.size());
+
+	state->getCastle()->takeOre(ore * 5);
+	state->getCastle()->addWeapons(ore);
+
+	Logger::debugFormat("Created %i Weapons", ore);
 }

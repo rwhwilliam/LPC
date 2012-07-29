@@ -33,6 +33,7 @@
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Gui/ActionBar.h"
+#include "Villages/Gui/ResourceBar.h"
 #include "Villages/Buildings/Bakery.h"
 #include "Villages/Buildings/Blacksmith.h"
 #include "Villages/Buildings/Building.h"
@@ -71,10 +72,12 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 
 	castle = NULL;
 
-	actionBar = new ActionBar(this, 40, 0, 400, 100, "");
+	actionBar = new ActionBar(this, 40, 698, 400, 100, "");
 	endTurnBtn = new ClickableButton<SimState>(850, 450, 128, 64, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &SimState::startEndTurn);
 
 	roadCreator = NULL;
+
+	bar = new ResourceBar(this);
 
 	XMLDocument doc;
 	if (!doc.LoadFile(path.c_str()))
@@ -168,6 +171,8 @@ SimState::~SimState()
 	if(roadCreator != NULL)
 		delete roadCreator;
 
+	delete bar;
+
 	vector<Building*>::iterator bit;
 	for(bit = buildings.begin(); bit != buildings.end(); ++bit)
 	{
@@ -250,6 +255,8 @@ int SimState::getYOffset()
 void SimState::update(float time, Uint8* keystrokes)
 {
 	map->update(time, keystrokes);
+
+	bar->update(time, keystrokes);
 
 	if(imageHover != NULL)
 		imageHover->update(time, keystrokes);
@@ -673,6 +680,8 @@ void SimState::draw()
 
 	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->draw(frame);
+
+	bar->draw(frame);
 
 	if(endTurnBtn != NULL && mode == S_NORMAL)
 		endTurnBtn->draw(frame);
@@ -1278,6 +1287,8 @@ void SimState::startEndTurn()
 
 	list<Road*> network;
 	getRoadNetwork(network);
+
+	Logger::debug("Generating Resources");
 
 	vector<Building*>::iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)

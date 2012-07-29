@@ -35,9 +35,17 @@ public:
 	GuardStation(const GuardStation& data);
 	GuardStation& operator=(const GuardStation* rhs);
 
+	void draw(int xoffset, int yoffset, SDL_Surface* screen);
+
 	BuildingType getType() { return BT_GUARDSTATION; }
 	int getRating() { return 1; }
-	void generate() { }
+	void generate();
+
+	int inCoverage(Building* bldg);
+
+private:
+	int coverageDiameter;
+	int value;
 };
 
 #endif

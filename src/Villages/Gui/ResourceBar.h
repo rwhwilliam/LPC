@@ -15,38 +15,46 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef LABEL_H
-#define LABEL_H
-
-#include <string>
+#ifndef RESOURCEBAR_H
+#define RESOURCEBAR_H
 
 #include "SDL.h"
 
-#include "Component.h"
+class SimState;
+class Label;
+class Image;
 
-using namespace std;
-
-class Font;
-
-class Label : public Component
+class ResourceBar
 {
 public:
-	Label(int x, int y, string fontSrc, string content, int size);
-	Label(int x, int y, string fontSrc, string content, int size, Uint8 r, Uint8 g, Uint8 b);
-	~Label();
+	ResourceBar(SimState* state);
+	~ResourceBar();
 
-	Label(const Label& data);
-	Label& operator=(const Label* rhs);
+	ResourceBar(const ResourceBar& data);
+	ResourceBar& operator=(const ResourceBar* rhs);
 
-	void setText(string txt);
 
-	void raiseEvent(SDL_Event* event);
+	void update(float time, Uint8* keystrokes);
 	void draw(SDL_Surface* screen);
 
 private:
-	Font* font;
-	SDL_Surface* textImage;
-	string content;
+	SimState* state;
+
+	Image* bg;
+	Image* goldImg;
+	Image* foodImg;
+	Image* woodImg; 
+	Image* oreImg;
+	Image* weaponsImg;
+	Image* wellImg;
+
+	Label* goldLbl;
+	Label* foodLbl;
+	Label* woodLbl;
+	Label* oreLbl;
+	Label* weaponsLbl;
+	Label* wellLbl;
+	
 };
 
 #endif

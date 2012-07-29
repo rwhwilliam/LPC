@@ -140,7 +140,7 @@ string ImageLoader::loadImage(string path, Uint8 r, Uint8 g, Uint8 b, float scal
 
 string ImageLoader::scaleImage(string src, float scale)
 {
-	string base = src.substr(0, src.find_last_of("_"));
+	string base = src.substr(0, src.find_last_of("_")).substr(src.find_last_of("/") + 1, src.length());
 
 	Logger::debugFormat("Scaling image %s", base.c_str());
 

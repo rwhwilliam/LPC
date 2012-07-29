@@ -25,6 +25,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/Buildings/Castle.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -47,4 +48,11 @@ MiningCamp::MiningCamp(const MiningCamp& data) : Building(NULL, "", 0, 0)
 MiningCamp& MiningCamp::operator=(const MiningCamp* rhs)
 {
 	throw VillageException("MiningCamp Assignment Operator");
+}
+
+void MiningCamp::generate()
+{
+	Logger::debugFormat("Mined %i Ore", workers.size() * 2);
+
+	state->getCastle()->addOre(workers.size() * 2);
 }

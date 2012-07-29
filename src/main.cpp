@@ -14,6 +14,7 @@
 #include "Engine/Time/Timer.h"
 
 #include "Villages/States/SimState.h"
+#include "Villages/States/TitleState.h"
 
 using namespace std;
 
@@ -50,9 +51,11 @@ int main(int argc, char* args[])
 
 		stateManager.push(s);
 
-		bool quit = false;
+		TitleState* title = new TitleState(&stateManager, atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
 
-		Logger::debugFormat("logging test");
+		stateManager.push(title);
+
+		bool quit = false;
 
 		Timer t;
 		

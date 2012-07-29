@@ -15,38 +15,51 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef LABEL_H
-#define LABEL_H
-
-#include <string>
+#include "TitleState.h"
 
 #include "SDL.h"
 
-#include "Component.h"
+#include "Engine/Graphics/Image.h"
+#include "Engine/State/State.h"
+#include "Engine/State/StateManager.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
 
-using namespace std;
-
-class Font;
-
-class Label : public Component
+TitleState::TitleState(StateManager* manager, int width, int height, int xloc, int yloc) : State(manager, width, height, xloc, yloc)
 {
-public:
-	Label(int x, int y, string fontSrc, string content, int size);
-	Label(int x, int y, string fontSrc, string content, int size, Uint8 r, Uint8 g, Uint8 b);
-	~Label();
+	Logger::debug("TitleState Constructor");
 
-	Label(const Label& data);
-	Label& operator=(const Label* rhs);
+	bg = new Image("title.png");
+}
 
-	void setText(string txt);
+TitleState::~TitleState()
+{
+	delete bg;
 
-	void raiseEvent(SDL_Event* event);
-	void draw(SDL_Surface* screen);
+	Logger::debug("TitleState Destructor");
+}
 
-private:
-	Font* font;
-	SDL_Surface* textImage;
-	string content;
-};
+TitleState::TitleState(const TitleState& data) : State(NULL, 0, 0, 0, 0)
+{
+	throw VillageException("TitleState Copy Constructor");
+}
 
-#endif
+TitleState* TitleState::operator=(const TitleState* rhs)
+{
+	throw VillageException("TitleState Assignment Operator");
+}
+
+void TitleState::update(float time, Uint8* keystrokes)
+{
+
+}
+
+void TitleState::raiseEvent(SDL_Event* event)
+{
+	
+}
+
+void TitleState::draw()
+{
+	bg->draw(0, 0, frame);
+}

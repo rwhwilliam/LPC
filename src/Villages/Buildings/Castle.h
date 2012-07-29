@@ -54,6 +54,12 @@ public:
 	int takeOre(int val);
 	int takeWeapons(int val);
 
+	void addGold(int val) { gold += val; }
+	void addFood(int val) { food += val; }
+	void addWood(int val) { wood += val; }
+	void addOre(int val) { ore += val; }
+	void addWeapons(int val) { weapons += val; }
+
 private:
 	int gold, food, wood, ore, weapons;
 	int tax;

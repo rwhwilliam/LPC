@@ -35,7 +35,7 @@ MapTile::MapTile(SimState* state, string src, int xloc, int yloc) : xloc(xloc), 
 
 	MapTile::state = state;
 
-	img = new Image(src, 255, 0, 255);
+	img = new Image(src, (Uint8)255, 0, 255, state->getZoomLevel());
 }
 
 MapTile::~MapTile()

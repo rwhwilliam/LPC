@@ -177,12 +177,10 @@ void Building::generate(list<Road*>& network)
 {
 	if(inNetwork(network))
 	{
-		Logger::debug("IN NETWORK!");
-
 		generate();
 	}
 	else
 	{
-		Logger::debug("NOT IN NETWORK!");
+		Logger::debugFormat("Building at (%i, %i) can not produce because it is not attached to the castle via a road!", xloc, yloc);
 	}
 }

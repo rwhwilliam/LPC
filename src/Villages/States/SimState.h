@@ -45,6 +45,7 @@ class RoadFactory;
 class Road;
 class StateManager;
 class Villager;
+class ResourceBar;
 
 class SimState : public State
 {
@@ -135,6 +136,8 @@ private:
 
 	ActionBar* actionBar;
 	ClickableButton<SimState>* endTurnBtn;
+
+	ResourceBar* bar;
 };
 
 #endif
