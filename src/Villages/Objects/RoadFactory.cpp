@@ -37,6 +37,7 @@ RoadFactory::RoadFactory(SimState* state, int startX, int startY) : startX(start
 	RoadFactory::state = state;
 
 	preImg = new Image("road-horizontal.png", 128, (Uint8)255, 0, 255, state->getZoomLevel());
+	bad = new Image("road-badicon.png", 154, (Uint8)255, 0, 255, state->getZoomLevel());
 
 	coords.clear();
 	coords.push_back(pair<int, int>(startX, startY));
@@ -44,6 +45,9 @@ RoadFactory::RoadFactory(SimState* state, int startX, int startY) : startX(start
 
 RoadFactory::~RoadFactory()
 {
+	delete preImg;
+	delete bad;
+
 	Logger::debug("RoadFactory Destructor");
 }
 
@@ -60,6 +64,7 @@ RoadFactory& RoadFactory::operator=(const RoadFactory* rhs)
 void RoadFactory::resize()
 {
 	preImg->setScale(state->getZoomLevel());
+	bad->setScale(state->getZoomLevel());
 }
 
 void RoadFactory::raiseEvent(SDL_Event* event)
@@ -123,6 +128,9 @@ void RoadFactory::draw(int xoffset, int yoffset, SDL_Surface* screen)
 	for(it = coords.begin(); it < coords.end(); ++it)
 	{
 		preImg->draw(it->first * state->getTileWidth() - xoffset, it->second * state->getTileHeight() - yoffset, screen);
+
+		if(state->canBuild(it->first * state->getTileWidth() - xoffset, it->second * state->getTileHeight() - yoffset, preImg->getWidth(), preImg->getHeight()) == E_BAD)
+			bad->draw(it->first * state->getTileWidth() - xoffset, it->second * state->getTileHeight() - yoffset, screen);
 	}
 }
 

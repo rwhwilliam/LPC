@@ -17,6 +17,9 @@
 
 #include "Hover.h"
 
+#include <algorithm>
+#include <list>
+
 #include "SDL.h"
 #include "SDL_gfxPrimitives.h"
 
@@ -38,6 +41,7 @@ Hover::Hover(SimState* state, int x, int y, int width, int height, int targetX, 
 	target.h = targetHeight;
 
 	active = false;
+	scrolling = false;
 
 	timer = new Timer();
 
@@ -49,7 +53,7 @@ Hover::~Hover()
 	delete timer;
 	delete font;
 
-	vector<SDL_Surface*>::iterator it;
+	list<SDL_Surface*>::iterator it;
 	for(it = lines.begin(); it != lines.end(); ++it)
 		SDL_FreeSurface(*it);
 
@@ -88,8 +92,10 @@ void Hover::raiseEvent(SDL_Event* event)
 
 		if((x >= target.x * state->getZoomLevel() - state->getXOffset()) && (x <= (target.x + target.w) * state->getZoomLevel() - state->getXOffset()) && (y >= target.y * state->getZoomLevel() - state->getYOffset()) && (y <= (target.y + target.h) * state->getZoomLevel() - state->getYOffset()))
 		{
+			if(!active)
+				timer->start();
+
 			active = true;
-			timer->start();
 		}
 		else
 		{
@@ -101,12 +107,26 @@ void Hover::raiseEvent(SDL_Event* event)
 
 void Hover::draw(int xoffset, int yoffset, SDL_Surface* screen)
 {
-	if(active && timer->get_ticks() >= 500)
+	if(active && timer->get_ticks() >= 250)
 	{
-		boxRGBA(screen, xloc * state->getZoomLevel() - xoffset, yloc * state->getZoomLevel() - yoffset, xloc * state->getZoomLevel() + width - xoffset, yloc * state->getZoomLevel() + height - yoffset, 225, 206, 46, 25);
+		int line = 0;
 
-		vector<SDL_Surface*>::const_iterator it;
-		for(it != lines.begin(); it != lines.end(); ++it)
-			font->draw(10 + xloc * state->getZoomLevel() - xoffset, 10 + yloc * state->getZoomLevel() - yoffset, *it, screen);
+		if(scrolling)
+		{
+			boxRGBA(screen, xloc * state->getZoomLevel() - xoffset, yloc * state->getZoomLevel() - yoffset, xloc * state->getZoomLevel() + width - xoffset, yloc * state->getZoomLevel() + height - yoffset, 225, 206, 46, 55);
+
+			list<SDL_Surface*>::const_iterator it;
+			for(it = lines.begin(); it != lines.end(); ++it)
+				font->draw(10 + xloc * state->getZoomLevel() - xoffset, 10 + yloc * state->getZoomLevel() - yoffset + (line++ * 20), *it, screen);
+		}
+		else
+		{
+			boxRGBA(screen, xloc, yloc, xloc + width, yloc + height, 225, 206, 46, 55);
+
+			list<SDL_Surface*>::const_iterator it;
+			for(it = lines.begin(); it != lines.end(); ++it)
+				font->draw(10 + xloc, 10 + yloc + (line++ * 20), *it, screen);
+		}
 	}
 }
+

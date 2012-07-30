@@ -54,6 +54,7 @@ private:
 	int finishX, finishY;
 	vector<pair<int, int> > coords;
 	Image* preImg;
+	Image* bad;
 };
 
 #endif

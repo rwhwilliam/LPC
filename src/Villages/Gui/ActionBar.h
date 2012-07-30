@@ -28,6 +28,7 @@
 using namespace std;
 
 class SimState;
+class Hover;
 
 class ActionBar : public UI
 {
@@ -37,6 +38,9 @@ public:
 
 	ActionBar(const ActionBar& data);
 	ActionBar& operator=(const ActionBar* rhs);
+
+	void raiseEvent(SDL_Event* event);
+	void draw(SDL_Surface* screen);
 
 private:
 	void placeHouse();
@@ -55,6 +59,7 @@ private:
 	void placeRoad();
 	void zoomIn();
 	void zoomOut();
+	void deleteStuff();
 
 	SimState* state;
 	ClickableButton<ActionBar>* buildHouse;
@@ -73,6 +78,9 @@ private:
 	ClickableButton<ActionBar>* buildRoad;
 	ClickableButton<ActionBar>* in;
 	ClickableButton<ActionBar>* out;
+	ClickableButton<ActionBar>* del;
+
+	Hover* hoverHouse;
 };
 
 #endif

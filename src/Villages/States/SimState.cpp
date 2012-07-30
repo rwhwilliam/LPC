@@ -73,7 +73,7 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 
 	castle = NULL;
 
-	actionBar = new ActionBar(this, 40, 698, 400, 100, "");
+	actionBar = new ActionBar(this, 40, 398, 400, 100, "");
 	endTurnBtn = new ClickableButton<SimState>(850, 450, 128, 64, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &SimState::startEndTurn);
 
 	roadCreator = NULL;
@@ -285,6 +285,9 @@ void SimState::update(float time, Uint8* keystrokes)
 
 			mode = S_NORMAL;
 		}
+
+		if(mode = S_DELETE)
+			mode = S_NORMAL;
 	}
 }
 
@@ -627,8 +630,58 @@ void SimState::raiseEvent(SDL_Event* event)
 
 				roadCreator->createRoad();
 
+				std::map<string, Road*>::iterator ittr;
+					for(ittr = roads.begin(); ittr != roads.end(); ++ittr)
+						ittr->second->calculateMode();
+
 				delete roadCreator;
 				roadCreator = NULL;
+			}
+
+			break;
+		}
+
+		case S_DELETE:
+		{
+			vector<Building*>::const_iterator it;
+			for(it = buildings.begin(); it != buildings.end(); ++it)
+			{
+				if((*it)->collides(event->motion.x, event->motion.y, 1, 1))
+				{
+					list<Villager*>::iterator ittr;
+					for(ittr = villagers.begin(); ittr != villagers.end(); ++ittr)
+					{
+						if((*ittr)->getHouse() == *it || (*ittr)->getJob() == *it)
+						{
+							Logger::debug("Citizen Leaving");
+
+							villagers.remove(*ittr);
+						}
+					}
+
+					Logger::debug("Demolishing Building");
+
+					buildings.erase(it);
+					break;
+				}
+			}
+
+			
+			std::map<string, Road*>::iterator itt;
+			for(itt = roads.begin(); itt != roads.end(); ++itt)
+			{
+				if(itt->second->collides(event->motion.x, event->motion.y, 1, 1))
+				{
+					roads.erase(itt);
+
+					Logger::debug("Demolishing Road");
+
+					std::map<string, Road*>::iterator ittr;
+					for(ittr = roads.begin(); ittr != roads.end(); ++ittr)
+						ittr->second->calculateMode();
+
+					break;
+				}
 			}
 
 			break;
@@ -867,7 +920,7 @@ void SimState::placeRoad()
 		if(imageHover != NULL)
 			delete imageHover;
 
-		imageHover = new MouseImage(this, "road-horizontal.png", "road-horizontal.png", 128);
+		imageHover = new MouseImage(this, "road-horizontal.png", "road-bad.png", 128);
 	}
 }
 
@@ -882,11 +935,23 @@ void SimState::zoomIn()
 
 void SimState::zoomOut()
 {
-	zoomLevel = (zoomLevel / 2.0 > .125) ? zoomLevel / 2.0 : .125;
+	zoomLevel = (zoomLevel / 2.0 > .25) ? zoomLevel / 2.0 : .25;
 
 	changeZoom();
 
 	Logger::debugFormat("Zooming In to %f", zoomLevel);
+}
+
+void SimState::deleteStuff()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_DELETE;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+	}
 }
 
 void SimState::changeZoom()

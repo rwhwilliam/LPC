@@ -89,7 +89,7 @@ string ImageLoader::loadImage(string path, float scale)
 
 				if(scale != 1)
 				{
-					SDL_Surface* scaledImage = zoomSurface (optimizedImage, scale, scale, 1);
+					SDL_Surface* scaledImage = zoomSurface (optimizedImage, scale, scale, 0);
 
 					SDL_FreeSurface(optimizedImage);
 
@@ -150,7 +150,7 @@ string ImageLoader::scaleImage(string src, float scale)
 	if(ImageLoader::getImage(base + "_" + toString(1)) != NULL)
 		images[base + "_" + toString(scale)] = zoomSurface(ImageLoader::getImage(base + "_" + toString(1)), scale, scale, 1);
 	else
-		return ImageLoader::loadImage(base, scale);
+		return ImageLoader::loadImage(base, 255, 0, 255, scale);
 
 	return base + "_" + toString(scale);
 }

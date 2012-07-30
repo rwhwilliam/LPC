@@ -83,7 +83,7 @@ void IncrementBox::decrement()
 
 void IncrementBox::raiseEvent(SDL_Event* event)
 {
-	box->raiseEvent(event);
+	//box->raiseEvent(event);
 	up->raiseEvent(event);
 	down->raiseEvent(event);
 }

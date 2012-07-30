@@ -25,6 +25,7 @@
 #include "Engine/Gui/UI.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/Gui/Hover.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -36,8 +37,10 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	ActionBar::state = state;
 
 	buildHouse = new ClickableButton<ActionBar>(x + 10, y + 10, 50, 50, "house-button-normal.png", "house-button-hover.png", "house-button-pressed.png", this, &ActionBar::placeHouse); 
-
 	addComponent("buildHouse", buildHouse);
+	hoverHouse = new Hover(state, x + 10, y - 110, 200, 100, x + 10, y + 10, 50, 50);
+	hoverHouse->addLine("Houses Hold People");
+	hoverHouse->addLine("test");
 
 	buildFarm = new ClickableButton<ActionBar>(x + 74, y + 10, 64, 64, "farm-button-normal.png", "farm-button-hover.png", "farm-button-pressed.png", this, &ActionBar::placeFarm);
 
@@ -71,7 +74,7 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 
 	addComponent("buildJeweler", buildJeweler);*/
 
-	buildBlacksmith = new ClickableButton<ActionBar>(x + 586, y + 10, 64, 64, "blacksmith-button-normal.png", "blacksmith-button-hover.png", "blacksmith-button-pressed.png", this, &ActionBar::placeBlacksmith);
+	buildBlacksmith = new ClickableButton<ActionBar>(x + 330, y + 10, 64, 64, "blacksmith-button-normal.png", "blacksmith-button-hover.png", "blacksmith-button-pressed.png", this, &ActionBar::placeBlacksmith);
 
 	addComponent("buildBlacksmith", buildBlacksmith);
 
@@ -79,7 +82,7 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 
 	addComponent("buildBakery", buildBakery);*/
 
-	buildGuardStation = new ClickableButton<ActionBar>(x + 714, y + 10, 64, 64, "guardstation-button-normal.png", "guardstation-button-hover.png", "guardstation-button-pressed.png", this, &ActionBar::placeGuardStation);
+	buildGuardStation = new ClickableButton<ActionBar>(x + 394, y + 10, 64, 64, "guardstation-button-normal.png", "guardstation-button-hover.png", "guardstation-button-pressed.png", this, &ActionBar::placeGuardStation);
 
 	addComponent("buildGuardStation", buildGuardStation);
 
@@ -87,17 +90,21 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 
 	addComponent("buildMarket", buildMarket);*/
 
-	buildRoad = new ClickableButton<ActionBar>(x + 842, y + 10, 64, 64, "road-button-normal.png", "road-button-hover.png", "road-button-pressed.png", this, &ActionBar::placeRoad);
+	buildRoad = new ClickableButton<ActionBar>(x + 458, y + 10, 64, 64, "road-button-normal.png", "road-button-hover.png", "road-button-pressed.png", this, &ActionBar::placeRoad);
 
 	addComponent("buildRoad", buildRoad);
 
-	in = new ClickableButton<ActionBar>(x + 906, y + 10, 32, 32, "zoomin-button-normal.png", "zoomin-button-hover.png", "zoomin-button-pressed.png", this, &ActionBar::zoomIn);
+	in = new ClickableButton<ActionBar>(x + 522, y + 10, 32, 32, "zoomin-button-normal.png", "zoomin-button-hover.png", "zoomin-button-pressed.png", this, &ActionBar::zoomIn);
 
 	addComponent("zoomIn", in);
 
-	out = new ClickableButton<ActionBar>(x + 906, y + 42, 32, 32, "zoomout-button-normal.png", "zoomout-button-hover.png", "zoomout-button-pressed.png", this, &ActionBar::zoomOut);
+	out = new ClickableButton<ActionBar>(x + 522, y + 42, 32, 32, "zoomout-button-normal.png", "zoomout-button-hover.png", "zoomout-button-pressed.png", this, &ActionBar::zoomOut);
 
 	addComponent("zoomOut", out);
+
+	del = new ClickableButton<ActionBar>(x + 554, y + 10, 64, 64, "delete-button-normal.png", "delete-button-hover.png", "delete-button-pressed.png", this, &ActionBar::deleteStuff);
+
+	addComponent("delete", del);
 }
 
 ActionBar::~ActionBar()
@@ -130,6 +137,20 @@ ActionBar::ActionBar(const ActionBar& data) : UI(0, 0, 0, 0, "")
 ActionBar& ActionBar::operator=(const ActionBar* rhs)
 {
 	throw VillageException("ActionBar Assignment Operator");
+}
+
+void ActionBar::raiseEvent(SDL_Event* event)
+{
+	UI::raiseEvent(event);
+
+	hoverHouse->raiseEvent(event);
+}
+
+void ActionBar::draw(SDL_Surface* screen)
+{
+	UI::draw(screen);
+
+	hoverHouse->draw(0, 0, screen);
 }
 
 void ActionBar::placeHouse()
@@ -210,4 +231,9 @@ void ActionBar::zoomIn()
 void ActionBar::zoomOut()
 {
 	state->zoomOut();
+}
+
+void ActionBar::deleteStuff()
+{
+	state->deleteStuff();
 }

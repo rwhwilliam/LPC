@@ -19,7 +19,7 @@
 #define HOVER_H
 
 #include <string>
-#include <vector>
+#include <list>
 
 #include "SDL.h"
 
@@ -45,7 +45,7 @@ public:
 	void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
 private:
-	vector<SDL_Surface*> lines;
+	list<SDL_Surface*> lines;
 	int xloc, yloc;
 	int width, height;
 	SDL_Rect target;
