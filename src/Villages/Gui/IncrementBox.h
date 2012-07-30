@@ -30,6 +30,7 @@ class IncrementBox : public Component
 {
 public:
 	IncrementBox(int x, int y, int width, int height, int min, int max);
+	IncrementBox(int x, int y, int width, int height, int min, int max, int val);
 	~IncrementBox();
 
 	IncrementBox(const IncrementBox& data);
@@ -39,6 +40,7 @@ public:
 	void decrement();
 
 	int getValue() { return current; }
+	void setValue(int val) { current = val; }
 
 	void raiseEvent(SDL_Event* event);
 	void draw(SDL_Surface* screen);

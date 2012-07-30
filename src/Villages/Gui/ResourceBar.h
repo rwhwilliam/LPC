@@ -23,6 +23,7 @@
 class SimState;
 class Label;
 class Image;
+class IncrementBox;
 
 class ResourceBar
 {
@@ -35,12 +36,15 @@ public:
 
 
 	void update(float time, Uint8* keystrokes);
+	void raiseEvent(SDL_Event* event);
 	void draw(SDL_Surface* screen);
 
 private:
 	SimState* state;
 
 	Image* bg;
+	Image* bg2;
+
 	Image* goldImg;
 	Image* foodImg;
 	Image* woodImg; 
@@ -55,6 +59,16 @@ private:
 	Label* weaponsLbl;
 	Label* wellLbl;
 	
+	Label* taxLbl;
+	IncrementBox* box;
+
+	Label* popLbl;
+	Label* pop;
+
+	Label* newPop;
+
+	Label* turnLbl;
+	Label* turn;
 };
 
 #endif

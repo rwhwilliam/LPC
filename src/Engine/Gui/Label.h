@@ -31,8 +31,8 @@ class Font;
 class Label : public Component
 {
 public:
-	Label(int x, int y, string fontSrc, string content, int size);
-	Label(int x, int y, string fontSrc, string content, int size, Uint8 r, Uint8 g, Uint8 b);
+	Label(int x, int y, char* fontSrc, const char* content, int size);
+	Label(int x, int y, char* fontSrc, const char* content, int size, Uint8 r, Uint8 g, Uint8 b);
 	~Label();
 
 	Label(const Label& data);

@@ -66,9 +66,10 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 {
 	zoomLevel = 1;
 	turn = 1;
+	newPop = 0;
 
 	mode = S_PLACECASTLE;
-	imageHover = new MouseImage(this, "castle.png", "castle.png", 128);
+	imageHover = new MouseImage(this, "castle.png", "castle-bad.png", 128);
 
 	castle = NULL;
 
@@ -290,6 +291,7 @@ void SimState::update(float time, Uint8* keystrokes)
 void SimState::raiseEvent(SDL_Event* event)
 {
 	map->raiseEvent(event);
+	bar->raiseEvent(event);
 
 	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->raiseEvent(event);
@@ -1079,7 +1081,7 @@ int SimState::getSpareWater()
 void SimState::findHouse(Villager* person)
 {
 	House* temp = NULL;
-	int val = 0;
+	int val = - 1000;
 	
 	vector<Building*>::const_iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)
@@ -1100,7 +1102,7 @@ void SimState::findHouse(Villager* person)
 void SimState::findFarm(Villager* person)
 {
 	Farm* temp = NULL;
-	int val = 0;
+	int val = -1000;
 	
 	vector<Building*>::const_iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)
@@ -1121,7 +1123,7 @@ void SimState::findFarm(Villager* person)
 void SimState::findMill(Villager* person)
 {
 	Mill* temp = NULL;
-	int val = 0;
+	int val = -1000;
 	
 	vector<Building*>::const_iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)
@@ -1142,7 +1144,7 @@ void SimState::findMill(Villager* person)
 void SimState::findMine(Villager* person)
 {
 	MiningCamp* temp = NULL;
-	int val = 0;
+	int val = -1000;
 	
 	vector<Building*>::const_iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)
@@ -1163,7 +1165,7 @@ void SimState::findMine(Villager* person)
 void SimState::findBlacksmith(Villager* person)
 {
 	Blacksmith* temp = NULL;
-	int val = 0;
+	int val = -1000;
 	
 	vector<Building*>::const_iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)
@@ -1305,11 +1307,27 @@ void SimState::startEndTurn()
 		if((*it)->getType() != BT_GUARDSTATION)
 			(*it)->updateCoverage(guards);
 
+	Logger::debug("Collecting Taxes");
+
+	int unCovered = 0;
+	for(it = buildings.begin(); it != buildings.end(); ++it)
+		if((*it)->getType() != BT_GUARDSTATION)
+			if(!(*it)->isGuardCovered())
+				unCovered++;
+
+	Logger::debugFormat("%i Buildings Uncovered", unCovered);
+
+	int taxes = 50 + (int)(villagers.size() * 100 * castle->getTaxRate() / 100.0) - 5 * unCovered;
+
+	Logger::debugFormat("%i Taxes Collected", taxes);
+
+	castle->addGold(taxes);
+
 	int left = letPeopleLeave();
 
 	Logger::debugFormat("%i People Left", left);
 
-	int newPop = getNewPopCount();
+	newPop = getNewPopCount();
 
 	Logger::debugFormat("%i People Joined", newPop);
 
@@ -1324,6 +1342,8 @@ void SimState::startEndTurn()
 		//skip the assigning of people
 		finishEndTurn();
 	}
+
+	newPop -= left;
 }
 
 void SimState::assignEndTurn(int pop, int farm, int mill, int mine, int blacksmith)

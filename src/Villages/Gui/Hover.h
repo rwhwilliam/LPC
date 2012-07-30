@@ -15,79 +15,45 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef BUILDING_H
-#define BUILDING_H
+#ifndef HOVER_H
+#define HOVER_H
 
 #include <string>
-#include <list>
+#include <vector>
 
 #include "SDL.h"
 
-#include "Engine/Graphics/Image.h"
-
 using namespace std;
 
-class MouseImage;
-class MapTile;
+class Timer;
 class SimState;
-class Villager;
-class Road;
-class GuardStation;
+class Font;
 
-enum BuildingType { BT_BAKERY, BT_BLACKSMITH, BT_CASTLE, BT_FARM, BT_GUARDSTATION, BT_HOUSE, BT_JEWELER, BT_MARKET, BT_MILL, BT_MININGCAMP, BT_TAVERN, BT_THEATRE, BT_WEAVER, BT_WELL };
-
-class Building
+class Hover
 {
 public:
-	Building(SimState* state, string src, int xloc, int yloc);
-	~Building();
+	Hover(SimState* state, int x, int y, int width, int height, int targetX, int targetY, int targetWidth, int targetHeight);
+	~Hover();
 
-	Building(const Building& data);
-	Building& operator=(const Building* rhs);
+	Hover(const Hover& data);
+	Hover& operator=(const Hover* rhs);
 
-	int getX() { return xloc; }
-	int getY() { return yloc; }
-	int getMapX();
-	int getMapY();
-	int getWidth() { return img->getWidth(); }
-	int getHeight() { return img->getHeight(); }
+	void addLine(string line);
+	void setScrolling(bool scrolling) { Hover::scrolling = scrolling; }
 
-	bool collides(int x, int y, int width, int height);
+	void raiseEvent(SDL_Event* event);
+	void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
-	void resize();
-
-	virtual void update(float time, Uint8* keystrokes);
-	virtual void raiseEvent(SDL_Event* event);
-	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
-	virtual BuildingType getType() = 0;
-	virtual int getRating() = 0;
-
-	int getCapacity() { return capacity; }
-	int getWorkerCount() { return workers.size(); }
-	int getRoom() { return capacity - workers.size(); }
-	int getCoverate() { return coverage; }
-
-	bool hasRoom() { return (getWorkerCount() < capacity); }
-	void addWorker(Villager* person);
-	void removeWorker(Villager* person);
-
-	void getSurroundingRoads(list<Road*>& temp);
-	bool inNetwork(list<Road*>& network);
-	void updateCoverage(list<GuardStation*>& guards);
-	void generate(list<Road*>& network);
-	bool isGuardCovered() { return (coverage > 0); }
-
-protected:
-	virtual void generate() = 0;
-
-	Image* img;
+private:
+	vector<SDL_Surface*> lines;
 	int xloc, yloc;
+	int width, height;
+	SDL_Rect target;
+	Timer* timer;
+	bool active;
+	bool scrolling;
 	SimState* state;
-
-	int capacity;
-	list<Villager*> workers;
-	int coverage;
-	bool roadConnected;
+	Font* font;
 };
 
 #endif

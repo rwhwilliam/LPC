@@ -39,6 +39,17 @@ IncrementBox::IncrementBox(int x, int y, int width, int height, int min, int max
 	box->setContent(toString(current));
 }
 
+IncrementBox::IncrementBox(int x, int y, int width, int height, int min, int max, int val) : Component(x, y, width, height), min(min), max(max)
+{
+	box = new Textbox(x, y, 100, 32, "textbox-small.png", "lazy.ttf", 22);
+	up = new ClickableButton<IncrementBox>(x + 96, y, 32, 16, "arrow-up.png", "arrow-up.png", "arrow-up.png", this, &IncrementBox::increment);
+	down = new ClickableButton<IncrementBox>(x + 96, y + 16, 32, 16, "arrow-down.png", "arrow-down.png", "arrow-down.png", this, &IncrementBox::decrement);
+
+	current = val;
+
+	box->setContent(toString(current));
+}
+
 IncrementBox::~IncrementBox()
 {
 	delete up;

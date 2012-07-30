@@ -46,6 +46,7 @@ Building::Building(SimState* state, string src, int xloc, int yloc) : xloc(xloc)
 
 	capacity = 0;
 	roadConnected = false;
+	coverage = 0;
 }
 
 Building::~Building()

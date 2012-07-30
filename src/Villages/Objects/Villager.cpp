@@ -70,7 +70,7 @@ void Villager::setResidence(House* residence)
 
 bool Villager::wantsToLeave()
 {
-	int random = rand() % 900 + 1;
+	int random = rand() % 5000 + 1;
 
 	if(random <= pow(simstate->getCastle()->getTaxRate(), 2.0))
 		return true;
@@ -88,6 +88,15 @@ bool Villager::wantsToLeave()
 		random = rand() % 100 + 1;
 		
 		if(random <= 1)
+			return true;
+	}
+
+	int coverage = residence->getCoverate();
+	if(coverage < 75)
+	{
+		random = rand() % 75 + 1;
+
+		if(random > coverage)
 			return true;
 	}
 

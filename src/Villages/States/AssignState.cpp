@@ -37,18 +37,23 @@ AssignState::AssignState(StateManager* manager, SimState* simstate, int pop, int
 	ui = new UI(xloc, yloc, width, height, "assign-ui.png", 255, 0, 255);
 
 	ui->addComponent("headerLbl", new Label(240, 220, "lazy.ttf", "People Moved to your Village!", 32, 0, 0, 0));
-	ui->addComponent("infoLbl", new Label(280, 265, "lazy.ttf", "Please Assign all " + toString(pop) + " of them to a Job", 22, 0, 0, 0));
+	string s = "Please Assign all " + toString(pop) + " of them to a Job";
+	ui->addComponent("infoLbl", new Label(280, 265, "lazy.ttf", s.c_str(), 22, 0, 0, 0));
 
-	ui->addComponent("lblFarm", new Label(40, 315, "lazy.ttf", "Farm (" + toString(simstate->getFarmRoom()) + " Spots)", 22, 0, 0, 0));
+	s = "Farm (" + toString(simstate->getFarmRoom()) + " Spots)";
+	ui->addComponent("lblFarm", new Label(40, 315, "lazy.ttf", s.c_str(), 22, 0, 0, 0));
 	ui->addComponent("txtFarm", new IncrementBox(280, 310, 128, 32, 0, min(pop, simstate->getFarmRoom())));
 
-	ui->addComponent("lblMill", new Label(40, 380, "lazy.ttf", "Mill (" + toString(simstate->getMillRoom()) + " Spots)", 22, 0, 0, 0));
+	s = "Mill (" + toString(simstate->getMillRoom()) + " Spots)";
+	ui->addComponent("lblMill", new Label(40, 380, "lazy.ttf", s.c_str(), 22, 0, 0, 0));
 	ui->addComponent("txtMill", new IncrementBox(280, 375, 128, 32, 0, min(pop, simstate->getMillRoom())));
 
-	ui->addComponent("lblMine", new Label(500, 315, "lazy.ttf", "Mine (" + toString(simstate->getMineRoom()) + " Spots)", 22, 0, 0, 0));
+	s = "Mine (" + toString(simstate->getMineRoom()) + " Spots)";
+	ui->addComponent("lblMine", new Label(500, 315, "lazy.ttf", s.c_str(), 22, 0, 0, 0));
 	ui->addComponent("txtMine", new IncrementBox(740, 310, 128, 32, 0, min(pop, simstate->getMineRoom())));
 
-	ui->addComponent("lblBlacksmith", new Label(500, 380, "lazy.ttf", "Blacksmith (" + toString(simstate->getBlacksmithRoom()) + " Spots)", 22, 0, 0, 0));
+	s = "Blacksmith (" + toString(simstate->getBlacksmithRoom()) + " Spots)";
+	ui->addComponent("lblBlacksmith", new Label(500, 380, "lazy.ttf", s.c_str(), 22, 0, 0, 0));
 	ui->addComponent("txtBlacksmith", new IncrementBox(740, 375, 128, 32, 0, min(pop, simstate->getBlacksmithRoom())));
 	
 	ui->addComponent("btnAssign", new ClickableButton<AssignState>(400, 450, 64, 32, "assign-normal.png", "assign-hover.png", "assign-pressed.png", this, &AssignState::assign));

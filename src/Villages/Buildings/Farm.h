@@ -38,7 +38,7 @@ public:
 	Farm& operator=(const Farm* rhs);
 
 	BuildingType getType() { return BT_FARM; }
-	int getRating() { return 1; }
+	int getRating() { return coverage; }
 	void generate();
 };
 

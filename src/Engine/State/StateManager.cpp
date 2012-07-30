@@ -117,7 +117,7 @@ void StateManager::raiseEvent(SDL_Event* event)
 
 		(*ittr)->raiseEvent(event);
 
-		if(!(*ittr)->getRaiseBehind())
+		//if(!(*ittr)->getRaiseBehind())
 			break;
 	}
 	while(ittr != states.begin());

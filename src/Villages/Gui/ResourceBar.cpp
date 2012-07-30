@@ -26,6 +26,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/Gui/IncrementBox.h"
 #include "Villages/States/SimState.h"
 #include "Villages/Buildings/Castle.h"
 
@@ -38,6 +39,7 @@ ResourceBar::ResourceBar(SimState* state)
 	ResourceBar::state = state;
 
 	bg = new Image("resource-ui.png", 255, 0, 255);
+	bg2 = new Image("resource-ui2.png", 255, 0, 255);
 
 	goldImg = new Image("icon-gold.png", 255, 0, 255);
 	foodImg = new Image("icon-food.png", 255, 0, 255);
@@ -52,11 +54,24 @@ ResourceBar::ResourceBar(SimState* state)
 	oreLbl = new Label(580, 12, "lazy.ttf", "", 30);
 	weaponsLbl = new Label(730, 12, "lazy.ttf", "", 30);
 	wellLbl = new Label(880, 12, "lazy.ttf", "", 30);
+
+	taxLbl = new Label(600, 62, "lazy.ttf", "Tax %:", 22);
+
+	box = new IncrementBox(670, 55, 120, 32, 0, 100, 5);
+
+	popLbl = new Label(230, 62, "lazy.ttf", "Pop:", 22);
+	pop = new Label(280, 62, "lazy.ttf", "", 22);
+
+	newPop = new Label(380, 62, "lazy.ttf", "+0", 22);
+
+	turnLbl = new Label(500, 62, "lazy.ttf", "Turn:", 22);
+	turn = new Label(550, 62, "lazy.ttf", "", 22);
 }
 
 ResourceBar::~ResourceBar()
 {
 	delete bg;
+	delete bg2;
 
 	delete goldImg;
 	delete foodImg;
@@ -71,6 +86,17 @@ ResourceBar::~ResourceBar()
 	delete oreLbl;
 	delete weaponsLbl;
 	delete wellLbl;
+
+	delete taxLbl;
+
+	delete box;
+
+	delete popLbl;
+	delete pop;
+
+	delete newPop;
+	
+	delete turn;
 
 	Logger::debug("ResourceBar Destructor");
 }
@@ -95,12 +121,28 @@ void ResourceBar::update(float time, Uint8* keystrokes)
 		oreLbl->setText(toString(state->getCastle()->getOre()));
 		weaponsLbl->setText(toString(state->getCastle()->getWeapons()));
 		wellLbl->setText(toString(state->getSpareWater()));
+
+		state->getCastle()->setTaxRate(box->getValue());
+		pop->setText(toString(state->getPop()));
+
+		if(state->getNewPop() >= 0)
+			newPop->setText("+" + toString(state->getNewPop()));
+		else
+			newPop->setText("-" + toString(abs(state->getNewPop())));
+
+		turn->setText(toString(state->getTurn()));
 	}
+}
+
+void ResourceBar::raiseEvent(SDL_Event* event)
+{
+	box->raiseEvent(event);
 }
 
 void ResourceBar::draw(SDL_Surface* screen)
 {
 	bg->draw(62, 0, screen);
+	bg2->draw(212, 50, screen);
 
 	goldImg->draw(80, 5, screen);
 	goldLbl->draw(screen);
@@ -119,4 +161,15 @@ void ResourceBar::draw(SDL_Surface* screen)
 
 	wellImg->draw(830, 5, screen);
 	wellLbl->draw(screen);
+
+	taxLbl->draw(screen);
+	box->draw(screen);
+
+	popLbl->draw(screen);
+	pop->draw(screen);
+
+	newPop->draw(screen);
+
+	turnLbl->draw(screen);
+	turn->draw(screen);
 }

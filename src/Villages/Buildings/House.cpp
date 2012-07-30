@@ -70,7 +70,8 @@ int House::getRating()
 		}
 	}
 
-	rating += minAvg / count;
+	if(count > 0)
+		rating += minAvg / count;
 
 	rating += 150 - (int)sqrt(pow(xloc - state->getCastle()->getX(), 2.0) + pow(yloc - state->getCastle()->getY(), 2.0));
 

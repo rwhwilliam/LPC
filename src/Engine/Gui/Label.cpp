@@ -27,26 +27,26 @@
 
 using namespace std;
 
-Label::Label(int x, int y, string fontSrc, string content, int size) : Component(x, y, 0, 0)
+Label::Label(int x, int y, char* fontSrc, const char* content, int size) : Component(x, y, 0, 0)
 {
-	Logger::debugFormat("Label created with content: %s", content.c_str());
+	Logger::debugFormat("Label created with content: %s", content);
 
-	font = new Font(fontSrc, size, 255, 255, 255);
+	font = new Font(string(fontSrc), size, 255, 255, 255);
 
 	textImage = font->getSurface(content);
 
-	Label::content = content;
+	Label::content = string(content);
 }
 
-Label::Label(int x, int y, string fontSrc, string content, int size, Uint8 r, Uint8 g, Uint8 b) : Component(x, y, 0, 0)
+Label::Label(int x, int y, char* fontSrc, const char* content, int size, Uint8 r, Uint8 g, Uint8 b) : Component(x, y, 0, 0)
 {
-	Logger::debugFormat("Label created with content: %s", content.c_str());
+	Logger::debugFormat("Label created with content: %s", content);
 
-	font = new Font(fontSrc, size, r, g, b);
+	font = new Font(string(fontSrc), size, r, g, b);
 
 	textImage = font->getSurface(content);
 
-	Label::content = content;
+	Label::content = string(content);
 }
 
 Label::~Label()

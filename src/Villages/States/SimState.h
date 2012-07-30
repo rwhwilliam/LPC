@@ -94,6 +94,9 @@ public:
 	void assignEndTurn(int pop, int farm, int mill, int mine, int blacksmith);
 	void finishEndTurn();
 
+	int getPop() { return villagers.size(); }
+	int getTurn() { return turn; }
+	int getNewPop() { return newPop; }
 	int getPopRoom();
 	int getWorkRoom();
 	int getFarmRoom();
@@ -118,6 +121,7 @@ private:
 	int tileWidth, tileHeight;
 	int turn;
 	float zoomLevel;
+	int newPop;
 	
 	SimMode mode;
 	ScrollingMap* map;

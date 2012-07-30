@@ -55,7 +55,7 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 
 	addComponent("buildWell", buildWell);
 
-	buildTavern = new ClickableButton<ActionBar>(x + 330, y + 10, 64, 64, "tavern-button-normal.png", "tavern-button-hover.png", "tavern-button-pressed.png", this, &ActionBar::placeTavern);
+	/*buildTavern = new ClickableButton<ActionBar>(x + 330, y + 10, 64, 64, "tavern-button-normal.png", "tavern-button-hover.png", "tavern-button-pressed.png", this, &ActionBar::placeTavern);
 
 	addComponent("buildTavern", buildTavern);
 
@@ -69,23 +69,23 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 
 	buildJeweler = new ClickableButton<ActionBar>(x + 522, y + 10, 64, 64, "jeweler-button-normal.png", "jeweler-button-hover.png", "jeweler-button-pressed.png", this, &ActionBar::placeJeweler);
 
-	addComponent("buildJeweler", buildJeweler);
+	addComponent("buildJeweler", buildJeweler);*/
 
 	buildBlacksmith = new ClickableButton<ActionBar>(x + 586, y + 10, 64, 64, "blacksmith-button-normal.png", "blacksmith-button-hover.png", "blacksmith-button-pressed.png", this, &ActionBar::placeBlacksmith);
 
 	addComponent("buildBlacksmith", buildBlacksmith);
 
-	buildBakery = new ClickableButton<ActionBar>(x + 650, y + 10, 64, 64, "bakery-button-normal.png", "bakery-button-hover.png", "bakery-button-pressed.png", this, &ActionBar::placeBakery);
+	/*buildBakery = new ClickableButton<ActionBar>(x + 650, y + 10, 64, 64, "bakery-button-normal.png", "bakery-button-hover.png", "bakery-button-pressed.png", this, &ActionBar::placeBakery);
 
-	addComponent("buildBakery", buildBakery);
+	addComponent("buildBakery", buildBakery);*/
 
 	buildGuardStation = new ClickableButton<ActionBar>(x + 714, y + 10, 64, 64, "guardstation-button-normal.png", "guardstation-button-hover.png", "guardstation-button-pressed.png", this, &ActionBar::placeGuardStation);
 
 	addComponent("buildGuardStation", buildGuardStation);
 
-	buildMarket = new ClickableButton<ActionBar>(x + 778, y + 10, 64, 64, "market-button-normal.png", "market-button-hover.png", "market-button-pressed.png", this, &ActionBar::placeMarket);
+	/*buildMarket = new ClickableButton<ActionBar>(x + 778, y + 10, 64, 64, "market-button-normal.png", "market-button-hover.png", "market-button-pressed.png", this, &ActionBar::placeMarket);
 
-	addComponent("buildMarket", buildMarket);
+	addComponent("buildMarket", buildMarket);*/
 
 	buildRoad = new ClickableButton<ActionBar>(x + 842, y + 10, 64, 64, "road-button-normal.png", "road-button-hover.png", "road-button-pressed.png", this, &ActionBar::placeRoad);
 
