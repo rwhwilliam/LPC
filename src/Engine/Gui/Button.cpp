@@ -113,7 +113,7 @@ void Button::raiseEvent(SDL_Event* event)
 
 				if((x >= Button::x) && (x <= Button::x + Button::width) && (y >= Button::y) && (y <= Button::y + Button::height))
 				{
-					if(state == DOWN)
+					//if(state == DOWN)
 						click();
 
 					state = HOVER;
