@@ -31,6 +31,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/States/SimState.h"
+#include "Villages/States/CreditState.h"
 
 using namespace std;
 
@@ -88,7 +89,9 @@ void TitleState::startNewGame()
 
 void TitleState::startCredits()
 {
+	CreditState* c = new CreditState(manager, atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
 
+	manager->push(c);
 }
 
 void TitleState::update(float time, Uint8* keystrokes)

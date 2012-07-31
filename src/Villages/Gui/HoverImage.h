@@ -15,49 +15,33 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef HOVER_H
-#define HOVER_H
+#ifndef HOVERIMAGE_H
+#define HOVERIMAGE_H
 
-#include <string>
-#include <list>
-#include <map>
+#include "Hover.h"
 
 #include "SDL.h"
 
-using namespace std;
+class Image;
 
-class Timer;
-class SimState;
-class Font;
-
-class Hover
+class HoverImage : public Hover
 {
 public:
-	Hover(SimState* state, int x, int y, int width, int height, int targetX, int targetY, int targetWidth, int targetHeight);
-	~Hover();
+	HoverImage(SimState* state, int x, int y, int width, int height, int targetX, int targetY, int targetWidth, int targetHeight);
+	~HoverImage();
 
-	Hover(const Hover& data);
-	Hover& operator=(const Hover* rhs);
+	HoverImage(const HoverImage& data);
+	HoverImage& operator=(const HoverImage* rhs);
 
 	void addLine(string line);
-	void setScrolling(bool scrolling) { Hover::scrolling = scrolling; }
+	void addLine(string key, string line);
+	void editLine(string key, string line);
+	void addImage(int x, int y, Image* img);
 
-	void raiseEvent(SDL_Event* event);
 	void draw(int xoffset, int yoffset, SDL_Surface* screen);
 
-protected:
-	map<string, SDL_Surface*> lines;
-	list<SDL_Surface*> linelist;
-	int xloc, yloc;
-	int width, height;
-	SDL_Rect target;
-	Timer* timer;
-
-	bool active;
-	bool scrolling;
-
-	SimState* state;
-	Font* font;
+private:
+	map<pair<int, int>, Image*> images;
 };
 
 #endif

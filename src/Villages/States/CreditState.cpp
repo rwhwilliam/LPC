@@ -15,78 +15,68 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef ACTIONBAR_H
-#define ACTIONBAR_H
+#include "CreditState.h"
 
 #include <string>
 
 #include "SDL.h"
 
+#include "Engine/Graphics/Image.h"
 #include "Engine/Gui/ClickableButton.h"
-#include "Engine/Gui/UI.h"
+#include "Engine/State/State.h"
+#include "Engine/State/StateManager.h"
+#include "Engine/Util/Config.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
 
 using namespace std;
 
-class SimState;
-class HoverImage;
-
-class ActionBar : public UI
+CreditState::CreditState(StateManager* manager, int width, int height, int xloc, int yloc) : State(manager, width, height, xloc, yloc)
 {
-public:
-	ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc);
-	~ActionBar();
+	Logger::debug("CreditState Constructor");
 
-	ActionBar(const ActionBar& data);
-	ActionBar& operator=(const ActionBar* rhs);
+	bg = new Image("assign-ui.png");
 
-	void raiseEvent(SDL_Event* event);
-	void draw(SDL_Surface* screen);
+	end = new ClickableButton<CreditState>(400, 400, 64, 32, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &CreditState::goToTitle);	
+}
 
-private:
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-	void placeJeweler();
-	void placeBlacksmith();
-	void placeBakery();
-	void placeGuardStation();
-	void placeMarket();
-	void placeRoad();
-	void zoomIn();
-	void zoomOut();
-	void deleteStuff();
-	void placeWonder();
+CreditState::~CreditState()
+{
+	delete bg;
 
-	SimState* state;
-	ClickableButton<ActionBar>* buildHouse;
-	ClickableButton<ActionBar>* buildFarm;
-	ClickableButton<ActionBar>* buildMiningCamp;
-	ClickableButton<ActionBar>* buildMill;
-	ClickableButton<ActionBar>* buildWell;
-	//ClickableButton<ActionBar>* buildTavern;
-	//ClickableButton<ActionBar>* buildTheatre;
-	//ClickableButton<ActionBar>* buildWeaver;
-	//ClickableButton<ActionBar>* buildJeweler;
-	ClickableButton<ActionBar>* buildBlacksmith;
-	//ClickableButton<ActionBar>* buildBakery;
-	ClickableButton<ActionBar>* buildGuardStation;
-	//ClickableButton<ActionBar>* buildMarket;
-	ClickableButton<ActionBar>* buildRoad;
-	ClickableButton<ActionBar>* buildWonder;
-	ClickableButton<ActionBar>* in;
-	ClickableButton<ActionBar>* out;
-	ClickableButton<ActionBar>* del;
+	delete end;
 
-	HoverImage* hoverHouse;
-	HoverImage* hoverFarm;
-	HoverImage* hoverMine;
-	HoverImage* hoverMill;
-	HoverImage* hoverWell;
-};
+	Logger::debug("CreditState Destructor");
+}
 
-#endif
+CreditState::CreditState(const CreditState& data) : State(NULL, 0, 0, 0, 0)
+{
+	throw VillageException("CreditState Copy Constructor");
+}
+
+CreditState* CreditState::operator=(const CreditState* rhs)
+{
+	throw VillageException("CreditState Assignment Operator");
+}
+
+void CreditState::goToTitle()
+{
+	manager->pop();
+}
+
+void CreditState::update(float time, Uint8* keystrokes)
+{
+
+}
+
+void CreditState::raiseEvent(SDL_Event* event)
+{
+	end->raiseEvent(event);
+}
+
+void CreditState::draw()
+{
+	bg->draw(0, 0, frame);
+
+	end->draw(frame);
+}

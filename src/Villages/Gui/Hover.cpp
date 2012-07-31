@@ -18,7 +18,7 @@
 #include "Hover.h"
 
 #include <algorithm>
-#include <list>
+#include <map>
 
 #include "SDL.h"
 #include "SDL_gfxPrimitives.h"
@@ -26,6 +26,7 @@
 #include "Engine/Graphics/Font.h"
 #include "Engine/Time/Timer.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/States/SimState.h"
 
@@ -53,9 +54,12 @@ Hover::~Hover()
 	delete timer;
 	delete font;
 
-	list<SDL_Surface*>::iterator it;
+	map<string, SDL_Surface*>::iterator it;
 	for(it = lines.begin(); it != lines.end(); ++it)
-		SDL_FreeSurface(*it);
+		SDL_FreeSurface(it->second);
+
+	lines.clear();
+	linelist.clear();
 
 	Logger::debug("Hover Destructor");
 }
@@ -72,7 +76,9 @@ Hover& Hover::operator=(const Hover* rhs)
 
 void Hover::addLine(string line)
 {
-	lines.push_back(font->getSurface(line));
+	SDL_Surface* temp = font->getSurface(line);
+	lines["line_" + toString(lines.size())] = temp;
+	linelist.push_back(temp);
 }
 
 void Hover::raiseEvent(SDL_Event* event)
@@ -116,7 +122,7 @@ void Hover::draw(int xoffset, int yoffset, SDL_Surface* screen)
 			boxRGBA(screen, xloc * state->getZoomLevel() - xoffset, yloc * state->getZoomLevel() - yoffset, xloc * state->getZoomLevel() + width - xoffset, yloc * state->getZoomLevel() + height - yoffset, 225, 206, 46, 55);
 
 			list<SDL_Surface*>::const_iterator it;
-			for(it = lines.begin(); it != lines.end(); ++it)
+			for(it = linelist.begin(); it != linelist.end(); ++it)
 				font->draw(10 + xloc * state->getZoomLevel() - xoffset, 10 + yloc * state->getZoomLevel() - yoffset + (line++ * 20), *it, screen);
 		}
 		else
@@ -124,7 +130,7 @@ void Hover::draw(int xoffset, int yoffset, SDL_Surface* screen)
 			boxRGBA(screen, xloc, yloc, xloc + width, yloc + height, 225, 206, 46, 55);
 
 			list<SDL_Surface*>::const_iterator it;
-			for(it = lines.begin(); it != lines.end(); ++it)
+			for(it = linelist.begin(); it != linelist.end(); ++it)
 				font->draw(10 + xloc, 10 + yloc + (line++ * 20), *it, screen);
 		}
 	}

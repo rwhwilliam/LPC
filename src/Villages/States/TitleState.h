@@ -26,6 +26,7 @@
 using namespace std;
 
 class Image;
+class StateManager;
 
 class TitleState : public State
 {
