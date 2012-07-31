@@ -56,7 +56,14 @@ AssignState::AssignState(StateManager* manager, SimState* simstate, int pop, int
 	ui->addComponent("lblBlacksmith", new Label(500, 380, "lazy.ttf", s.c_str(), 22, 0, 0, 0));
 	ui->addComponent("txtBlacksmith", new IncrementBox(740, 375, 128, 32, 0, min(pop, simstate->getBlacksmithRoom())));
 	
-	ui->addComponent("btnAssign", new ClickableButton<AssignState>(400, 450, 64, 32, "assign-normal.png", "assign-hover.png", "assign-pressed.png", this, &AssignState::assign));
+	if(simstate->getWonder() != NULL)
+	{
+		s = "Wonder (" + toString(simstate->getWonderRoom()) + " Spots)";
+		ui->addComponent("lblWonder", new Label(400, 450, "lazy.ttf", s.c_str(), 22, 0, 0, 0));
+		ui->addComponent("txtWonder", new IncrementBox(640, 445, 128, 32, 0, min(pop, simstate->getWonderRoom())));
+	}
+
+	ui->addComponent("btnAssign", new ClickableButton<AssignState>(450, 500, 64, 32, "assign-normal.png", "assign-hover.png", "assign-pressed.png", this, &AssignState::assign));
 	
 	AssignState::showBehind = true;
 }
@@ -98,7 +105,8 @@ int AssignState::getTotal()
 	return dynamic_cast<IncrementBox*>(ui->getComponent("txtFarm"))->getValue() + 
 		dynamic_cast<IncrementBox*>(ui->getComponent("txtMill"))->getValue() +
 		dynamic_cast<IncrementBox*>(ui->getComponent("txtMine"))->getValue() +
-		dynamic_cast<IncrementBox*>(ui->getComponent("txtBlacksmith"))->getValue();
+		dynamic_cast<IncrementBox*>(ui->getComponent("txtBlacksmith"))->getValue() + 
+		(simstate->getWonder() != NULL) ? dynamic_cast<IncrementBox*>(ui->getComponent("txtWonder"))->getValue() : 0;
 }
 
 void AssignState::assign()
@@ -108,7 +116,8 @@ void AssignState::assign()
 		simstate->assignEndTurn(pop, dynamic_cast<IncrementBox*>(ui->getComponent("txtFarm"))->getValue(), 
 			dynamic_cast<IncrementBox*>(ui->getComponent("txtMill"))->getValue(), 
 			dynamic_cast<IncrementBox*>(ui->getComponent("txtMine"))->getValue(), 
-			dynamic_cast<IncrementBox*>(ui->getComponent("txtBlacksmith"))->getValue());
+			dynamic_cast<IncrementBox*>(ui->getComponent("txtBlacksmith"))->getValue(),
+			(simstate->getWonder() != NULL) ? dynamic_cast<IncrementBox*>(ui->getComponent("txtWonder"))->getValue() : 0);
 
 		manager->pop();
 	}

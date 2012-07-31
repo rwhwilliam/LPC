@@ -40,6 +40,9 @@ public:
 	BuildingType getType() { return BT_FARM; }
 	int getRating() { return coverage; }
 	void generate();
+
+	bool canPurchase();
+	void purchase();
 };
 
 #endif

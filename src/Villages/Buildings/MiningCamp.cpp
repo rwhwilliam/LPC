@@ -33,6 +33,8 @@ using namespace std;
 MiningCamp::MiningCamp(SimState* state, int xloc, int yloc) : Building(state, "MiningCampImage", xloc, yloc)
 {
 	Logger::debug("MiningCamp Constructor");
+
+	capacity = 5;
 }
 
 MiningCamp::~MiningCamp()
@@ -55,4 +57,15 @@ void MiningCamp::generate()
 	Logger::debugFormat("Mined %i Ore", workers.size() * 2);
 
 	state->getCastle()->addOre(workers.size() * 2);
+}
+
+bool MiningCamp::canPurchase()
+{
+	return (state->getCastle()->getGold() >= 500 && state->getCastle()->getWood() >= 100);
+}
+
+void MiningCamp::purchase()
+{
+	state->getCastle()->takeGold(500);
+	state->getCastle()->takeWood(100);
 }

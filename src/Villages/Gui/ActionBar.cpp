@@ -94,15 +94,19 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 
 	addComponent("buildRoad", buildRoad);
 
-	in = new ClickableButton<ActionBar>(x + 522, y + 10, 32, 32, "zoomin-button-normal.png", "zoomin-button-hover.png", "zoomin-button-pressed.png", this, &ActionBar::zoomIn);
+	buildWonder = new ClickableButton<ActionBar>(x + 522, y + 10, 64, 64, "wonder-button-normal.png", "wonder-button-hover.png", "wonder-button-pressed.png", this, &ActionBar::placeWonder);
+
+	addComponent("buildWonder", buildWonder);
+
+	in = new ClickableButton<ActionBar>(x + 586, y + 10, 32, 32, "zoomin-button-normal.png", "zoomin-button-hover.png", "zoomin-button-pressed.png", this, &ActionBar::zoomIn);
 
 	addComponent("zoomIn", in);
 
-	out = new ClickableButton<ActionBar>(x + 522, y + 42, 32, 32, "zoomout-button-normal.png", "zoomout-button-hover.png", "zoomout-button-pressed.png", this, &ActionBar::zoomOut);
+	out = new ClickableButton<ActionBar>(x + 586, y + 42, 32, 32, "zoomout-button-normal.png", "zoomout-button-hover.png", "zoomout-button-pressed.png", this, &ActionBar::zoomOut);
 
 	addComponent("zoomOut", out);
 
-	del = new ClickableButton<ActionBar>(x + 554, y + 10, 64, 64, "delete-button-normal.png", "delete-button-hover.png", "delete-button-pressed.png", this, &ActionBar::deleteStuff);
+	del = new ClickableButton<ActionBar>(x + 618, y + 10, 64, 64, "delete-button-normal.png", "delete-button-hover.png", "delete-button-pressed.png", this, &ActionBar::deleteStuff);
 
 	addComponent("delete", del);
 }
@@ -236,4 +240,9 @@ void ActionBar::zoomOut()
 void ActionBar::deleteStuff()
 {
 	state->deleteStuff();
+}
+
+void ActionBar::placeWonder()
+{
+	state->placeWonder();
 }

@@ -32,10 +32,11 @@
 
 using namespace std;
 
-enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL, S_PLACEWELL, S_PLACETAVERN, S_PLACETHEATRE, S_PLACEWEAVER, S_PLACEJEWELER, S_PLACEBLACKSMITH, S_PLACEBAKERY, S_PLACEGUARDSTATION, S_PLACEMARKET, S_PLACEROADSTART, S_PLACEROADEND, S_DELETE };
+enum SimMode { S_NORMAL, S_PLACECASTLE, S_PLACEHOUSE, S_PLACEFARM, S_PLACEMININGCAMP, S_PLACEMILL, S_PLACEWELL, S_PLACETAVERN, S_PLACETHEATRE, S_PLACEWEAVER, S_PLACEJEWELER, S_PLACEBLACKSMITH, S_PLACEBAKERY, S_PLACEGUARDSTATION, S_PLACEMARKET, S_PLACEROADSTART, S_PLACEROADEND, S_DELETE, S_PLACEWONDER };
 
 class MouseImage;
 class Castle;
+class Wonder;
 class ScrollingMap;
 class ActionBar;
 class CaveTile;
@@ -46,6 +47,7 @@ class Road;
 class StateManager;
 class Villager;
 class ResourceBar;
+class MessageBox;
 
 class SimState : public State
 {
@@ -68,6 +70,7 @@ public:
 	float getZoomLevel() { return zoomLevel; }
 	map<string, Road*>* getRoads() { return &roads; }
 	vector<Building*>* getBuildings() { return &buildings; }
+	MessageBox* getMessageBox() { return msgBox; }
 
 	EngineResult canBuild(int x, int y, int width, int height);
 
@@ -86,13 +89,14 @@ public:
 	void placeMarket();
 	void placeRoad();
 	void deleteStuff();
+	void placeWonder();
 	
 	void zoomIn();
 	void zoomOut();
 	void changeZoom();
 
 	void startEndTurn();
-	void assignEndTurn(int pop, int farm, int mill, int mine, int blacksmith);
+	void assignEndTurn(int pop, int farm, int mill, int mine, int blacksmith, int wonder);
 	void finishEndTurn();
 
 	int getPop() { return villagers.size(); }
@@ -105,6 +109,7 @@ public:
 	int getMineRoom();
 	int getBlacksmithRoom();
 	int getSpareWater();
+	int getWonderRoom();
 
 	void findHouse(Villager* person);
 	void findFarm(Villager* person);
@@ -116,6 +121,7 @@ public:
 	int letPeopleLeave();
 
 	Castle* getCastle() { return castle; }
+	Wonder* getWonder() { return wonder; }
 	void getRoadNetwork(list<Road*>& network);
 
 private:
@@ -123,11 +129,14 @@ private:
 	int turn;
 	float zoomLevel;
 	int newPop;
+
+	string music;
 	
 	SimMode mode;
 	ScrollingMap* map;
 	MouseImage* imageHover;
 	Castle* castle;
+	Wonder* wonder;
 
 	vector<Building*> buildings;
 
@@ -144,6 +153,7 @@ private:
 	ClickableButton<SimState>* endTurnBtn;
 
 	ResourceBar* bar;
+	MessageBox* msgBox;
 };
 
 #endif

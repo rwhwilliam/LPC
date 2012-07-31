@@ -15,74 +15,62 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef ACTIONBAR_H
-#define ACTIONBAR_H
+#include "Wonder.h"
 
 #include <string>
 
-#include "SDL.h"
-
-#include "Engine/Gui/ClickableButton.h"
-#include "Engine/Gui/UI.h"
+#include "Engine/Util/Logger.h"
+#include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/Building.h"
+#include "Villages/Buildings/Castle.h"
+#include "Villages/Objects/Road.h"
+#include "Villages/States/SimState.h"
 
 using namespace std;
 
-class SimState;
-class Hover;
-
-class ActionBar : public UI
+Wonder::Wonder(SimState* state, int xloc, int yloc) : Building(state, "WonderImage", xloc, yloc)
 {
-public:
-	ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc);
-	~ActionBar();
+	Logger::debug("Wonder Constructor");
 
-	ActionBar(const ActionBar& data);
-	ActionBar& operator=(const ActionBar* rhs);
+	capacity = 500;
+	workerTurns = 5000;
+}
 
-	void raiseEvent(SDL_Event* event);
-	void draw(SDL_Surface* screen);
+Wonder::~Wonder()
+{
+	Logger::debug("Wonder Destructor");
+}
 
-private:
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-	void placeJeweler();
-	void placeBlacksmith();
-	void placeBakery();
-	void placeGuardStation();
-	void placeMarket();
-	void placeRoad();
-	void zoomIn();
-	void zoomOut();
-	void deleteStuff();
-	void placeWonder();
+Wonder::Wonder(const Wonder& data) : Building(NULL, "", 0, 0)
+{
+	throw VillageException("Wonder Copy Constructor");
+}
 
-	SimState* state;
-	ClickableButton<ActionBar>* buildHouse;
-	ClickableButton<ActionBar>* buildFarm;
-	ClickableButton<ActionBar>* buildMiningCamp;
-	ClickableButton<ActionBar>* buildMill;
-	ClickableButton<ActionBar>* buildWell;
-	//ClickableButton<ActionBar>* buildTavern;
-	//ClickableButton<ActionBar>* buildTheatre;
-	//ClickableButton<ActionBar>* buildWeaver;
-	//ClickableButton<ActionBar>* buildJeweler;
-	ClickableButton<ActionBar>* buildBlacksmith;
-	//ClickableButton<ActionBar>* buildBakery;
-	ClickableButton<ActionBar>* buildGuardStation;
-	//ClickableButton<ActionBar>* buildMarket;
-	ClickableButton<ActionBar>* buildRoad;
-	ClickableButton<ActionBar>* buildWonder;
-	ClickableButton<ActionBar>* in;
-	ClickableButton<ActionBar>* out;
-	ClickableButton<ActionBar>* del;
+Wonder& Wonder::operator=(const Wonder* rhs)
+{
+	throw VillageException("Wonder Assignment Operator");
+}
 
-	Hover* hoverHouse;
-};
+bool Wonder::canPurchase()
+{
+	return (state->getCastle()->getGold() >= 50000 &&
+		state->getCastle()->getWood() >= 10000 &&
+		state->getCastle()->getOre() >= 5000);
+}
 
-#endif
+void Wonder::purchase()
+{
+	state->getCastle()->takeGold(50000);
+	state->getCastle()->takeWood(10000);
+	state->getCastle()->takeOre(5000);
+}
+
+void Wonder::generate(list<Road*>& network)
+{
+	Building::generate(network);
+}
+
+void Wonder::generate()
+{
+	workerTurns -= workers.size();
+}

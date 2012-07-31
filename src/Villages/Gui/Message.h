@@ -15,74 +15,34 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#ifndef ACTIONBAR_H
-#define ACTIONBAR_H
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
 #include <string>
 
 #include "SDL.h"
 
-#include "Engine/Gui/ClickableButton.h"
-#include "Engine/Gui/UI.h"
-
 using namespace std;
 
-class SimState;
-class Hover;
+class Font;
 
-class ActionBar : public UI
+class Message
 {
 public:
-	ActionBar(SimState* state, int x, int y, int width, int height, string backgroundSrc);
-	~ActionBar();
+	Message(Font* font, string msg, int time);
+	~Message();
 
-	ActionBar(const ActionBar& data);
-	ActionBar& operator=(const ActionBar* rhs);
+	Message(const Message& data);
+	Message& operator=(const Message* rhs);
 
-	void raiseEvent(SDL_Event* event);
-	void draw(SDL_Surface* screen);
+	string getMessage() { return msg; }
+	int getTime() { return time; }
+	SDL_Surface* getLine() { return line; }
 
 private:
-	void placeHouse();
-	void placeFarm();
-	void placeMiningCamp();
-	void placeMill();
-	void placeWell();
-	void placeTavern();
-	void placeTheatre();
-	void placeWeaver();
-	void placeJeweler();
-	void placeBlacksmith();
-	void placeBakery();
-	void placeGuardStation();
-	void placeMarket();
-	void placeRoad();
-	void zoomIn();
-	void zoomOut();
-	void deleteStuff();
-	void placeWonder();
-
-	SimState* state;
-	ClickableButton<ActionBar>* buildHouse;
-	ClickableButton<ActionBar>* buildFarm;
-	ClickableButton<ActionBar>* buildMiningCamp;
-	ClickableButton<ActionBar>* buildMill;
-	ClickableButton<ActionBar>* buildWell;
-	//ClickableButton<ActionBar>* buildTavern;
-	//ClickableButton<ActionBar>* buildTheatre;
-	//ClickableButton<ActionBar>* buildWeaver;
-	//ClickableButton<ActionBar>* buildJeweler;
-	ClickableButton<ActionBar>* buildBlacksmith;
-	//ClickableButton<ActionBar>* buildBakery;
-	ClickableButton<ActionBar>* buildGuardStation;
-	//ClickableButton<ActionBar>* buildMarket;
-	ClickableButton<ActionBar>* buildRoad;
-	ClickableButton<ActionBar>* buildWonder;
-	ClickableButton<ActionBar>* in;
-	ClickableButton<ActionBar>* out;
-	ClickableButton<ActionBar>* del;
-
-	Hover* hoverHouse;
+	string msg;
+	int time;
+	SDL_Surface* line;
 };
 
 #endif

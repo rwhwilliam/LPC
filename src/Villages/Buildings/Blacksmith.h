@@ -38,6 +38,9 @@ public:
 	BuildingType getType() { return BT_BLACKSMITH; }
 	int getRating() { return coverage; }
 	void generate();
+
+	bool canPurchase();
+	void purchase();
 };
 
 #endif

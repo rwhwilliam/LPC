@@ -34,7 +34,7 @@ class Villager;
 class Road;
 class GuardStation;
 
-enum BuildingType { BT_BAKERY, BT_BLACKSMITH, BT_CASTLE, BT_FARM, BT_GUARDSTATION, BT_HOUSE, BT_JEWELER, BT_MARKET, BT_MILL, BT_MININGCAMP, BT_TAVERN, BT_THEATRE, BT_WEAVER, BT_WELL };
+enum BuildingType { BT_WONDER, BT_BAKERY, BT_BLACKSMITH, BT_CASTLE, BT_FARM, BT_GUARDSTATION, BT_HOUSE, BT_JEWELER, BT_MARKET, BT_MILL, BT_MININGCAMP, BT_TAVERN, BT_THEATRE, BT_WEAVER, BT_WELL };
 
 class Building
 {
@@ -61,6 +61,9 @@ public:
 	virtual void draw(int xoffset, int yoffset, SDL_Surface* screen);
 	virtual BuildingType getType() = 0;
 	virtual int getRating() = 0;
+
+	virtual bool canPurchase() = 0;
+	virtual void purchase() = 0;
 
 	int getCapacity() { return capacity; }
 	int getWorkerCount() { return workers.size(); }

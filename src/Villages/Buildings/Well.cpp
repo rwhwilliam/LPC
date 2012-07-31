@@ -25,6 +25,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
+#include "Villages/Buildings/Castle.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -47,4 +48,14 @@ Well::Well(const Well& data) : Building(NULL, "", 0, 0)
 Well& Well::operator=(const Well* rhs)
 {
 	throw VillageException("Well Assignment Operator");
+}
+
+bool Well::canPurchase()
+{
+	return (state->getCastle()->getGold() >= 100);
+}
+
+void Well::purchase()
+{
+	state->getCastle()->takeGold(100);
 }

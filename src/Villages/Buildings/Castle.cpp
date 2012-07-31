@@ -35,11 +35,11 @@ Castle::Castle(SimState* state, int xloc, int yloc) : Building(state, "CastleIma
 
 	tax = 5;
 
-	food = 50;
-	gold = 500;
-	wood = 20;
-	ore = 10;
-	weapons = 0;
+	food = 500;
+	gold = 2000;
+	wood = 1000;
+	ore = 100;
+	weapons = 50;
 }
 
 Castle::~Castle()
@@ -59,6 +59,9 @@ Castle& Castle::operator=(const Castle* rhs)
 
 void Castle::setTaxRate(int val)
 {
+	if(val != tax)
+		Logger::debugFormat("Setting tax rate to %i percent", val);
+
 	if(val > 100)
 		val = 100;
 	if(val < 0)
@@ -66,7 +69,6 @@ void Castle::setTaxRate(int val)
 
 	tax = val;
 
-	Logger::debugFormat("Setting tax rate to %i percent", tax);
 }
 
 int Castle::takeGold(int val)

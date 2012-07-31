@@ -38,6 +38,9 @@ public:
 	BuildingType getType() { return BT_WELL; }
 	int getRating() { return 1; }
 	void generate() { }
+
+	bool canPurchase();
+	void purchase();
 };
 
 #endif

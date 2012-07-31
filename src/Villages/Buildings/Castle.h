@@ -60,6 +60,9 @@ public:
 	void addOre(int val) { ore += val; }
 	void addWeapons(int val) { weapons += val; }
 
+	bool canPurchase() { return false; }
+	void purchase() { }
+
 private:
 	int gold, food, wood, ore, weapons;
 	int tax;

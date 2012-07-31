@@ -43,15 +43,15 @@ TitleState::TitleState(StateManager* manager, int width, int height, int xloc, i
 	newgame = new ClickableButton<TitleState>(362, 300, 300, 50, "newgame-button-normal.png", "newgame-button-hover.png", "newgame-button-hover.png", this, &TitleState::startNewGame);
 	credits = new ClickableButton<TitleState>(362, 380, 300, 50, "credits-button-normal.png", "credits-button-hover.png", "credits-button-hover.png", this, &TitleState::startCredits);
 
-	//music = SoundLoader::loadMusic("title.mp3");
+	music = SoundLoader::loadMusic("title.mp3");
 
-	//Mix_HaltMusic();
+	Mix_HaltMusic();
 
-    //if(Mix_PlayingMusic() == 0 )
-    //{
+    if(Mix_PlayingMusic() == 0 )
+    {
         //Play the music
-        //Mix_PlayMusic( SoundLoader::getMusic(music), -1 );
-	//}
+        Mix_PlayMusic( SoundLoader::getMusic(music), -1 );
+	}
 }
 
 TitleState::~TitleState()
@@ -61,8 +61,8 @@ TitleState::~TitleState()
 	delete newgame;
 	delete credits;
 
-	//Mix_HaltMusic();
-	//Mix_FreeMusic(SoundLoader::getMusic(music));
+	Mix_HaltMusic();
+	Mix_FreeMusic(SoundLoader::getMusic(music));
 
 	Logger::debug("TitleState Destructor");
 }

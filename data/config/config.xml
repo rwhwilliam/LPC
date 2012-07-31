@@ -104,4 +104,8 @@
 		<Name>MarketImage</Name>
 		<Value>market.png</Value>
 	</Config>
+	<Config>
+		<Name>WonderImage</Name>
+		<Value>wonder.png</Value>
+	</Config>
 </Configuration>

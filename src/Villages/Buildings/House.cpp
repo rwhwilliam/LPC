@@ -84,3 +84,14 @@ int House::getRating()
 	else
 		return 1;
 }
+
+bool House::canPurchase()
+{
+	return (state->getCastle()->getGold() >= 200 && state->getCastle()->getWood() >= 150);
+}
+
+void House::purchase()
+{
+	state->getCastle()->takeGold(200);
+	state->getCastle()->takeWood(150);
+}

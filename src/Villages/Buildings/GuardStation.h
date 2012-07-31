@@ -43,6 +43,9 @@ public:
 
 	int inCoverage(Building* bldg);
 
+	bool canPurchase();
+	void purchase();
+
 private:
 	int coverageDiameter;
 	int value;

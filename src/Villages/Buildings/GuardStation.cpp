@@ -97,3 +97,13 @@ void GuardStation::generate()
 			value = 50;
 	}
 }
+
+bool GuardStation::canPurchase()
+{
+	return (state->getCastle()->getGold() >= 250);
+}
+
+void GuardStation::purchase()
+{
+	state->getCastle()->takeGold(250);
+}

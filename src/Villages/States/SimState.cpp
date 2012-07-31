@@ -24,16 +24,18 @@
 #include <stdlib.h>
 
 #include "tinyxml2.h"
+#include "SDL.h"
+#include "SDL_mixer.h"
+
 
 #include "Engine/Graphics/Image.h"
+#include "Engine/Sound/SoundLoader.h"
 #include "Engine/State/StateManager.h"
 #include "Engine/Util/Config.h"
 #include "Engine/Util/Enums.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Tokenizer.h"
 #include "Engine/Util/VillageException.h"
-#include "Villages/Gui/ActionBar.h"
-#include "Villages/Gui/ResourceBar.h"
 #include "Villages/Buildings/Bakery.h"
 #include "Villages/Buildings/Blacksmith.h"
 #include "Villages/Buildings/Building.h"
@@ -47,8 +49,12 @@
 #include "Villages/Buildings/Mill.h"
 #include "Villages/Buildings/Tavern.h"
 #include "Villages/Buildings/Theatre.h"
+#include "Villages/Buildings/Wonder.h"
 #include "Villages/Buildings/Weaver.h"
 #include "Villages/Buildings/Well.h"
+#include "Villages/Gui/ActionBar.h"
+#include "Villages/Gui/MessageBox.h"
+#include "Villages/Gui/ResourceBar.h"
 #include "Villages/Map/CaveTile.h"
 #include "Villages/Map/ForestTile.h"
 #include "Villages/Objects/Road.h"
@@ -68,13 +74,22 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 	turn = 1;
 	newPop = 0;
 
+	music = SoundLoader::loadMusic("Calmtown.ogg");
+
+	if(Mix_PlayingMusic() == 0)
+	{
+		Mix_PlayMusic(SoundLoader::getMusic(music), -1);
+	}
+
 	mode = S_PLACECASTLE;
 	imageHover = new MouseImage(this, "castle.png", "castle-bad.png", 128);
 
 	castle = NULL;
+	wonder = NULL;
 
-	actionBar = new ActionBar(this, 40, 398, 400, 100, "");
-	endTurnBtn = new ClickableButton<SimState>(850, 450, 128, 64, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &SimState::startEndTurn);
+	actionBar = new ActionBar(this, 176, 698, 400, 100, "");
+	endTurnBtn = new ClickableButton<SimState>(825, 55, 128, 64, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &SimState::startEndTurn);
+	msgBox = new MessageBox(0, 50, 210, 250);
 
 	roadCreator = NULL;
 
@@ -155,6 +170,9 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 
 SimState::~SimState()
 {
+	Mix_HaltMusic();
+	Mix_FreeMusic(SoundLoader::getMusic(music));
+
 	delete map;
 
 	if(imageHover != NULL)
@@ -162,6 +180,9 @@ SimState::~SimState()
 
 	if(castle != NULL)
 		delete castle;
+
+	if(wonder != NULL)
+		delete wonder;
 	
 	if(actionBar != NULL)
 		delete actionBar;
@@ -173,6 +194,7 @@ SimState::~SimState()
 		delete roadCreator;
 
 	delete bar;
+	delete msgBox;
 
 	vector<Building*>::iterator bit;
 	for(bit = buildings.begin(); bit != buildings.end(); ++bit)
@@ -258,6 +280,7 @@ void SimState::update(float time, Uint8* keystrokes)
 	map->update(time, keystrokes);
 
 	bar->update(time, keystrokes);
+	msgBox->update(time, keystrokes);
 
 	if(imageHover != NULL)
 		imageHover->update(time, keystrokes);
@@ -329,6 +352,10 @@ void SimState::raiseEvent(SDL_Event* event)
 				
 					imageHover = NULL;
 				}
+				else
+				{
+					msgBox->addMessage("Cannot build there!");
+				}
 
 			}
 			else
@@ -338,21 +365,64 @@ void SimState::raiseEvent(SDL_Event* event)
 			break;
 		}
 
+		case S_PLACEWONDER:
+		{
+			if(wonder == NULL)
+			{
+				if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
+				{
+					wonder = new Wonder(this, imageHover->getX(), imageHover->getY());
+
+					Logger::debugFormat("Wonder placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+					mode = S_NORMAL;
+
+					if(imageHover != NULL)
+						delete imageHover;
+				
+					imageHover = NULL;
+				}
+				else
+				{
+					msgBox->addMessage("Cannot build there!");
+				}
+
+			}
+			else
+			{
+				Logger::error("Tried to place a second wonder");
+			}
+			break;
+		}
+
 		case S_PLACEHOUSE:
 		{
 			if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				House* house = new House(this, imageHover->getX(), imageHover->getY());
-				buildings.push_back(house);
 
-				Logger::debugFormat("House placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				if(house->canPurchase())
+				{
+					house->purchase();
+					buildings.push_back(house);
 
-				mode = S_NORMAL;
+					Logger::debugFormat("House placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-				if(imageHover != NULL)
-					delete imageHover;
+					mode = S_NORMAL;
 
-				imageHover = NULL;
+					if(imageHover != NULL)
+						delete imageHover;
+
+					imageHover = NULL;
+				}
+				else
+				{
+					msgBox->addMessage("Not enough resources!");
+				}
+			}
+			else
+			{
+				msgBox->addMessage("Cannot build there!");
 			}
 
 			break;
@@ -363,16 +433,29 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				Farm* farm = new Farm(this, imageHover->getX(), imageHover->getY());
-				buildings.push_back(farm);
 
-				Logger::debugFormat("Farm placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				if(farm->canPurchase())
+				{
+					farm->purchase();
+					buildings.push_back(farm);
 
-				mode = S_NORMAL;
+					Logger::debugFormat("Farm placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-				if(imageHover != NULL)
-					delete imageHover;
+					mode = S_NORMAL;
 
-				imageHover = NULL;
+					if(imageHover != NULL)
+						delete imageHover;
+
+					imageHover = NULL;
+				}
+				else
+				{
+					msgBox->addMessage("Not enough resources!");
+				}
+			}
+			else
+			{
+				msgBox->addMessage("Cannot build there!");
 			}
 
 			break;
@@ -383,16 +466,29 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				MiningCamp* camp = new MiningCamp(this, imageHover->getX(), imageHover->getY());
-				buildings.push_back(camp);
 
-				Logger::debugFormat("Mining Camp placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				if(camp->canPurchase())
+				{
+					camp->purchase();
+					buildings.push_back(camp);
 
-				mode = S_NORMAL;
+					Logger::debugFormat("Mining Camp placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-				if(imageHover != NULL)
-					delete imageHover;
+					mode = S_NORMAL;
 
-				imageHover = NULL;
+					if(imageHover != NULL)
+						delete imageHover;
+
+					imageHover = NULL;
+				}
+				else
+				{
+					msgBox->addMessage("Not enough resources!");
+				}
+			}
+			else
+			{
+				msgBox->addMessage("Cannot build there!");
 			}
 
 			break;
@@ -403,16 +499,29 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				Mill* mill = new Mill(this, imageHover->getX(), imageHover->getY());
-				buildings.push_back(mill);
 
-				Logger::debugFormat("Mill placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				if(mill->canPurchase())
+				{
+					mill->purchase();
+					buildings.push_back(mill);
 
-				mode = S_NORMAL;
+					Logger::debugFormat("Mill placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-				if(imageHover != NULL)
-					delete imageHover;
+					mode = S_NORMAL;
 
-				imageHover = NULL;
+					if(imageHover != NULL)
+						delete imageHover;
+
+					imageHover = NULL;
+				}
+				else
+				{
+					msgBox->addMessage("Not enough resources!");
+				}
+			}
+			else
+			{
+				msgBox->addMessage("Cannot build there!");
 			}
 
 			break;
@@ -423,16 +532,29 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				Well* well = new Well(this, imageHover->getX(), imageHover->getY());
-				buildings.push_back(well);
 
-				Logger::debugFormat("Well placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				if(well->canPurchase())
+				{
+					well->purchase();
+					buildings.push_back(well);
 
-				mode = S_NORMAL;
+					Logger::debugFormat("Well placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-				if(imageHover != NULL)
-					delete imageHover;
+					mode = S_NORMAL;
 
-				imageHover = NULL;
+					if(imageHover != NULL)
+						delete imageHover;
+
+					imageHover = NULL;
+				}
+				else
+				{
+					msgBox->addMessage("Not enough resources!");
+				}
+			}
+			else
+			{
+				msgBox->addMessage("Cannot build there!");
 			}
 
 			break;
@@ -523,16 +645,29 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				Blacksmith* blacksmith = new Blacksmith(this, imageHover->getX(), imageHover->getY());
-				buildings.push_back(blacksmith);
 
-				Logger::debugFormat("Blacksmith placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				if(blacksmith->canPurchase())
+				{
+					blacksmith->purchase();
+					buildings.push_back(blacksmith);
 
-				mode = S_NORMAL;
+					Logger::debugFormat("Blacksmith placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-				if(imageHover != NULL)
-					delete imageHover;
+					mode = S_NORMAL;
 
-				imageHover = NULL;
+					if(imageHover != NULL)
+						delete imageHover;
+
+					imageHover = NULL;
+				}
+				else
+				{
+					msgBox->addMessage("Not enough resources!");
+				}
+			}
+			else
+			{
+				msgBox->addMessage("Cannot build there!");
 			}
 
 			break;
@@ -563,16 +698,29 @@ void SimState::raiseEvent(SDL_Event* event)
 			if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 			{
 				GuardStation* guardStation = new GuardStation(this, imageHover->getX(), imageHover->getY());
-				buildings.push_back(guardStation);
 
-				Logger::debugFormat("GuardStation placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+				if(guardStation->canPurchase())
+				{
+					guardStation->purchase();
+					buildings.push_back(guardStation);
 
-				mode = S_NORMAL;
+					Logger::debugFormat("GuardStation placed at (%i, %i)", imageHover->getX(), imageHover->getY());
 
-				if(imageHover != NULL)
-					delete imageHover;
+					mode = S_NORMAL;
 
-				imageHover = NULL;
+					if(imageHover != NULL)
+						delete imageHover;
+
+					imageHover = NULL;
+				}
+				else
+				{
+					msgBox->addMessage("Not enough resources!");
+				}
+			}
+			else
+			{
+				msgBox->addMessage("Cannot build here!");
 			}
 
 			break;
@@ -616,6 +764,10 @@ void SimState::raiseEvent(SDL_Event* event)
 
 				imageHover = NULL;
 			}
+			else
+			{
+				msgBox->addMessage("Cannot build here!");
+			}
 
 			break;
 		}
@@ -636,6 +788,10 @@ void SimState::raiseEvent(SDL_Event* event)
 
 				delete roadCreator;
 				roadCreator = NULL;
+			}
+			else
+			{
+				msgBox->addMessage("Cannot build here!");
 			}
 
 			break;
@@ -660,6 +816,7 @@ void SimState::raiseEvent(SDL_Event* event)
 					}
 
 					Logger::debug("Demolishing Building");
+					msgBox->addMessage("Building Destroyed");
 
 					buildings.erase(it);
 					break;
@@ -675,6 +832,7 @@ void SimState::raiseEvent(SDL_Event* event)
 					roads.erase(itt);
 
 					Logger::debug("Demolishing Road");
+					msgBox->addMessage("Road Destroyed");
 
 					std::map<string, Road*>::iterator ittr;
 					for(ittr = roads.begin(); ittr != roads.end(); ++ittr)
@@ -702,6 +860,9 @@ void SimState::draw()
 
 	if(castle != NULL)
 		castle->draw(xoffset, yoffset, frame);
+
+	if(wonder != NULL)
+		wonder->draw(xoffset, yoffset, frame);
 
 	if(imageHover != NULL)
 		imageHover->draw(frame);
@@ -737,6 +898,7 @@ void SimState::draw()
 		actionBar->draw(frame);
 
 	bar->draw(frame);
+	msgBox->draw(frame);
 
 	if(endTurnBtn != NULL && mode == S_NORMAL)
 		endTurnBtn->draw(frame);
@@ -924,6 +1086,19 @@ void SimState::placeRoad()
 	}
 }
 
+void SimState::placeWonder()
+{
+	if(mode == S_NORMAL)
+	{
+		mode = S_PLACEWONDER;
+
+		if(imageHover != NULL)
+			delete imageHover;
+
+		imageHover = new MouseImage(this, "wonder.png", "wonder-bad.png", 128);
+	}
+}
+
 void SimState::zoomIn()
 {
 	zoomLevel = (zoomLevel * 2.0 < 1) ? zoomLevel * 2.0 : 1;
@@ -1001,6 +1176,10 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 {
 	if(castle != NULL)
 		if(castle->collides(x, y, width, height))
+			return E_BAD;
+
+	if(wonder != NULL)
+		if(wonder->collides(x, y, width, height))
 			return E_BAD;
 
 	vector<Building*>::const_iterator bit;
@@ -1141,6 +1320,14 @@ int SimState::getSpareWater()
 			ret++;
 		
 	return ret * 15 - villagers.size();
+}
+
+int SimState::getWonderRoom()
+{
+	if(wonder != NULL)
+		return wonder->getRoom();
+
+	return 0;
 }
 
 void SimState::findHouse(Villager* person)
@@ -1361,6 +1548,9 @@ void SimState::startEndTurn()
 	for(it = buildings.begin(); it != buildings.end(); ++it)
 		(*it)->generate(network);
 
+	if(wonder != NULL)
+		wonder->generate(network);
+
 	Logger::debug("Updating Guard Station Coverage");
 
 	list<GuardStation*> guards;
@@ -1387,6 +1577,7 @@ void SimState::startEndTurn()
 	Logger::debugFormat("%i Taxes Collected", taxes);
 
 	castle->addGold(taxes);
+	castle->takeFood(villagers.size());
 
 	int left = letPeopleLeave();
 
@@ -1396,7 +1587,7 @@ void SimState::startEndTurn()
 
 	Logger::debugFormat("%i People Joined", newPop);
 
-	if(newPop > 0)
+	if(newPop == 0)
 	{
 		Logger::debugFormat("%i Villages Joined", newPop);
 
@@ -1411,9 +1602,9 @@ void SimState::startEndTurn()
 	newPop -= left;
 }
 
-void SimState::assignEndTurn(int pop, int farm, int mill, int mine, int blacksmith)
+void SimState::assignEndTurn(int pop, int farm, int mill, int mine, int blacksmith, int wonder)
 {
-	if(pop >= farm + mill + mine + blacksmith)
+	if(pop >= farm + mill + mine + blacksmith + wonder)
 	{
 		if(farm <= getFarmRoom())
 		{
@@ -1456,6 +1647,20 @@ void SimState::assignEndTurn(int pop, int farm, int mill, int mine, int blacksmi
 				findHouse(v);
 				findBlacksmith(v);
 				villagers.push_back(v);
+			}
+		}
+
+		if(getWonder() != NULL)
+		{
+			if(wonder <= getWonderRoom())
+			{
+				for(int i = 0; i < wonder; ++i)
+				{
+					Villager* v = new Villager(this, NULL, NULL);
+					findHouse(v);
+					v->setJob(getWonder());
+					villagers.push_back(v);
+				}
 			}
 		}
 	}

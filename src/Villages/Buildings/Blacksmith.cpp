@@ -63,3 +63,14 @@ void Blacksmith::generate()
 
 	Logger::debugFormat("Created %i Weapons", ore);
 }
+
+bool Blacksmith::canPurchase()
+{
+	return (state->getCastle()->getGold() >= 750 && state->getCastle()->getWood() >= 250);
+}
+
+void Blacksmith::purchase()
+{
+	state->getCastle()->takeGold(750);
+	state->getCastle()->takeWood(250);
+}

@@ -33,6 +33,8 @@ using namespace std;
 Mill::Mill(SimState* state, int xloc, int yloc) : Building(state, "MillImage", xloc, yloc)
 {
 	Logger::debug("Mill Constructor");
+
+	capacity = 10;
 }
 
 Mill::~Mill()
@@ -57,4 +59,15 @@ void Mill::generate()
 	state->getCastle()->addWood(wood);
 
 	Logger::debugFormat("Cut %i Wood", wood);
+}
+
+bool Mill::canPurchase()
+{
+	return (state->getCastle()->getGold() >= 150 && state->getCastle()->getWood() >= 25);
+}
+
+void Mill::purchase()
+{
+	state->getCastle()->takeGold(150);
+	state->getCastle()->takeWood(25);
 }

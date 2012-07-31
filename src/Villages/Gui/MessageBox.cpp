@@ -15,60 +15,86 @@
 * If not, see http://www.gnu.org/licenses/.                                                       *
 **************************************************************************************************/
 
-#include "Farm.h"
+#include "MessageBox.h"
 
 #include <string>
-#include <vector>
 
-#include "SDL.h"
-
+#include "Engine/Graphics/Font.h"
 #include "Engine/Graphics/Image.h"
+#include "Engine/Time/Timer.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
-#include "Villages/Buildings/Building.h"
-#include "Villages/Buildings/Castle.h"
-#include "Villages/Objects/Villager.h"
-#include "Villages/States/SimState.h"
+#include "Villages/Gui/Message.h"
 
-using namespace std;
-
-Farm::Farm(SimState* state, int xloc, int yloc) : Building(state, "FarmImage", xloc, yloc)
+MessageBox::MessageBox(int x, int y, int width, int height) : xloc(x), yloc(y), width(width), height(height)
 {
-	Logger::debug("Farm Constructor");
+	Logger::debug("MessageBox Constructor");
 
-	capacity = 20;
+	timer = new Timer();
+	timer->start();
+	font = new Font("lazy.ttf", 15, 255, 255, 255);
+	bg = new Image("messagebox-ui.png", 255, 0, 255);
 }
 
-Farm::~Farm()
+MessageBox::~MessageBox()
 {
-	Logger::debug("Farm Destructor");
+	delete timer;
+	delete font;
+	delete bg;
+
+	list<Message*>::iterator it;
+	for(it = msgs.begin(); it != msgs.end(); ++it)
+		delete *it;
+
+	msgs.clear();
+
+	Logger::debug("MessageBox Destructor");
 }
 
-Farm::Farm(const Farm& data) : Building(NULL, "", 0, 0)
+MessageBox::MessageBox(const MessageBox& data)
 {
-	throw VillageException("Farm Copy Constructor");
+	throw VillageException("MessageBox Copy Constructor");
 }
 
-Farm& Farm::operator=(const Farm* rhs)
+MessageBox& MessageBox::operator=(const MessageBox* rhs)
 {
-	throw VillageException("Farm Assignment Operator");
+	throw VillageException("MessageBox Assignment Operator");
 }
 
-void Farm::generate()
+void MessageBox::addMessage(string msg)
 {
-	int food = workers.size() * 5;
-
-	state->getCastle()->addFood(food);
-
-	Logger::debugFormat("Farmed %i Food", food);
+	Message* m = new Message(font, msg, timer->get_ticks());
+	msgs.push_back(m);
 }
 
-bool Farm::canPurchase()
+void MessageBox::update(float time, Uint8* keystrokes)
 {
-	return (state->getCastle()->getGold() >= 100);
+	if(msgs.size() > 0)
+	{
+		Message* front = msgs.front();
+		if(front->getTime() <= timer->get_ticks() - 5000)
+		{
+			delete front;
+			msgs.pop_front();
+		}
+
+		if(msgs.size() > 9)
+		{
+			delete msgs.front();
+			msgs.pop_front();
+		}
+	}
 }
 
-void Farm::purchase()
+void MessageBox::draw(SDL_Surface* screen)
 {
-	state->getCastle()->takeGold(100);
+	if(msgs.size() > 0)
+	{
+		bg->draw(xloc, yloc, screen);
+
+		int i = 0;
+		list<Message*>::const_iterator it;
+		for(it = msgs.begin(); it != msgs.end(); ++it)
+			font->draw(xloc + 10, yloc + 25 + 20 * i++, (*it)->getLine(), screen);
+	}
 }
