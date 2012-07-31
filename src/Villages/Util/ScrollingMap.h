@@ -39,6 +39,8 @@ public:
 
 	int getXOffset() { return xoffset; }
 	int getYOffset() { return yoffset; }
+	void setXOffset(int val);
+	void setYOffset(int val);
 
 	void resize();
 

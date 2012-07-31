@@ -1103,7 +1103,14 @@ void SimState::placeWonder()
 
 void SimState::zoomIn()
 {
+	int temp = zoomLevel;
 	zoomLevel = (zoomLevel * 2.0 < 1) ? zoomLevel * 2.0 : 1;
+
+	if(temp != zoomLevel)
+	{
+		smap->setXOffset(smap->getXOffset() * 2 + atoi(Config::getConfig("ScreenWidth").c_str()) / 2);
+		smap->setYOffset(smap->getYOffset() * 2 + atoi(Config::getConfig("ScreenHeight").c_str()) / 2);
+	}
 
 	changeZoom();
 
@@ -1112,7 +1119,14 @@ void SimState::zoomIn()
 
 void SimState::zoomOut()
 {
+	int temp = zoomLevel;
 	zoomLevel = (zoomLevel / 2.0 > .25) ? zoomLevel / 2.0 : .25;
+
+	if(temp != zoomLevel)
+	{
+		smap->setXOffset((smap->getXOffset() - atoi(Config::getConfig("ScreenWidth").c_str()) / 2) / 2);
+		smap->setYOffset((smap->getYOffset() - atoi(Config::getConfig("ScreenHeight").c_str()) / 2) / 2);
+	}
 
 	changeZoom();
 

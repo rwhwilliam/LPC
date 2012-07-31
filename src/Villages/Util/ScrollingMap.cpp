@@ -34,8 +34,8 @@ ScrollingMap::ScrollingMap(SimState* state, int width, int height, int tileWidth
 {
 	Logger::debugFormat("ScrollingMap Constructor");
 
-	xoffset = 0;
-	yoffset = 0;
+	xoffset = tileWidth * 100;
+	yoffset = tileHeight * 50;
 
 	ScrollingMap::state = state;
 }
@@ -108,6 +108,22 @@ void ScrollingMap::update(float time, Uint8* keystates)
 
 		xoffset = (xoffset + speed > temp) ? temp : xoffset + speed;
 	}
+}
+
+void ScrollingMap::setXOffset(int val)
+{
+	int temp = width * (tileWidth * 2) - atoi(Config::getConfig("ScreenWidth").c_str());
+
+	xoffset = (val > temp) ? temp : val;
+	xoffset = (xoffset < 0) ? 0 : xoffset;
+}
+
+void ScrollingMap::setYOffset(int val)
+{
+	int temp = height * (tileHeight * 2) - atoi(Config::getConfig("ScreenHeight").c_str());
+
+	yoffset = (val > temp) ? temp : val;
+	yoffset = (yoffset < 0) ? 0 : yoffset;
 }
 
 void ScrollingMap::draw(SDL_Surface* screen)
