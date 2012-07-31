@@ -86,7 +86,7 @@ void ScrollingMap::raiseEvent(SDL_Event* event)
 
 void ScrollingMap::update(float time, Uint8* keystates)
 {
-	int speed = 10;
+	int speed = 20;
 
 	if(keystates[SDLK_w])
 	{
@@ -94,7 +94,7 @@ void ScrollingMap::update(float time, Uint8* keystates)
 	}
 	if(keystates[SDLK_s])
 	{
-		int temp = height * tileHeight - atoi(Config::getConfig("ScreenHeight").c_str());
+		int temp = height * (tileHeight * 2) - atoi(Config::getConfig("ScreenHeight").c_str());
 
 		yoffset = (yoffset + speed > temp) ? temp : yoffset + speed;
 	}
@@ -104,7 +104,7 @@ void ScrollingMap::update(float time, Uint8* keystates)
 	}
 	if(keystates[SDLK_d])
 	{
-		int temp = width * tileWidth - atoi(Config::getConfig("ScreenWidth").c_str());
+		int temp = width * (tileWidth * 2) - atoi(Config::getConfig("ScreenWidth").c_str());
 
 		xoffset = (xoffset + speed > temp) ? temp : xoffset + speed;
 	}

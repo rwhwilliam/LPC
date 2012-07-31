@@ -10,7 +10,7 @@
  		</Tile>
  		<Tile>
  			<Id>2</Id>
- 			<Path>dirt-base.png</Path>
+ 			<Path>grass-base.png</Path>
  		</Tile>
  	</Tiles>
  	<Data>
