@@ -198,6 +198,16 @@ SimState::~SimState()
 	delete bar;
 	delete msgBox;
 
+	list<Villager*>::iterator vit;
+	for(vit = villagers.begin(); vit != villagers.end(); ++vit)
+	{
+		delete (*vit);
+
+		//villagers.erase(vit);
+	}
+
+	villagers.clear();
+
 	vector<Building*>::iterator bit;
 	for(bit = buildings.begin(); bit != buildings.end(); ++bit)
 	{
@@ -235,16 +245,6 @@ SimState::~SimState()
 	}
 
 	roads.clear();
-
-	list<Villager*>::iterator vit;
-	for(vit = villagers.begin(); vit != villagers.end(); ++vit)
-	{
-		delete (*vit);
-
-		//villagers.erase(vit);
-	}
-
-	villagers.clear();
 }
 
 SimState::SimState(const SimState& data) : State(NULL, 0, 0, 0, 0)
