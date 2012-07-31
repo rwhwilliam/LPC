@@ -76,6 +76,8 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 
 	music = SoundLoader::loadMusic("Calmtown.ogg");
 
+	Mix_HaltMusic();
+
 	if(Mix_PlayingMusic() == 0)
 	{
 		Mix_PlayMusic(SoundLoader::getMusic(music), -1);
@@ -106,7 +108,7 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 	int _tilewidth = atoi(Config::getConfig("TileWidth").c_str());
 	int _tileheight = atoi(Config::getConfig("TileHeight").c_str());
 	int _layers = atoi(doc.FirstChildElement("Map")->FirstChildElement("Layers")->GetText());
-	map = new ScrollingMap(this, _width, _height, _tilewidth, _tileheight, _layers);
+	smap = new ScrollingMap(this, _width, _height, _tilewidth, _tileheight, _layers);
 
 	for(const XMLNode* node=doc.FirstChildElement("Map")->FirstChildElement("Tiles")->FirstChildElement("Tile");
 		node; node=node->NextSibling())
@@ -125,7 +127,7 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 		if(node->FirstChildElement("BMask") != NULL)
 			b = atoi(node->FirstChildElement("BMask")->GetText()) % sizeof(b);
 
-		map->addTile(id, new Image(node->FirstChildElement("Path")->GetText(), r, g, b));
+		smap->addTile(id, new Image(node->FirstChildElement("Path")->GetText(), r, g, b));
 	}
 
 	int layer = 0;
@@ -142,7 +144,7 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 			data[i++] = atoi(t.GetToken().c_str());
 		}
 
-		map->addLayer(layer++, data);
+		smap->addLayer(layer++, data);
 
 		delete[] data;
 	}
@@ -173,7 +175,7 @@ SimState::~SimState()
 	Mix_HaltMusic();
 	Mix_FreeMusic(SoundLoader::getMusic(music));
 
-	delete map;
+	delete smap;
 
 	if(imageHover != NULL)
 		delete imageHover;
@@ -257,27 +259,27 @@ SimState& SimState::operator=(const SimState* rhs)
 
 int SimState::getTileWidth()
 {
-	return map->getTileWidth();
+	return smap->getTileWidth();
 }
 
 int SimState::getTileHeight()
 {
-	return map->getTileHeight();
+	return smap->getTileHeight();
 }
 
 int SimState::getXOffset()
 {
-	return map->getXOffset();
+	return smap->getXOffset();
 }
 
 int SimState::getYOffset()
 {
-	return map->getYOffset();
+	return smap->getYOffset();
 }
 
 void SimState::update(float time, Uint8* keystrokes)
 {
-	map->update(time, keystrokes);
+	smap->update(time, keystrokes);
 
 	bar->update(time, keystrokes);
 	msgBox->update(time, keystrokes);
@@ -316,7 +318,7 @@ void SimState::update(float time, Uint8* keystrokes)
 
 void SimState::raiseEvent(SDL_Event* event)
 {
-	map->raiseEvent(event);
+	smap->raiseEvent(event);
 	bar->raiseEvent(event);
 
 	if(actionBar != NULL && mode == S_NORMAL)
@@ -799,7 +801,7 @@ void SimState::raiseEvent(SDL_Event* event)
 
 		case S_DELETE:
 		{
-			vector<Building*>::const_iterator it;
+			vector<Building*>::iterator it;
 			for(it = buildings.begin(); it != buildings.end(); ++it)
 			{
 				if((*it)->collides(event->motion.x, event->motion.y, 1, 1))
@@ -853,10 +855,10 @@ void SimState::draw()
 {
 	SDL_FillRect(frame, &frame->clip_rect, SDL_MapRGB(frame->format, 0x00, 0x00, 0x00));
 
-	map->draw(frame);
+	smap->draw(frame);
 
-	int xoffset = map->getXOffset();
-	int yoffset = map->getYOffset();
+	int xoffset = smap->getXOffset();
+	int yoffset = smap->getYOffset();
 
 	if(castle != NULL)
 		castle->draw(xoffset, yoffset, frame);
@@ -1134,8 +1136,8 @@ void SimState::changeZoom()
 	tileWidth = static_cast<int>(atoi(Config::getConfig("TileWidth").c_str()) * zoomLevel);
 	tileHeight = static_cast<int>(atoi(Config::getConfig("TileHeight").c_str()) * zoomLevel);
 
-	map->setTileWidth(tileWidth);
-	map->setTileHeight(tileHeight);
+	smap->setTileWidth(tileWidth);
+	smap->setTileHeight(tileHeight);
 
 	castle->resize();
 
@@ -1145,7 +1147,7 @@ void SimState::changeZoom()
 		(*bit)->resize();
 	}
 
-	map->resize();
+	smap->resize();
 
 	vector<CaveTile*>::iterator cit;
 	for(cit = caves.begin(); cit != caves.end(); ++cit)
@@ -1216,7 +1218,7 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	{
 		vector<CaveTile*>::const_iterator cit;
 		for(cit = caves.begin(); cit != caves.end(); ++cit)
-			if((abs(((*cit)->getMapX() + (*cit)->getWidth() / 2 - map->getXOffset()) - (x + width / 2)) <= 256) && (abs(((*cit)->getMapY() + (*cit)->getHeight() / 2 - map->getYOffset()) - (y + height / 2)) <= 256))
+			if((abs(((*cit)->getMapX() + (*cit)->getWidth() / 2 - smap->getXOffset()) - (x + width / 2)) <= 256) && (abs(((*cit)->getMapY() + (*cit)->getHeight() / 2 - smap->getYOffset()) - (y + height / 2)) <= 256))
 				return E_GOOD;
 
 		return E_BAD;
@@ -1228,7 +1230,7 @@ EngineResult SimState::canBuild(int x, int y, int width, int height)
 	{
 		vector<ForestTile*>::const_iterator fit;
 		for(fit = forests.begin(); fit != forests.end(); ++fit)
-			if((abs(((*fit)->getMapX() + (*fit)->getWidth() / 2 - map->getXOffset()) - (x + width / 2)) <= 256) && (abs(((*fit)->getMapY() + (*fit)->getHeight() / 2 - map->getYOffset()) - (y + height / 2)) <= 256))
+			if((abs(((*fit)->getMapX() + (*fit)->getWidth() / 2 - smap->getXOffset()) - (x + width / 2)) <= 256) && (abs(((*fit)->getMapY() + (*fit)->getHeight() / 2 - smap->getYOffset()) - (y + height / 2)) <= 256))
 				return E_GOOD;
 
 		return E_BAD;
@@ -1587,7 +1589,7 @@ void SimState::startEndTurn()
 
 	Logger::debugFormat("%i People Joined", newPop);
 
-	if(newPop == 0)
+	if(newPop > 0)
 	{
 		Logger::debugFormat("%i Villages Joined", newPop);
 

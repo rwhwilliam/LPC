@@ -25,6 +25,7 @@
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
+#include "Villages/Buildings/Wonder.h"
 #include "Villages/Gui/IncrementBox.h"
 #include "Villages/States/SimState.h"
 
@@ -58,6 +59,7 @@ AssignState::AssignState(StateManager* manager, SimState* simstate, int pop, int
 	
 	if(simstate->getWonder() != NULL)
 	{
+		Wonder* w = simstate->getWonder();
 		s = "Wonder (" + toString(simstate->getWonderRoom()) + " Spots)";
 		ui->addComponent("lblWonder", new Label(400, 450, "lazy.ttf", s.c_str(), 22, 0, 0, 0));
 		ui->addComponent("txtWonder", new IncrementBox(640, 445, 128, 32, 0, min(pop, simstate->getWonderRoom())));
@@ -102,23 +104,37 @@ void AssignState::draw()
 
 int AssignState::getTotal()
 {
-	return dynamic_cast<IncrementBox*>(ui->getComponent("txtFarm"))->getValue() + 
+	int ret = dynamic_cast<IncrementBox*>(ui->getComponent("txtFarm"))->getValue() + 
 		dynamic_cast<IncrementBox*>(ui->getComponent("txtMill"))->getValue() +
 		dynamic_cast<IncrementBox*>(ui->getComponent("txtMine"))->getValue() +
-		dynamic_cast<IncrementBox*>(ui->getComponent("txtBlacksmith"))->getValue() + 
-		(simstate->getWonder() != NULL) ? dynamic_cast<IncrementBox*>(ui->getComponent("txtWonder"))->getValue() : 0;
+		dynamic_cast<IncrementBox*>(ui->getComponent("txtBlacksmith"))->getValue();
+
+	if (simstate->getWonder() != NULL)
+		ret += dynamic_cast<IncrementBox*>(ui->getComponent("txtWonder"))->getValue();
+
+	return ret;
 }
 
 void AssignState::assign()
 {
 	if(getTotal() == pop)
 	{
-		simstate->assignEndTurn(pop, dynamic_cast<IncrementBox*>(ui->getComponent("txtFarm"))->getValue(), 
-			dynamic_cast<IncrementBox*>(ui->getComponent("txtMill"))->getValue(), 
-			dynamic_cast<IncrementBox*>(ui->getComponent("txtMine"))->getValue(), 
-			dynamic_cast<IncrementBox*>(ui->getComponent("txtBlacksmith"))->getValue(),
-			(simstate->getWonder() != NULL) ? dynamic_cast<IncrementBox*>(ui->getComponent("txtWonder"))->getValue() : 0);
-
+		if(simstate->getWonder() == NULL)
+		{
+			simstate->assignEndTurn(pop, dynamic_cast<IncrementBox*>(ui->getComponent("txtFarm"))->getValue(), 
+				dynamic_cast<IncrementBox*>(ui->getComponent("txtMill"))->getValue(), 
+				dynamic_cast<IncrementBox*>(ui->getComponent("txtMine"))->getValue(), 
+				dynamic_cast<IncrementBox*>(ui->getComponent("txtBlacksmith"))->getValue(),
+				0);
+		}
+		else
+		{
+			simstate->assignEndTurn(pop, dynamic_cast<IncrementBox*>(ui->getComponent("txtFarm"))->getValue(), 
+				dynamic_cast<IncrementBox*>(ui->getComponent("txtMill"))->getValue(), 
+				dynamic_cast<IncrementBox*>(ui->getComponent("txtMine"))->getValue(), 
+				dynamic_cast<IncrementBox*>(ui->getComponent("txtBlacksmith"))->getValue(),
+				dynamic_cast<IncrementBox*>(ui->getComponent("txtWonder"))->getValue());
+		}
 		manager->pop();
 	}
 }

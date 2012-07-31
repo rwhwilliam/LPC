@@ -121,7 +121,7 @@ public:
 	int letPeopleLeave();
 
 	Castle* getCastle() { return castle; }
-	Wonder* getWonder() { return wonder; }
+	Wonder* getWonder() { return (wonder == NULL) ? NULL : wonder; }
 	void getRoadNetwork(list<Road*>& network);
 
 private:
@@ -133,7 +133,7 @@ private:
 	string music;
 	
 	SimMode mode;
-	ScrollingMap* map;
+	ScrollingMap* smap;
 	MouseImage* imageHover;
 	Castle* castle;
 	Wonder* wonder;

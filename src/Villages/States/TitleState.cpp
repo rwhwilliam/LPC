@@ -79,7 +79,7 @@ TitleState* TitleState::operator=(const TitleState* rhs)
 
 void TitleState::startNewGame()
 {
-	//Mix_HaltMusic();
+	Mix_HaltMusic();
 
 	SimState* s = new SimState(manager, "data/maps/map1.xml", atoi(Config::getConfig("ScreenWidth").c_str()), atoi(Config::getConfig("ScreenHeight").c_str()), 0, 0);
 

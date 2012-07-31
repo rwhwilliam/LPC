@@ -18,6 +18,7 @@
 #include "ResourceBar.h"
 
 #include <vector>
+#include <cmath>
 
 #include "SDL.h"
 
