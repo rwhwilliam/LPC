@@ -89,6 +89,8 @@ private:
 	HoverImage* hoverWell;
 	HoverImage* hoverBlacksmith;
 	HoverImage* hoverTower;
+	HoverImage* hoverRoad;
+	HoverImage* hoverWonder;
 };
 
 #endif

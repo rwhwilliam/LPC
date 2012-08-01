@@ -150,12 +150,32 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	addComponent("buildMarket", buildMarket);*/
 
 	buildRoad = new ClickableButton<ActionBar>(x + 458, y + 10, 64, 64, "road-button-normal.png", "road-button-hover.png", "road-button-pressed.png", this, &ActionBar::placeRoad);
-
 	addComponent("buildRoad", buildRoad);
+	hoverRoad = new HoverImage(state, x + 172, y - 125, 350, 135, x + 458, y + 10, 64, 64);
+	hoverRoad->addLine("Roads allow movement in your village");
+	hoverRoad->addLine("All Non-house buildings need to be connected");
+	hoverRoad->addLine("by roads to the castle in order to produce");
+	hoverRoad->addLine("This includes wells");
+	hoverRoad->addLine("Roads are free!");
+	hoverRoad->addLine("Press ESC to exit road placement mode");
 
 	buildWonder = new ClickableButton<ActionBar>(x + 522, y + 10, 64, 64, "wonder-button-normal.png", "wonder-button-hover.png", "wonder-button-pressed.png", this, &ActionBar::placeWonder);
-
 	addComponent("buildWonder", buildWonder);
+	hoverWonder = new HoverImage(state, x + 522, y - 135, 300, 145, x + 522, y + 10, 64, 64);
+	hoverWonder->addLine("Complete a Wonder to win the game!");
+	hoverWonder->addLine("Once placed, you have to assign workers to build it!");
+	hoverWonder->addLine("Max Workers = 500");
+	hoverWonder->addLine("50,000");
+	hoverWonder->addLine("10,000");
+	hoverWonder->addLine("5,000");
+	hoverWonder->addLine("5,000 Worker-Turns");
+	temp = new Image("icon-gold.png", (Uint8)255, 0, 255, .5);
+	hoverWonder->addImage(65, 65, temp);
+	temp = new Image("icon-wood.png", (Uint8)255, 0, 255, .5);
+	hoverWonder->addImage(65, 85, temp);
+	temp = new Image("icon-ore.png", (Uint8)255, 0, 255, .5);
+	hoverWonder->addImage(65, 105, temp);
+
 
 	in = new ClickableButton<ActionBar>(x + 586, y + 10, 32, 32, "zoomin-button-normal.png", "zoomin-button-hover.png", "zoomin-button-pressed.png", this, &ActionBar::zoomIn);
 
@@ -181,6 +201,8 @@ ActionBar::~ActionBar()
 	delete hoverWell;
 	delete hoverBlacksmith;
 	delete hoverTower;
+	delete hoverRoad;
+	delete hoverWonder;
 
 	//delete buildHouse;
 	//delete buildFarm;
@@ -221,6 +243,8 @@ void ActionBar::raiseEvent(SDL_Event* event)
 	hoverWell->raiseEvent(event);
 	hoverBlacksmith->raiseEvent(event);
 	hoverTower->raiseEvent(event);
+	hoverRoad->raiseEvent(event);
+	hoverWonder->raiseEvent(event);
 }
 
 void ActionBar::draw(SDL_Surface* screen)
@@ -234,6 +258,8 @@ void ActionBar::draw(SDL_Surface* screen)
 	hoverWell->draw(0, 0, screen);
 	hoverBlacksmith->draw(0, 0, screen);
 	hoverTower->draw(0, 0, screen);
+	hoverRoad->draw(0, 0, screen);
+	hoverWonder->draw(0, 0, screen);
 }
 
 void ActionBar::placeHouse()
