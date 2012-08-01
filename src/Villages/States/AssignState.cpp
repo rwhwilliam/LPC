@@ -37,6 +37,8 @@ AssignState::AssignState(StateManager* manager, SimState* simstate, int pop, int
 
 	ui = new UI(xloc, yloc, width, height, "assign-ui.png", 255, 0, 255);
 
+	ui->addComponent("errorLbl", new Label(300, 480, "lazy.ttf", "", 22, 255, 0, 0));
+
 	ui->addComponent("headerLbl", new Label(240, 220, "lazy.ttf", "People Moved to your Village!", 32, 0, 0, 0));
 	string s = "Please Assign all " + toString(pop) + " of them to a Job";
 	ui->addComponent("infoLbl", new Label(280, 265, "lazy.ttf", s.c_str(), 22, 0, 0, 0));
@@ -136,5 +138,9 @@ void AssignState::assign()
 				dynamic_cast<IncrementBox*>(ui->getComponent("txtWonder"))->getValue());
 		}
 		manager->pop();
+	}
+	else
+	{
+		dynamic_cast<Label*>(ui->getComponent("errorLbl"))->setText("You must assign all population!");
 	}
 }

@@ -96,7 +96,7 @@ void Hover::raiseEvent(SDL_Event* event)
 		x += event->motion.x;
 		y += event->motion.y;
 
-		if((x >= target.x * state->getZoomLevel() - state->getXOffset()) && (x <= (target.x + target.w) * state->getZoomLevel() - state->getXOffset()) && (y >= target.y * state->getZoomLevel() - state->getYOffset()) && (y <= (target.y + target.h) * state->getZoomLevel() - state->getYOffset()))
+		if((x >= target.x * state->getZoomLevel() - (scrolling) ? state->getXOffset() : 0) && (x <= (target.x + target.w) * state->getZoomLevel() - (scrolling) ? state->getXOffset() : 0) && (y >= target.y * state->getZoomLevel() - (scrolling) ? state->getYOffset() : 0) && (y <= (target.y + target.h) * state->getZoomLevel() - (scrolling) ? state->getYOffset() : 0))
 		{
 			if(!active)
 				timer->start();

@@ -42,7 +42,6 @@ private:
 
 	int pop;
 	UI* ui;
-	
 
 	SimState* simstate;
 };

@@ -34,6 +34,8 @@ using namespace std;
 Blacksmith::Blacksmith(SimState* state, int xloc, int yloc) : Building(state, "BlacksmithImage", xloc, yloc)
 {
 	Logger::debug("Blacksmith Constructor");
+
+	capacity = 4;
 }
 
 Blacksmith::~Blacksmith()
@@ -56,7 +58,7 @@ void Blacksmith::generate()
 	int ore = state->getCastle()->getOre();
 	ore /= 5;
 
-	ore = min(ore, (int)workers.size());
+	ore = min(ore, (int)workers.size() * 2);
 
 	state->getCastle()->takeOre(ore * 5);
 	state->getCastle()->addWeapons(ore);

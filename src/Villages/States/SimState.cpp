@@ -35,6 +35,7 @@
 #include "Engine/Util/Enums.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/Tokenizer.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Bakery.h"
 #include "Villages/Buildings/Blacksmith.h"
@@ -88,6 +89,8 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 
 	castle = NULL;
 	wonder = NULL;
+
+	won = new Image("win.png");
 
 	actionBar = new ActionBar(this, 176, 698, 400, 100, "");
 	endTurnBtn = new ClickableButton<SimState>(825, 55, 128, 64, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &SimState::startEndTurn);
@@ -784,12 +787,15 @@ void SimState::raiseEvent(SDL_Event* event)
 
 				roadCreator->createRoad();
 
+
 				std::map<string, Road*>::iterator ittr;
 					for(ittr = roads.begin(); ittr != roads.end(); ++ittr)
 						ittr->second->calculateMode();
 
 				delete roadCreator;
 				roadCreator = NULL;
+
+				placeRoad();
 			}
 			else
 			{
@@ -901,6 +907,9 @@ void SimState::draw()
 
 	bar->draw(frame);
 	msgBox->draw(frame);
+
+	if(wonder != NULL && wonder->hasWon())
+		won->draw(212, 300, frame);
 
 	if(endTurnBtn != NULL && mode == S_NORMAL)
 		endTurnBtn->draw(frame);
@@ -1274,7 +1283,7 @@ int SimState::getPopRoom()
 
 int SimState::getWorkRoom()
 {
-	return getFarmRoom() + getMillRoom() + getMineRoom() + getBlacksmithRoom();
+	return getFarmRoom() + getMillRoom() + getMineRoom() + getBlacksmithRoom() + getWonderRoom();
 }
 
 int SimState::getFarmRoom()
@@ -1333,7 +1342,8 @@ int SimState::getSpareWater()
 	vector<Building*>::const_iterator it;
 	for(it = buildings.begin(); it != buildings.end(); ++it)
 		if((*it)->getType() == BT_WELL)
-			ret++;
+			if((*it)->isRoadConnected())
+				ret++;
 		
 	return ret * 15 - villagers.size();
 }
@@ -1479,6 +1489,15 @@ int SimState::getNewPopCount()
 	if(castle->getTaxRate() > 0 && castle->getTaxRate() <= 5)
 		newPop += 1;
 
+	if(newPop < getPopRoom() / 2)
+		newPop  = (int)(newPop * 1.5);
+
+	if(newPop > getPopRoom())
+		newPop = getPopRoom();
+
+	if(newPop > getWorkRoom())
+		newPop = getWorkRoom();
+
 	return (newPop >= 0) ? newPop : 0;
 }
 
@@ -1593,6 +1612,9 @@ void SimState::startEndTurn()
 	Logger::debugFormat("%i Taxes Collected", taxes);
 
 	castle->addGold(taxes);
+
+	Logger::debug("Feeding the People");
+
 	castle->takeFood(villagers.size());
 
 	int left = letPeopleLeave();
@@ -1602,6 +1624,7 @@ void SimState::startEndTurn()
 	newPop = getNewPopCount();
 
 	Logger::debugFormat("%i People Joined", newPop);
+	msgBox->addMessage(toString(newPop) + " people joined the village!");
 
 	if(newPop > 0)
 	{

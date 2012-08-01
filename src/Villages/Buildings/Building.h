@@ -68,7 +68,7 @@ public:
 	int getCapacity() { return capacity; }
 	int getWorkerCount() { return workers.size(); }
 	int getRoom() { return capacity - workers.size(); }
-	int getCoverate() { return coverage; }
+	int getCoverage() { return coverage; }
 
 	bool hasRoom() { return (getWorkerCount() < capacity); }
 	void addWorker(Villager* person);
@@ -79,6 +79,7 @@ public:
 	void updateCoverage(list<GuardStation*>& guards);
 	void generate(list<Road*>& network);
 	bool isGuardCovered() { return (coverage > 0); }
+	bool isRoadConnected() { return roadConnected; }
 
 protected:
 	virtual void generate() = 0;

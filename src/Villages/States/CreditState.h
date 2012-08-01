@@ -20,13 +20,13 @@
 
 #include <string>
 
-#include "Engine/Gui/ClickableButton.h"
 #include "Engine/State/State.h"
 
 using namespace std;
 
 class Image;
 class StateManager;
+class UI;
 
 class CreditState : public State
 {
@@ -43,9 +43,9 @@ public:
 
 private:
 	void goToTitle();
-	
-	Image* bg;
-	ClickableButton<CreditState>* end;
+
+	UI* ui;
+	//ClickableButton<CreditState>* end;
 };
 
 #endif CREDITSTATE_H

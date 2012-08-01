@@ -23,6 +23,8 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Gui/ClickableButton.h"
+#include "Engine/Gui/Label.h"
+#include "Engine/Gui/UI.h"
 #include "Engine/State/State.h"
 #include "Engine/State/StateManager.h"
 #include "Engine/Util/Config.h"
@@ -35,16 +37,24 @@ CreditState::CreditState(StateManager* manager, int width, int height, int xloc,
 {
 	Logger::debug("CreditState Constructor");
 
-	bg = new Image("assign-ui.png");
+	ui = new UI(xloc, yloc, width, height, "assign-ui.png", 255, 0, 255);
 
-	end = new ClickableButton<CreditState>(400, 400, 64, 32, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &CreditState::goToTitle);	
+	ui->addComponent("btn", new ClickableButton<CreditState>(450, 550, 64, 32, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &CreditState::goToTitle));
+	ui->addComponent("header", new Label(350, 210, "lazy.ttf", "Special thanks to:", 42, 0, 0, 0));
+	ui->addComponent("1", new Label(200, 270, "lazy.ttf", "- All Liberated Pixel Cup Artists who provided contest art", 22, 0, 0, 0));
+	ui->addComponent("2", new Label(200, 300, "lazy.ttf", "- Other OpenGameArt.org Artists for additional images:", 22, 0, 0, 0));
+	ui->addComponent("3", new Label(250, 330, "lazy.ttf", "- Rough Small Signs & Symbol Pack by qubodup", 22, 0, 0, 0));
+	ui->addComponent("4", new Label(250, 360, "lazy.ttf", "- Beer Bottle (Open/Closed) by Q_x", 22, 0, 0, 0));
+	ui->addComponent("5", new Label(250, 390, "lazy.ttf", "- Crystal Dungeon (Title Music) by FoxSynergy", 22, 0, 0, 0));
+	ui->addComponent("6", new Label(250, 420, "lazy.ttf", "- RPG status icons by Buch", 22, 0, 0, 0));
+	ui->addComponent("7", new Label(250, 450, "lazy.ttf", "- RPG Icons by DitzyDM", 22, 0, 0, 0));
+	ui->addComponent("8", new Label(250, 480, "lazy.ttf", "- Tower v2 by yd", 22, 0, 0, 0));
+	ui->addComponent("9", new Label(250, 510, "lazy.ttf", "- RPG Path Tile Template by gryc", 22, 0, 0, 0));
 }
 
 CreditState::~CreditState()
 {
-	delete bg;
-
-	delete end;
+	delete ui;
 
 	Logger::debug("CreditState Destructor");
 }
@@ -71,12 +81,10 @@ void CreditState::update(float time, Uint8* keystrokes)
 
 void CreditState::raiseEvent(SDL_Event* event)
 {
-	end->raiseEvent(event);
+	ui->raiseEvent(event);
 }
 
 void CreditState::draw()
 {
-	bg->draw(0, 0, frame);
-
-	end->draw(frame);
+	ui->draw(frame);
 }

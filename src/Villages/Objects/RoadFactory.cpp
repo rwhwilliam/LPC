@@ -98,7 +98,7 @@ void RoadFactory::raiseEvent(SDL_Event* event)
 
 			if(startX == finishX)
 			{
-				preImg = new Image("road-vertical.png", 128, 255, 0, 255);
+				preImg = new Image("road-vertical.png", 128, 255, 0, 255, state->getZoomLevel());
 
 				if(startY < finishY)
 					for(int i = startY; i <= finishY; i++)
@@ -109,7 +109,7 @@ void RoadFactory::raiseEvent(SDL_Event* event)
 			}
 			else
 			{
-				preImg = new Image("road-horizontal.png", 128, 255, 0, 255);
+				preImg = new Image("road-horizontal.png", 128, 255, 0, 255, state->getZoomLevel());
 
 				if(startX < finishX)
 					for(int i = startX; i <= finishX; i++)

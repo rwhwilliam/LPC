@@ -48,6 +48,7 @@ class StateManager;
 class Villager;
 class ResourceBar;
 class MessageBox;
+class Image;
 
 class SimState : public State
 {
@@ -131,6 +132,8 @@ private:
 	int newPop;
 
 	string music;
+
+	Image* won;
 	
 	SimMode mode;
 	ScrollingMap* smap;

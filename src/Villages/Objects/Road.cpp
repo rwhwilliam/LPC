@@ -70,35 +70,35 @@ void Road::calculateMode()
 	Road* w = getRoad(xloc - 1, yloc);
 
 	if(n != NULL && s == NULL && e == NULL && w == NULL)
-		img = new Image("road-end-down.png", 255, 0, 255);
+		img = new Image("road-end-down.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n == NULL && s != NULL && e == NULL && w == NULL)
-		img = new Image("road-end-up.png", 255, 0, 255);
+		img = new Image("road-end-up.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n == NULL && s == NULL && e != NULL && w == NULL)
-		img = new Image("road-end-left.png", 255, 0, 255);
+		img = new Image("road-end-left.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n == NULL && s == NULL && e == NULL && w != NULL)
-		img = new Image("road-end-right.png", 255, 0, 255);
+		img = new Image("road-end-right.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n != NULL && s != NULL && e == NULL && w == NULL)
-		img = new Image("road-vertical.png", 255, 0, 255);
+		img = new Image("road-vertical.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n == NULL && s == NULL && e != NULL && w != NULL)
-		img = new Image("road-horizontal.png", 255, 0, 255);
+		img = new Image("road-horizontal.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n != NULL && s == NULL && e != NULL && w == NULL)
-		img = new Image("road-turn-3.png", 255, 0, 255);
+		img = new Image("road-turn-3.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n != NULL && s == NULL && e == NULL && w != NULL)
-		img = new Image("road-turn-4.png", 255, 0, 255);
+		img = new Image("road-turn-4.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n == NULL && s != NULL && e != NULL && w == NULL)
-		img = new Image("road-turn-2.png", 255, 0, 255);
+		img = new Image("road-turn-2.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n == NULL && s != NULL && e == NULL && w != NULL)
-		img = new Image("road-turn-1.png", 255, 0, 255);
+		img = new Image("road-turn-1.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n == NULL && s != NULL && e != NULL && w != NULL)
-		img = new Image("road-intersection-down.png", 255, 0, 255);
+		img = new Image("road-intersection-down.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n != NULL && s == NULL && e != NULL && w != NULL)
-		img = new Image("road-intersection-up.png", 255, 0, 255);
+		img = new Image("road-intersection-up.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n != NULL && s != NULL && e == NULL && w != NULL)
-		img = new Image("road-intersection-left.png", 255, 0, 255);
+		img = new Image("road-intersection-left.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n != NULL && s != NULL && e != NULL && w == NULL)
-		img = new Image("road-intersection-right.png", 255, 0, 255);
+		img = new Image("road-intersection-right.png", (Uint8)255, 0, 255, state->getZoomLevel());
 	if(n != NULL && s != NULL && e != NULL && w != NULL)
-		img = new Image("road-intersection.png", 255, 0, 255);
+		img = new Image("road-intersection.png", (Uint8)255, 0, 255, state->getZoomLevel());
 
 	/*if(mode == R_VERTICAL)
 	{

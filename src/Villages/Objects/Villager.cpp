@@ -24,6 +24,7 @@
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
 #include "Villages/Buildings/House.h"
+#include "Villages/Gui/MessageBox.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -73,14 +74,20 @@ bool Villager::wantsToLeave()
 	int random = rand() % 5000 + 1;
 
 	if(random <= pow(simstate->getCastle()->getTaxRate(), 2.0))
+	{
+		simstate->getMessageBox()->addMessage("Villager left because of taxes");
 		return true;
+	}
 
 	if(simstate->getCastle()->getFood() <= 0)
 	{
 		random = rand() % 100 + 1;
 		
 		if(random <= 1)
+		{
+			simstate->getMessageBox()->addMessage("Villager left because of no food");
 			return true;
+		}
 	}
 
 	if(simstate->getSpareWater() <= 0)
@@ -88,16 +95,22 @@ bool Villager::wantsToLeave()
 		random = rand() % 100 + 1;
 		
 		if(random <= 1)
+		{
+			simstate->getMessageBox()->addMessage("Village left because of no water");
 			return true;
+		}
 	}
 
-	int coverage = residence->getCoverate();
+	int coverage = residence->getCoverage();
 	if(coverage < 75)
 	{
 		random = rand() % 75 + 1;
 
 		if(random > coverage)
+		{
+			simstate->getMessageBox()->addMessage("Village left due to high crime");
 			return true;
+		}
 	}
 
 	return false;

@@ -79,7 +79,7 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	hoverMill->addLine("Mills Generate Wood Each Turn");
 	hoverMill->addLine("Must be placed next to trees");
 	hoverMill->addLine("Max Workers = 10");
-	hoverMill->addLine("Output = 4");
+	hoverMill->addLine("Output = Workers * 4");
 	hoverMill->addLine("150");
 	hoverMill->addLine("25");
 	temp = new Image("icon-gold.png", (Uint8)255, 0, 255, .5);
@@ -115,16 +115,35 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 	addComponent("buildJeweler", buildJeweler);*/
 
 	buildBlacksmith = new ClickableButton<ActionBar>(x + 330, y + 10, 64, 64, "blacksmith-button-normal.png", "blacksmith-button-hover.png", "blacksmith-button-pressed.png", this, &ActionBar::placeBlacksmith);
-
 	addComponent("buildBlacksmith", buildBlacksmith);
+	hoverBlacksmith = new HoverImage(state, x + 99, y - 125, 295, 135, x + 330, y + 10, 64, 64);
+	hoverBlacksmith->addLine("Blacksmith makes weapons");
+	hoverBlacksmith->addLine("Each Weapon takes 5 Ore to make");
+	hoverBlacksmith->addLine("Max Workers = 4");
+	hoverBlacksmith->addLine("Output = Workers * 2");
+	hoverBlacksmith->addLine("750");
+	hoverBlacksmith->addLine("250");
+	temp = new Image("icon-gold.png", (Uint8)255, 0, 255, .5);
+	hoverBlacksmith->addImage(40, 85, temp);
+	temp = new Image("icon-wood.png", (Uint8)255, 0, 255, .5);
+	hoverBlacksmith->addImage(40, 105, temp);
 
 	/*buildBakery = new ClickableButton<ActionBar>(x + 650, y + 10, 64, 64, "bakery-button-normal.png", "bakery-button-hover.png", "bakery-button-pressed.png", this, &ActionBar::placeBakery);
 
 	addComponent("buildBakery", buildBakery);*/
 
 	buildGuardStation = new ClickableButton<ActionBar>(x + 394, y + 10, 64, 64, "guardstation-button-normal.png", "guardstation-button-hover.png", "guardstation-button-pressed.png", this, &ActionBar::placeGuardStation);
-
 	addComponent("buildGuardStation", buildGuardStation);
+	hoverTower = new HoverImage(state, x - 37, y - 145, 495, 155, x + 394, y + 10, 64, 64);
+	hoverTower->addLine("Guard Stations protect your village");
+	hoverTower->addLine("Each Station has a coverage area");
+	hoverTower->addLine("Buildings in the coverage area have less crime");
+	hoverTower->addLine("Coverage costs 1 weapon per turn");
+	hoverTower->addLine("Without weapons, effectiveness decreases");
+	hoverTower->addLine("Strategically placed towers help bring people to your village");
+	hoverTower->addLine("250");
+	temp = new Image("icon-gold.png", (Uint8)255, 0, 255, .5);
+	hoverTower->addImage(40, 125, temp);
 
 	/*buildMarket = new ClickableButton<ActionBar>(x + 778, y + 10, 64, 64, "market-button-normal.png", "market-button-hover.png", "market-button-pressed.png", this, &ActionBar::placeMarket);
 
@@ -160,6 +179,8 @@ ActionBar::~ActionBar()
 	delete hoverMine;
 	delete hoverMill;
 	delete hoverWell;
+	delete hoverBlacksmith;
+	delete hoverTower;
 
 	//delete buildHouse;
 	//delete buildFarm;
@@ -198,6 +219,8 @@ void ActionBar::raiseEvent(SDL_Event* event)
 	hoverMine->raiseEvent(event);
 	hoverMill->raiseEvent(event);
 	hoverWell->raiseEvent(event);
+	hoverBlacksmith->raiseEvent(event);
+	hoverTower->raiseEvent(event);
 }
 
 void ActionBar::draw(SDL_Surface* screen)
@@ -209,6 +232,8 @@ void ActionBar::draw(SDL_Surface* screen)
 	hoverMine->draw(0, 0, screen);
 	hoverMill->draw(0, 0, screen);
 	hoverWell->draw(0, 0, screen);
+	hoverBlacksmith->draw(0, 0, screen);
+	hoverTower->draw(0, 0, screen);
 }
 
 void ActionBar::placeHouse()

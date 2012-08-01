@@ -34,8 +34,8 @@ ScrollingMap::ScrollingMap(SimState* state, int width, int height, int tileWidth
 {
 	Logger::debugFormat("ScrollingMap Constructor");
 
-	xoffset = tileWidth * 100;
-	yoffset = tileHeight * 50;
+	xoffset = tileWidth * 110;
+	yoffset = tileHeight * 90;
 
 	ScrollingMap::state = state;
 }
