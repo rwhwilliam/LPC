@@ -119,7 +119,7 @@ void Hover::draw(int xoffset, int yoffset, SDL_Surface* screen)
 
 		if(scrolling)
 		{
-			boxRGBA(screen, xloc * state->getZoomLevel() - xoffset, yloc * state->getZoomLevel() - yoffset, xloc * state->getZoomLevel() + width - xoffset, yloc * state->getZoomLevel() + height - yoffset, 225, 206, 46, 55);
+			boxRGBA(screen, xloc * state->getZoomLevel() - xoffset, yloc * state->getZoomLevel() - yoffset, xloc * state->getZoomLevel() + width - xoffset, yloc * state->getZoomLevel() + height - yoffset, 225, 206, 46, 95);
 
 			list<SDL_Surface*>::const_iterator it;
 			for(it = linelist.begin(); it != linelist.end(); ++it)
@@ -127,7 +127,7 @@ void Hover::draw(int xoffset, int yoffset, SDL_Surface* screen)
 		}
 		else
 		{
-			boxRGBA(screen, xloc, yloc, xloc + width, yloc + height, 225, 206, 46, 55);
+			boxRGBA(screen, xloc, yloc, xloc + width, yloc + height, 225, 206, 46, 95);
 
 			list<SDL_Surface*>::const_iterator it;
 			for(it = linelist.begin(); it != linelist.end(); ++it)

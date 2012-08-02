@@ -24,9 +24,11 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -36,6 +38,13 @@ Blacksmith::Blacksmith(SimState* state, int xloc, int yloc) : Building(state, "B
 	Logger::debug("Blacksmith Constructor");
 
 	capacity = 4;
+
+	hover = new HoverImage(state, getMapX() + 44, getMapY() - 25, 200, 90, getMapX(), getMapY(), img->getWidth(), img->getHeight());
+	hover->setScrolling(true);
+	hover->addLine("workers", "Workers:");
+	hover->addLine("coverage", "Protection:");
+	hover->addLine("road", "Connected");
+	hover->addLine("ore", "ore");
 }
 
 Blacksmith::~Blacksmith()
@@ -75,4 +84,20 @@ void Blacksmith::purchase()
 {
 	state->getCastle()->takeGold(750);
 	state->getCastle()->takeWood(250);
+}
+
+void Blacksmith::update(float time, Uint8* keystrokes)
+{
+	hover->editLine("workers", "Workers: " + toString(getWorkerCount()) + "/" + toString(getCapacity()));
+	hover->editLine("coverage", "Protection: " + toString(getCoverage()) + "%");
+
+	if(isRoadConnected())
+		hover->editLine("road", "Connected to Castle");
+	else
+		hover->editLine("road", "NOT Connected to Castle");
+
+	if(state->getCastle()->getOre() < getWorkerCount() * 5)
+		hover->editLine("ore", "Running LOW on Ore!");
+	else
+		hover->editLine("ore", "Ore is plentiful");
 }

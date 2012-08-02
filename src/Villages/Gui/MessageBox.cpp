@@ -72,7 +72,7 @@ void MessageBox::update(float time, Uint8* keystrokes)
 	if(msgs.size() > 0)
 	{
 		Message* front = msgs.front();
-		if(front->getTime() <= timer->get_ticks() - 20000)
+		if(front->getTime() <= timer->get_ticks() - 10000)
 		{
 			delete front;
 			msgs.pop_front();

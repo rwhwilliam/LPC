@@ -43,6 +43,8 @@ public:
 
 	bool canPurchase();
 	void purchase();
+
+	void update(float time, Uint8* keystrokes);
 };
 
 #endif

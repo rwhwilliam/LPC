@@ -62,6 +62,7 @@
 #include "Villages/Objects/RoadFactory.h"
 #include "Villages/Objects/Villager.h"
 #include "Villages/States/AssignState.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/Util/MouseImage.h"
 #include "Villages/Util/ScrollingMap.h"
 #include "Villages/Util/Util.h"
@@ -87,10 +88,13 @@ SimState::SimState(StateManager* manager, string path, int width, int height, in
 	mode = S_PLACECASTLE;
 	imageHover = new MouseImage(this, "castle.png", "castle-bad.png", 128);
 
+	hover = new HoverImage(this, 700, 100, 300, 30, 0, 0, 1035, 768);
+	hover->addLine("Press ESC to exit Placement Mode");
+
 	castle = NULL;
 	wonder = NULL;
 
-	won = new Image("win.png");
+	won = new Image("win.png", 255, 0, 255);
 
 	actionBar = new ActionBar(this, 176, 698, 400, 100, "");
 	endTurnBtn = new ClickableButton<SimState>(825, 55, 128, 64, "end-button-normal.png", "end-button-hover.png", "end-button-pressed.png", this, &SimState::startEndTurn);
@@ -296,6 +300,9 @@ void SimState::update(float time, Uint8* keystrokes)
 		(*bit)->update(time, keystrokes);
 	}
 
+	if(wonder != NULL)
+		wonder->update(time, keystrokes);
+
 	if(keystrokes[SDLK_ESCAPE] && mode != S_PLACECASTLE)
 	{
 		if(imageHover != NULL)
@@ -323,6 +330,7 @@ void SimState::raiseEvent(SDL_Event* event)
 {
 	smap->raiseEvent(event);
 	bar->raiseEvent(event);
+	hover->raiseEvent(event);
 
 	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->raiseEvent(event);
@@ -335,6 +343,15 @@ void SimState::raiseEvent(SDL_Event* event)
 
 	if(roadCreator != NULL && mode == S_PLACEROADEND)
 		roadCreator->raiseEvent(event);
+
+	vector<Building*>::const_iterator bit;
+	for(bit = buildings.begin(); bit != buildings.end(); ++bit)
+	{
+		(*bit)->raiseEvent(event);
+	}
+
+	if(wonder != NULL)
+		wonder->raiseEvent(event);
 
 	if(event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
 	{
@@ -376,16 +393,27 @@ void SimState::raiseEvent(SDL_Event* event)
 			{
 				if(canBuild(imageHover->getMapX(), imageHover->getMapY(), imageHover->getWidth(), imageHover->getHeight()) == E_GOOD)
 				{
-					wonder = new Wonder(this, imageHover->getX(), imageHover->getY());
+					Wonder* wonder2 = new Wonder(this, imageHover->getX(), imageHover->getY());
 
-					Logger::debugFormat("Wonder placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+					if(wonder2->canPurchase())
+					{
+						wonder2->purchase();
 
-					mode = S_NORMAL;
+						wonder = wonder2;
 
-					if(imageHover != NULL)
-						delete imageHover;
+						Logger::debugFormat("Wonder placed at (%i, %i)", imageHover->getX(), imageHover->getY());
+
+						mode = S_NORMAL;
+
+						if(imageHover != NULL)
+							delete imageHover;
 				
-					imageHover = NULL;
+						imageHover = NULL;
+					}
+					else
+					{
+						msgBox->addMessage("Not enough resources!");
+					}
 				}
 				else
 				{
@@ -395,6 +423,7 @@ void SimState::raiseEvent(SDL_Event* event)
 			}
 			else
 			{
+				msgBox->addMessage("You can only build one!");
 				Logger::error("Tried to place a second wonder");
 			}
 			break;
@@ -789,8 +818,18 @@ void SimState::raiseEvent(SDL_Event* event)
 
 
 				std::map<string, Road*>::iterator ittr;
-					for(ittr = roads.begin(); ittr != roads.end(); ++ittr)
-						ittr->second->calculateMode();
+				for(ittr = roads.begin(); ittr != roads.end(); ++ittr)
+					ittr->second->calculateMode();
+
+				list<Road*> network;
+				getRoadNetwork(network);
+
+				vector<Building*>::iterator it;
+				for(it = buildings.begin(); it != buildings.end(); ++it)
+					(*it)->inNetwork(network);
+
+				if(wonder != NULL)
+					wonder->inNetwork(network);
 
 				delete roadCreator;
 				roadCreator = NULL;
@@ -846,6 +885,16 @@ void SimState::raiseEvent(SDL_Event* event)
 					for(ittr = roads.begin(); ittr != roads.end(); ++ittr)
 						ittr->second->calculateMode();
 
+					list<Road*> network;
+					getRoadNetwork(network);
+
+					vector<Building*>::iterator it;
+					for(it = buildings.begin(); it != buildings.end(); ++it)
+						(*it)->inNetwork(network);
+
+					if(wonder != NULL)
+						wonder->inNetwork(network);
+
 					break;
 				}
 			}
@@ -865,6 +914,12 @@ void SimState::draw()
 
 	int xoffset = smap->getXOffset();
 	int yoffset = smap->getYOffset();
+
+	std::map<string, Road*>::const_iterator rit;
+	for(rit = roads.begin(); rit != roads.end(); ++rit)
+	{
+		rit->second->draw(xoffset, yoffset, frame);
+	}
 
 	if(castle != NULL)
 		castle->draw(xoffset, yoffset, frame);
@@ -893,17 +948,14 @@ void SimState::draw()
 		(*bit)->draw(xoffset, yoffset, frame);
 	}
 
-	std::map<string, Road*>::const_iterator rit;
-	for(rit = roads.begin(); rit != roads.end(); ++rit)
-	{
-		rit->second->draw(xoffset, yoffset, frame);
-	}
-
 	if(roadCreator != NULL && mode == S_PLACEROADEND)
 		roadCreator->draw(xoffset, yoffset, frame);
 
 	if(actionBar != NULL && mode == S_NORMAL)
 		actionBar->draw(frame);
+
+	if(mode != S_NORMAL && mode != S_PLACECASTLE)
+		hover->draw(0, 0, frame);
 
 	bar->draw(frame);
 	msgBox->draw(frame);
@@ -1164,6 +1216,9 @@ void SimState::changeZoom()
 
 	castle->resize();
 
+	if(wonder != NULL)
+		wonder->resize();
+
 	vector<Building*>::iterator bit;
 	for(bit = buildings.begin(); bit != buildings.end(); ++bit)
 	{
@@ -1366,12 +1421,17 @@ void SimState::findHouse(Villager* person)
 	{
 		if((*it)->getType() == BT_HOUSE)
 		{
-			if((*it)->getRating() > val)
+			if((*it)->getRating() > val && (*it)->hasRoom())
 			{
 				val = (*it)->getRating();
 				temp = dynamic_cast<House*>(*it);
 			}
 		}
+	}
+
+	if(temp == NULL)
+	{
+		Logger::debug("No House Found");
 	}
 
 	person->setResidence(temp);
@@ -1387,7 +1447,7 @@ void SimState::findFarm(Villager* person)
 	{
 		if((*it)->getType() == BT_FARM)
 		{
-			if((*it)->getRating() > val)
+			if((*it)->getRating() > val && (*it)->hasRoom())
 			{
 				val = (*it)->getRating();
 				temp = dynamic_cast<Farm*>(*it);
@@ -1408,7 +1468,7 @@ void SimState::findMill(Villager* person)
 	{
 		if((*it)->getType() == BT_MILL)
 		{
-			if((*it)->getRating() > val)
+			if((*it)->getRating() > val && (*it)->hasRoom())
 			{
 				val = (*it)->getRating();
 				temp = dynamic_cast<Mill*>(*it);
@@ -1429,7 +1489,7 @@ void SimState::findMine(Villager* person)
 	{
 		if((*it)->getType() == BT_MININGCAMP)
 		{
-			if((*it)->getRating() > val)
+			if((*it)->getRating() > val && (*it)->hasRoom())
 			{
 				val = (*it)->getRating();
 				temp = dynamic_cast<MiningCamp*>(*it);
@@ -1450,7 +1510,7 @@ void SimState::findBlacksmith(Villager* person)
 	{
 		if((*it)->getType() == BT_BLACKSMITH)
 		{
-			if((*it)->getRating() > val)
+			if((*it)->getRating() > val && (*it)->hasRoom())
 			{
 				val = (*it)->getRating();
 				temp = dynamic_cast<Blacksmith*>(*it);
@@ -1466,10 +1526,16 @@ int SimState::getNewPopCount()
 	int newPop = rand() % 3;
 
 	if(getPopRoom() <= 0)
+	{
+		msgBox->addMessage("No Empty Houses!");
 		return 0;
+	}
 
 	if(getWorkRoom() <= 0)
+	{
+		msgBox->addMessage("No Jobs!");
 		return 0;
+	}
 
 	if(castle->getFood() == 0 && getSpareWater() <= 0)
 		return 0;
@@ -1607,7 +1673,7 @@ void SimState::startEndTurn()
 
 	Logger::debugFormat("%i Buildings Uncovered", unCovered);
 
-	int taxes = 50 + (int)(villagers.size() * 100 * castle->getTaxRate() / 100.0) - 5 * unCovered;
+	int taxes = 25 + (int)(villagers.size() * 75 * castle->getTaxRate() / 100.0) - 5 * unCovered;
 
 	Logger::debugFormat("%i Taxes Collected", taxes);
 
@@ -1624,7 +1690,7 @@ void SimState::startEndTurn()
 	newPop = getNewPopCount();
 
 	Logger::debugFormat("%i People Joined", newPop);
-	msgBox->addMessage(toString(newPop) + " people joined the village!");
+	msgBox->addMessage(toString(newPop) + " people joined!");
 
 	if(newPop > 0)
 	{

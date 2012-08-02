@@ -24,9 +24,11 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/Objects/Villager.h"
 #include "Villages/States/SimState.h"
 
@@ -37,6 +39,12 @@ Farm::Farm(SimState* state, int xloc, int yloc) : Building(state, "FarmImage", x
 	Logger::debug("Farm Constructor");
 
 	capacity = 20;
+
+	hover = new HoverImage(state, getMapX() + 60, getMapY() + 25, 200, 70, getMapX(), getMapY(), img->getWidth(), img->getHeight());
+	hover->setScrolling(true);
+	hover->addLine("workers", "Workers:");
+	hover->addLine("coverage", "Protection:");
+	hover->addLine("road", "Connected");
 }
 
 Farm::~Farm()
@@ -71,4 +79,15 @@ bool Farm::canPurchase()
 void Farm::purchase()
 {
 	state->getCastle()->takeGold(100);
+}
+
+void Farm::update(float time, Uint8* keystrokes)
+{
+	hover->editLine("workers", "Workers: " + toString(getWorkerCount()) + "/" + toString(getCapacity()));
+	hover->editLine("coverage", "Protection: " + toString(getCoverage()) + "%");
+
+	if(isRoadConnected())
+		hover->editLine("road", "Connected to Castle");
+	else
+		hover->editLine("road", "NOT Connected to Castle");
 }

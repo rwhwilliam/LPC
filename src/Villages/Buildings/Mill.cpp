@@ -23,9 +23,11 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -35,6 +37,12 @@ Mill::Mill(SimState* state, int xloc, int yloc) : Building(state, "MillImage", x
 	Logger::debug("Mill Constructor");
 
 	capacity = 10;
+
+	hover = new HoverImage(state, getMapX() - 8, getMapY() + 125, 200, 70, getMapX(), getMapY(), img->getWidth(), img->getHeight());
+	hover->setScrolling(true);
+	hover->addLine("workers", "Workers:");
+	hover->addLine("coverage", "Protection:");
+	hover->addLine("road", "Connected");
 }
 
 Mill::~Mill()
@@ -70,4 +78,15 @@ void Mill::purchase()
 {
 	state->getCastle()->takeGold(150);
 	state->getCastle()->takeWood(25);
+}
+
+void Mill::update(float time, Uint8* keystrokes)
+{
+	hover->editLine("workers", "Workers: " + toString(getWorkerCount()) + "/" + toString(getCapacity()));
+	hover->editLine("coverage", "Protection: " + toString(getCoverage()) + "%");
+
+	if(isRoadConnected())
+		hover->editLine("road", "Connected to Castle");
+	else
+		hover->editLine("road", "NOT Connected to Castle");
 }

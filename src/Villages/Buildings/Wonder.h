@@ -47,6 +47,8 @@ public:
 
 	bool hasWon() { return (workerTurns <= 0); }
 
+	void update(float time, Uint8* keystrokes);
+
 private:
 	int workerTurns;
 };

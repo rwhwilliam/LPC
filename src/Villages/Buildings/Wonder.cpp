@@ -18,11 +18,14 @@
 #include "Wonder.h"
 
 #include <string>
+#include <math.h>
 
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/Objects/Road.h"
 #include "Villages/States/SimState.h"
 
@@ -34,6 +37,12 @@ Wonder::Wonder(SimState* state, int xloc, int yloc) : Building(state, "WonderIma
 
 	capacity = 500;
 	workerTurns = 5000;
+
+	hover = new HoverImage(state, getMapX() + 92, getMapY() + 25, 200, 70, getMapX(), getMapY(), img->getWidth(), img->getHeight());
+	hover->setScrolling(true);
+	hover->addLine("workers", "Workers:");
+	hover->addLine("turns", "turns");
+	hover->addLine("road", "Connected");
 }
 
 Wonder::~Wonder()
@@ -73,4 +82,15 @@ void Wonder::generate(list<Road*>& network)
 void Wonder::generate()
 {
 	workerTurns -= workers.size();
+}
+
+void Wonder::update(float time, Uint8* keystrokes)
+{
+	hover->editLine("workers", "Workers: " + toString(getWorkerCount()) + "/" + toString(getCapacity()));
+	hover->editLine("turns", toString(floor(100 - workerTurns / 50.0)) + "% Complete");
+
+	if(isRoadConnected())
+		hover->editLine("road", "Connected to Castle");
+	else
+		hover->editLine("road", "NOT Connected to Castle");
 }

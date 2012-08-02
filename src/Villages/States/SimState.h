@@ -28,6 +28,7 @@
 #include "Engine/Gui/ClickableButton.h"
 #include "Engine/State/State.h"
 #include "Engine/Util/Enums.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/Util/MouseImage.h"
 
 using namespace std;
@@ -157,6 +158,7 @@ private:
 
 	ResourceBar* bar;
 	MessageBox* msgBox;
+	HoverImage* hover;
 };
 
 #endif

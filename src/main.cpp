@@ -81,7 +81,7 @@ int main(int argc, char* args[])
 			SDL_Flip(screen);
 
 			
-			Logger::debugFormat("ms %i", t.get_ticks());
+			//Logger::debugFormat("ms %i", t.get_ticks());
 			t.stop();
 		}
 

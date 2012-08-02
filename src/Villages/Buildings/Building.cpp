@@ -29,6 +29,7 @@
 #include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/GuardStation.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/Map/MapTile.h"
 #include "Villages/Objects/Road.h"
 #include "Villages/Objects/Villager.h"
@@ -47,11 +48,16 @@ Building::Building(SimState* state, string src, int xloc, int yloc) : xloc(xloc)
 	capacity = 0;
 	roadConnected = false;
 	coverage = 0;
+
+	hover = NULL;
 }
 
 Building::~Building()
 {
 	delete img;
+
+	if(hover != NULL)
+		delete hover;
 
 	Logger::debug("Building Destructor");
 }
@@ -78,12 +84,16 @@ void Building::update(float time, Uint8* keystrokes)
 
 void Building::raiseEvent(SDL_Event* event)
 {
-
+	if(hover != NULL)
+		hover->raiseEvent(event);
 }
 
 void Building::draw(int xoffset, int yoffset, SDL_Surface* screen)
 {
 	img->draw(getMapX() - xoffset, getMapY() - yoffset, screen);
+
+	if(hover != NULL)
+		hover->draw(xoffset, yoffset, screen);
 }
 
 bool Building::collides(int x, int y, int width, int height)
@@ -166,12 +176,16 @@ bool Building::inNetwork(list<Road*>& network)
 
 	getSurroundingRoads(temp);
 
+	roadConnected = true;
+
 	list<Road*>::iterator it;
 	list<Road*>::iterator it2;
 	for(it = temp.begin(); it != temp.end(); ++it)
 		for(it2 = network.begin(); it2 != network.end(); ++it2)
 			if(find(*it, *it2))
 				return true;
+
+	roadConnected = false;
 
 	return false;
 }

@@ -161,7 +161,7 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 
 	buildWonder = new ClickableButton<ActionBar>(x + 522, y + 10, 64, 64, "wonder-button-normal.png", "wonder-button-hover.png", "wonder-button-pressed.png", this, &ActionBar::placeWonder);
 	addComponent("buildWonder", buildWonder);
-	hoverWonder = new HoverImage(state, x + 522, y - 135, 300, 145, x + 522, y + 10, 64, 64);
+	hoverWonder = new HoverImage(state, x + 161, y - 135, 425, 145, x + 522, y + 10, 64, 64);
 	hoverWonder->addLine("Complete a Wonder to win the game!");
 	hoverWonder->addLine("Once placed, you have to assign workers to build it!");
 	hoverWonder->addLine("Max Workers = 500");
@@ -178,16 +178,16 @@ ActionBar::ActionBar(SimState* state, int x, int y, int width, int height, strin
 
 
 	in = new ClickableButton<ActionBar>(x + 586, y + 10, 32, 32, "zoomin-button-normal.png", "zoomin-button-hover.png", "zoomin-button-pressed.png", this, &ActionBar::zoomIn);
-
 	addComponent("zoomIn", in);
 
 	out = new ClickableButton<ActionBar>(x + 586, y + 42, 32, 32, "zoomout-button-normal.png", "zoomout-button-hover.png", "zoomout-button-pressed.png", this, &ActionBar::zoomOut);
-
 	addComponent("zoomOut", out);
 
 	del = new ClickableButton<ActionBar>(x + 618, y + 10, 64, 64, "delete-button-normal.png", "delete-button-hover.png", "delete-button-pressed.png", this, &ActionBar::deleteStuff);
-
 	addComponent("delete", del);
+	hoverDelete = new HoverImage(state, x + 418, y - 45, 264, 55, x + 618, y + 10, 64, 64);
+	hoverDelete->addLine("Delete Buildings");
+	hoverDelete->addLine("Press ESC to exit delete mode");
 }
 
 ActionBar::~ActionBar()
@@ -203,6 +203,7 @@ ActionBar::~ActionBar()
 	delete hoverTower;
 	delete hoverRoad;
 	delete hoverWonder;
+	delete hoverDelete;
 
 	//delete buildHouse;
 	//delete buildFarm;
@@ -245,6 +246,7 @@ void ActionBar::raiseEvent(SDL_Event* event)
 	hoverTower->raiseEvent(event);
 	hoverRoad->raiseEvent(event);
 	hoverWonder->raiseEvent(event);
+	hoverDelete->raiseEvent(event);
 }
 
 void ActionBar::draw(SDL_Surface* screen)
@@ -260,6 +262,7 @@ void ActionBar::draw(SDL_Surface* screen)
 	hoverTower->draw(0, 0, screen);
 	hoverRoad->draw(0, 0, screen);
 	hoverWonder->draw(0, 0, screen);
+	hoverDelete->draw(0, 0, screen);
 }
 
 void ActionBar::placeHouse()

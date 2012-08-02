@@ -24,9 +24,11 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -37,6 +39,11 @@ GuardStation::GuardStation(SimState* state, int xloc, int yloc) : Building(state
 
 	coverageDiameter = 8;
 	value = 0;
+
+	hover = new HoverImage(state, getMapX() - 68, getMapY() + 75, 200, 50, getMapX(), getMapY(), img->getWidth(), img->getHeight());
+	hover->setScrolling(true);
+	hover->addLine("coverage", "Protection:");
+	hover->addLine("road", "Connected");
 }
 
 GuardStation::~GuardStation()
@@ -63,7 +70,8 @@ void GuardStation::draw(int xoffset, int yoffset, SDL_Surface* screen)
 		bY + (coverageDiameter * 2) * state->getTileHeight() + getHeight(), 
 		0, 0, 255, 20);
 
-	img->draw(getMapX() - xoffset, getMapY() - yoffset, screen);
+	//img->draw(getMapX() - xoffset, getMapY() - yoffset, screen);
+	Building::draw(xoffset, yoffset, screen);
 }
 
 int GuardStation::inCoverage(Building* bldg)
@@ -106,4 +114,14 @@ bool GuardStation::canPurchase()
 void GuardStation::purchase()
 {
 	state->getCastle()->takeGold(250);
+}
+
+void GuardStation::update(float time, Uint8* keystrokes)
+{
+	hover->editLine("coverage", "Current Guard Rating: " + toString(value) + "%");
+
+	if(isRoadConnected())
+		hover->editLine("road", "Connected to Castle");
+	else
+		hover->editLine("road", "NOT Connected to Castle");
 }

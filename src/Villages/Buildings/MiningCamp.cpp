@@ -22,10 +22,12 @@
 #include "SDL.h"
 
 #include "Engine/Graphics/Image.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/Logger.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -35,6 +37,12 @@ MiningCamp::MiningCamp(SimState* state, int xloc, int yloc) : Building(state, "M
 	Logger::debug("MiningCamp Constructor");
 
 	capacity = 5;
+
+	hover = new HoverImage(state, getMapX() - 36, getMapY() + 100, 200, 70, getMapX(), getMapY(), img->getWidth(), img->getHeight());
+	hover->setScrolling(true);
+	hover->addLine("workers", "Workers:");
+	hover->addLine("coverage", "Protection:");
+	hover->addLine("road", "Connected");
 }
 
 MiningCamp::~MiningCamp()
@@ -68,4 +76,15 @@ void MiningCamp::purchase()
 {
 	state->getCastle()->takeGold(500);
 	state->getCastle()->takeWood(100);
+}
+
+void MiningCamp::update(float time, Uint8* keystrokes)
+{
+	hover->editLine("workers", "Workers: " + toString(getWorkerCount()) + "/" + toString(getCapacity()));
+	hover->editLine("coverage", "Protection: " + toString(getCoverage()) + "%");
+
+	if(isRoadConnected())
+		hover->editLine("road", "Connected to Castle");
+	else
+		hover->editLine("road", "NOT Connected to Castle");
 }

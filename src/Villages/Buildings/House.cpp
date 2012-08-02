@@ -25,9 +25,11 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/Objects/Villager.h"
 #include "Villages/States/SimState.h"
 
@@ -38,6 +40,12 @@ House::House(SimState* state, int xloc, int yloc) : Building(state, "HouseImage"
 	Logger::debug("House Constructor");
 
 	capacity = 10; 
+
+	hover = new HoverImage(state, getMapX() + 25, getMapY() + 50, 150, 50, getMapX(), getMapY(), img->getWidth(), img->getHeight());
+	hover->setScrolling(true);
+	hover->addLine("villagers", "Usage:");
+	hover->addLine("coverage", "Protection:");
+	//hover->addLine("road", "Connected");
 }
 
 House::~House()
@@ -94,4 +102,15 @@ void House::purchase()
 {
 	state->getCastle()->takeGold(200);
 	state->getCastle()->takeWood(150);
+}
+
+void House::update(float time, Uint8* keystrokes)
+{
+	hover->editLine("villagers", "Usage: " + toString(getWorkerCount()) + "/" + toString(getCapacity()));
+	hover->editLine("coverage", "Protection: " + toString(getCoverage()) + "%");
+
+	//if(isRoadConnected())
+	//	hover->editLine("road", "Connected to Castle");
+	//else
+	//	hover->editLine("road", "NOT Connected to Castle");
 }

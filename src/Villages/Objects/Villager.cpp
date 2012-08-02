@@ -40,8 +40,11 @@ Villager::Villager(SimState* simstate, Building* job, House* residence)
 
 Villager::~Villager()
 {
-	job->removeWorker(this);
-	residence->removeWorker(this);
+	if(job != NULL)
+		job->removeWorker(this);
+
+	if(residence != NULL)
+		residence->removeWorker(this);
 
 	Villager::job = NULL;
 	Villager::residence = NULL;
@@ -75,7 +78,7 @@ bool Villager::wantsToLeave()
 
 	if(random <= pow(simstate->getCastle()->getTaxRate(), 2.0))
 	{
-		simstate->getMessageBox()->addMessage("Villager left because of taxes");
+		simstate->getMessageBox()->addMessage("Villager left - high taxes");
 		return true;
 	}
 
@@ -85,7 +88,7 @@ bool Villager::wantsToLeave()
 		
 		if(random <= 1)
 		{
-			simstate->getMessageBox()->addMessage("Villager left because of no food");
+			simstate->getMessageBox()->addMessage("Villager left - food");
 			return true;
 		}
 	}
@@ -96,7 +99,7 @@ bool Villager::wantsToLeave()
 		
 		if(random <= 1)
 		{
-			simstate->getMessageBox()->addMessage("Village left because of no water");
+			simstate->getMessageBox()->addMessage("Village left - water");
 			return true;
 		}
 	}

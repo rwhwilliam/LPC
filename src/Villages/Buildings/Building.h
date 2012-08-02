@@ -33,6 +33,7 @@ class SimState;
 class Villager;
 class Road;
 class GuardStation;
+class HoverImage;
 
 enum BuildingType { BT_WONDER, BT_BAKERY, BT_BLACKSMITH, BT_CASTLE, BT_FARM, BT_GUARDSTATION, BT_HOUSE, BT_JEWELER, BT_MARKET, BT_MILL, BT_MININGCAMP, BT_TAVERN, BT_THEATRE, BT_WEAVER, BT_WELL };
 
@@ -92,6 +93,8 @@ protected:
 	list<Villager*> workers;
 	int coverage;
 	bool roadConnected;
+
+	HoverImage* hover;
 };
 
 #endif

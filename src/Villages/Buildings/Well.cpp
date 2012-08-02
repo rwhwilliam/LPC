@@ -23,9 +23,11 @@
 
 #include "Engine/Graphics/Image.h"
 #include "Engine/Util/Logger.h"
+#include "Engine/Util/Util.h"
 #include "Engine/Util/VillageException.h"
 #include "Villages/Buildings/Building.h"
 #include "Villages/Buildings/Castle.h"
+#include "Villages/Gui/HoverImage.h"
 #include "Villages/States/SimState.h"
 
 using namespace std;
@@ -33,6 +35,10 @@ using namespace std;
 Well::Well(SimState* state, int xloc, int yloc) : Building(state, "WellImage", xloc, yloc)
 {
 	Logger::debug("Well Constructor");
+
+	hover = new HoverImage(state, getMapX() - 84, getMapY() - 30, 200, 30, getMapX(), getMapY(), img->getWidth(), img->getHeight());
+	hover->setScrolling(true);
+	hover->addLine("road", "Connected");
 }
 
 Well::~Well()
@@ -58,4 +64,12 @@ bool Well::canPurchase()
 void Well::purchase()
 {
 	state->getCastle()->takeGold(100);
+}
+
+void Well::update(float time, Uint8* keystrokes)
+{
+	if(isRoadConnected())
+		hover->editLine("road", "Connected to Castle");
+	else
+		hover->editLine("road", "NOT Connected to Castle");
 }
