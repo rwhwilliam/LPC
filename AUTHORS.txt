@@ -1,0 +1,60 @@
+Code authors
+============
+
+This program was written by the following people:
+ - Ryan Holzum
+
+Asset attribution
+=================
+
+Assets were authored by the following people:
+
+Artur Reterski
+ - items.png
+ 
+Barbara Rivera
+ - building11.png
+ 
+Lanea Zimmerman
+- bridges.png
+- castle-outside.png
+- dirt.png
+- grass.png
+
+Brandom
+- Calmtown.ogg
+
+Casper Nilzzon
+- tent.png
+- tree_stump.png
+
+Clint Bellanger
+- coin_gold.png
+
+Daniel Eddeland
+- farming_fishing.png
+- scrollsandblocks.png
+
+Emilio J. Sanchez-Sierra
+- EXAMPLE_USE.png
+
+Skyler Robert Colladay
+- crypt.png
+
+qubodup
+- message-24-error.png
+
+Q_x
+- Q_x-beerbottleemptydig.png
+
+FoxSynergy
+- Crystal Dungeon v1_0
+
+Buch
+- rpg-effects.png
+
+yd
+- tower_2.png
+
+gryc
+- path_tiles_rounded.png

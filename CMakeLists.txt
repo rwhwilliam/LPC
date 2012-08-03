@@ -30,7 +30,7 @@ FILE(GLOB Config data/config/config.xml)
 FILE(GLOB Images data/images/*.png)
 FILE(GLOB Maps data/maps/*.xml)
 FILE(GLOB Fonts data/fonts/*.ttf)
-FILE(GLOB Music data/music/*.ogg)
+FILE(GLOB Music data/music/*.ogg data/music/*.mp3)
 
 set (
 	SOURCES
