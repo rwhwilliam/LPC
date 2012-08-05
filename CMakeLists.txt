@@ -65,7 +65,6 @@ Find_Package(SDL_ttf REQUIRED)
 Find_Package(SDL_mixer REQUIRED)
 
 include_directories(
-	includes/sdl/
 	includes/sdl-gfx/
 	includes/tinyxml2/
 	src/
@@ -89,6 +88,8 @@ if(${WIN32})
 	source_group(Source\ Files\\Villages\\Objects FILES ${VillagesObjects})
 	source_group(Source\ Files\\Villages\\States FILES ${VillagesStates})
 	source_group(Source\ Files\\Villages\\Util FILES ${VillagesUtil})
+	
+	include_directories(includes/sdl/)
 
 	link_libraries (
 		${SDL_LIBRARY}
@@ -107,6 +108,8 @@ if(${WIN32})
 	file(COPY ${Music} DESTINATION Debug/data/music)
 
 elseif(${UNIX})
+
+	include_directories(/usr/include/SDL)
 
 	link_libraries (
 		${SDL_LIBRARY}
